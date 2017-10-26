@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="propertyPlaceholderConfigurer"
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="ignoreUnresolvablePlaceholders" value="true" />
+        <property name="locations">
+            <list>
+                <value>file:${user.home}/qywx/qywxauth-config.properties</value>
+            </list>
+        </property>
+    </bean>
+
+    <!--数据库连接-->
+    <import resource="classpath:spring-jdbc.xml" />
+
+    <!--dao层dao-->
+    <import resource="classpath:spring-dao.xml" />
+</beans>
