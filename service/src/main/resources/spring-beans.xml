@@ -3,6 +3,6 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="corpManageService" class="com.rishiqing.qywx.biz.corp.impl.CorpManageServiceImpl" />
-    <bean id="appManageService" class="com.rishiqing.qywx.biz.suite.impl.AppManageServiceImpl" />
+    <bean id="corpManageService" class="com.rishiqing.qywx.service.biz.corp.impl.CorpManageServiceImpl" />
+    <bean id="appManageService" class="com.rishiqing.qywx.service.biz.isv.impl.AppManageServiceImpl" />
 </beans>

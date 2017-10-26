@@ -8,11 +8,17 @@
         <property name="ignoreUnresolvablePlaceholders" value="true" />
         <property name="locations">
             <list>
-                <value>file:${user.home}/qywxauth-config.properties</value>
+                <value>file:${user.home}/qywx/qywxauth-config.properties</value>
             </list>
         </property>
     </bean>
 
-    <!--spring beans-->
+    <!--service层的服务beans-->
     <import resource="classpath:spring-beans.xml" />
+
+    <!--数据库连接-->
+    <import resource="classpath:spring-jdbc.xml" />
+
+    <!--dao层dao-->
+    <import resource="classpath:spring-dao.xml" />
 </beans>

@@ -1,4 +1,4 @@
-package com.rishiqing.qywx.model;
+package com.rishiqing.qywx.service.model.isv;
 
 public class AppVO {
     private Long id;

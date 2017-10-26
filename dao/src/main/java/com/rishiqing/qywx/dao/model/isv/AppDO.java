@@ -1,16 +1,14 @@
-package com.rishiqing.qywx.model.corp;
+package com.rishiqing.qywx.dao.model.isv;
 
 import java.util.Date;
 
-/**
- * 企业DO
- */
-public class CorpDO {
+public class AppDO {
     private Long id;
     private Date dateCreated;
     private Date lastUpdated;
 
-    private String corpName;
+    private String appId;
+    private String suiteKey;
 
     public Long getId() {
         return id;
@@ -36,21 +34,30 @@ public class CorpDO {
         this.lastUpdated = lastUpdated;
     }
 
-    public String getCorpName() {
-        return corpName;
+    public String getAppId() {
+        return appId;
     }
 
-    public void setCorpName(String corpName) {
-        this.corpName = corpName;
+    public void setAppId(String appId) {
+        this.appId = appId;
+    }
+
+    public String getSuiteKey() {
+        return suiteKey;
+    }
+
+    public void setSuiteKey(String suiteKey) {
+        this.suiteKey = suiteKey;
     }
 
     @Override
     public String toString() {
-        return "CorpDO{" +
+        return "AppDO{" +
                 "id=" + id +
                 ", dateCreated=" + dateCreated +
                 ", lastUpdated=" + lastUpdated +
-                ", corpName='" + corpName + '\'' +
+                ", appId='" + appId + '\'' +
+                ", suiteKey='" + suiteKey + '\'' +
                 '}';
     }
 }

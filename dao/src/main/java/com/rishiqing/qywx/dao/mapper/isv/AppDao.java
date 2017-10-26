@@ -1,6 +1,6 @@
-package com.rishiqing.qywx.dao.isv;
+package com.rishiqing.qywx.dao.mapper.isv;
 
-import com.rishiqing.qywx.model.isv.AppDO;
+import com.rishiqing.qywx.dao.model.isv.AppDO;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

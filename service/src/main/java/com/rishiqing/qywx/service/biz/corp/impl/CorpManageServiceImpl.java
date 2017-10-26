@@ -1,11 +1,9 @@
-package com.rishiqing.qywx.biz.corp.impl;
+package com.rishiqing.qywx.service.biz.corp.impl;
 
-import com.rishiqing.qywx.biz.corp.CorpManageService;
-import com.rishiqing.qywx.dao.isv.AppDao;
-import com.rishiqing.qywx.model.corp.CorpDO;
+import com.rishiqing.qywx.service.biz.corp.CorpManageService;
+import com.rishiqing.qywx.dao.mapper.isv.AppDao;
+import com.rishiqing.qywx.dao.model.corp.CorpDO;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import javax.annotation.Resource;
 
 public class CorpManageServiceImpl implements CorpManageService {
 

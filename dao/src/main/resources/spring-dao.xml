@@ -11,7 +11,7 @@
     <!--数据源和配置文件-->
     <bean id="mySqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource" />
-        <property name="mapperLocations" value="classpath*:mybatis/*/*Mapper.xml" />
+        <property name="mapperLocations" value="classpath*:mybatis/**/*Mapper.xml" />
         <property name="configLocation" value="classpath:mybatis-config.xml" />
     </bean>
 
@@ -24,7 +24,7 @@
 
     <!--配置事务-->
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-        <property name="dataSource" value="dataSource" />
+        <property name="dataSource" ref="dataSource" />
     </bean>
 
     <!--标注@Transactional的类和方法具有事务性-->

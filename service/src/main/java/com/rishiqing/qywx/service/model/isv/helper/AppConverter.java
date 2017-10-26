@@ -1,7 +1,7 @@
-package com.rishiqing.qywx.model.helper;
+package com.rishiqing.qywx.service.model.isv.helper;
 
-import com.rishiqing.qywx.model.AppVO;
-import com.rishiqing.qywx.model.isv.AppDO;
+import com.rishiqing.qywx.service.model.isv.AppVO;
+import com.rishiqing.qywx.dao.model.isv.AppDO;
 
 public class AppConverter {
     public static AppVO appDO2AppVO(AppDO appDO){
