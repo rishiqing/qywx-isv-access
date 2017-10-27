@@ -9,7 +9,7 @@
         </Console>
         <RollingFile name="ISV_CALLBACK_APPENDER" fileName="${baseDir}/isv_callback.log"
                      filePattern="${baseDir}/$${date:yyyy-MM}/isv_callback-%d{MM-dd-yyyy}-%i.log.gz">
-            <PatternLayout>
+            <PatternLayout charset="UTF-8">
                 <Pattern>%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p %C{1.}.%M:%L - %m%n</Pattern>
             </PatternLayout>
             <Policies>

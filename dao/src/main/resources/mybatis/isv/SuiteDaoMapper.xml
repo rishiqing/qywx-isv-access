@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rishiqing.qywx.dao.mapper.isv.SuiteDao">
+    <resultMap id="suiteMap" type="com.rishiqing.qywx.dao.model.isv.SuiteDO">
+        <id property="id" column="id" />
+        <result property="dateCreated" column="date_created" />
+        <result property="lastUpdated" column="last_updated" />
+        <result property="suiteName" column="suite_name" />
+        <result property="suiteKey" column="suite_key" />
+        <result property="suiteSecret" column="suite_secret" />
+        <result property="encodingAesKey" column="encoding_aes_key" />
+        <result property="token" column="token" />
+        <result property="corpId" column="corp_id" />
+    </resultMap>
+
+    <sql id="selectAllFields">
+        id, suite_name, suite_key, suite_secret, encoding_aes_key, token, corp_id
+    </sql>
+
+    <select id="getSuiteBySuiteKey" resultMap="suiteMap">
+        SELECT <include refid="selectAllFields" /> FROM isv_suite
+        <![CDATA[
+            WHERE suite_key = #{suiteKey}
+        ]]>
+    </select>
+
+    <insert id="saveOrUpdateSuite" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO isv_suite (
+            date_created,
+            last_updated,
+            suite_name,
+            suite_key,
+            suite_secret,
+            encoding_aes_key,
+            token,
+            corp_id
+        ) VALUES (
+            now(),
+            now(),
+            #{suiteName},
+            #{suiteKey},
+            #{suiteSecret},
+            #{encodingAesKey},
+            #{token},
+            #{corpId}
+        ) ON DUPLICATE KEY UPDATE
+            last_updated = now(),
+            suite_name = #{suiteName},
+            suite_key = #{suiteKey},
+            suite_secret = #{suiteSecret},
+            encoding_aes_key = #{encodingAesKey},
+            token = #{token},
+            corp_id = #{corpId}
+    </insert>
+
+    <delete id="removeSuiteBySuiteKey">
+        DELETE FROM isv_suite WHERE suite_key = #{suiteKey}
+    </delete>
+</mapper>

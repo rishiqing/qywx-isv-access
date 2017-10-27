@@ -7,10 +7,10 @@
         <Console name="Console" target="SYSTEM_OUT">
             <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
         </Console>
-        <RollingFile name="ISV_CALLBACK_APPENDER" fileName="${baseDir}/isv_callback.log"
-                     filePattern="${baseDir}/$${date:yyyy-MM}/isv_callback-%d{MM-dd-yyyy}-%i.log.gz">
-            <PatternLayout>
-                <Pattern>%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p %C{1.}.%M:%L - %m%n</Pattern>
+        <RollingFile name="ISV_CALLBACK_APPENDER" fileName="${baseDir}/web_isv_callback.log"
+                     filePattern="${baseDir}/$${date:yyyy-MM}/web_isv_callback-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout charset="UTF-8">
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p %c{1.}.%M:%L - %m%n</Pattern>
             </PatternLayout>
             <Policies>
                 <TimeBasedTriggeringPolicy />
