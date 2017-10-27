@@ -47,7 +47,7 @@ public class CallbackController {
 
             if(sVerifyEchoStr != null){
                 //  走isv验证url流程
-                resultStr = wxcpt.VerifyURL(sVerifyMsgSig, sVerifyTimeStamp,
+                resultStr = wxcpt.verifyURL(sVerifyMsgSig, sVerifyTimeStamp,
                         sVerifyNonce, sVerifyEchoStr);
             }else{
                 //  走isv接受消息的流程

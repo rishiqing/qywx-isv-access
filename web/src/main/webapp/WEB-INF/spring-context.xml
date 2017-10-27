@@ -22,6 +22,9 @@
         <entry key="appId" value="${isv.app.id}" />
     </util:map>
 
+    <!--web层需要用到的service-->
+    <bean id="callbackService" class="com.rishiqing.qywx.web.service.impl.CallbackServiceImpl" />
+
     <!--service层的服务beans-->
     <import resource="classpath:spring-beans.xml" />
 
