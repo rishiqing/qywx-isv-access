@@ -8,7 +8,7 @@
         <property name="ignoreUnresolvablePlaceholders" value="true" />
         <property name="locations">
             <list>
-                <value>file:${user.home}/qywx/qywxauth-config.properties</value>
+                <value>file:${user.home}/qywx/qywxauth-config-test.properties</value>
             </list>
         </property>
     </bean>

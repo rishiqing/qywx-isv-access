@@ -13,7 +13,17 @@
                 <Pattern>%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p %C{1.}.%M:%L - %m%n</Pattern>
             </PatternLayout>
             <Policies>
-                <TimeBasedTriggeringPolicy />
+                <TimeBasedTriggeringPolicy interval="6" modulate="true" />
+                <SizeBasedTriggeringPolicy size="50 MB"/>
+            </Policies>
+        </RollingFile>
+        <RollingFile name="ISV_HTTP_REQUEST_APPENDER" fileName="${baseDir}/web_isv_http_request.log"
+                     filePattern="${baseDir}/$${date:yyyy-MM}/web_isv_http_request-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout charset="UTF-8">
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p %C{1.}.%M:%L - %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="6" modulate="true" />
                 <SizeBasedTriggeringPolicy size="50 MB"/>
             </Policies>
         </RollingFile>
@@ -24,6 +34,9 @@
         </Root>
         <Logger name="ISV_CALLBACK_LOGGER" level="info" additivity="false" includeLocation="true">
             <AppenderRef ref="ISV_CALLBACK_APPENDER"/>
+        </Logger>
+        <Logger name="ISV_HTTP_REQUEST_LOGGER" level="info" additivity="false" includeLocation="true">
+            <AppenderRef ref="ISV_HTTP_REQUEST_APPENDER"/>
         </Logger>
     </Loggers>
 </Configuration>

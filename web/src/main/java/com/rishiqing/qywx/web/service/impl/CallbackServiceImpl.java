@@ -1,6 +1,9 @@
 package com.rishiqing.qywx.web.service.impl;
 
 import com.rishiqing.qywx.service.biz.isv.SuiteManageService;
+import com.rishiqing.qywx.service.biz.isv.SuiteTicketManageService;
+import com.rishiqing.qywx.service.biz.isv.SuiteTokenManageService;
+import com.rishiqing.qywx.service.model.isv.SuiteTicketVO;
 import com.rishiqing.qywx.service.model.isv.SuiteVO;
 import com.rishiqing.qywx.web.exception.CallbackException;
 import com.rishiqing.qywx.web.service.CallbackService;
@@ -18,12 +21,15 @@ import java.io.IOException;
 import java.util.Map;
 
 public class CallbackServiceImpl implements CallbackService {
-    private static final Logger logger = LoggerFactory.getLogger("ISV_CALLBACK_LOGGER");
 
     @Autowired
     private Map isvGlobal;
     @Autowired
     private SuiteManageService suiteManageService;
+    @Autowired
+    private SuiteTicketManageService suiteTicketManageService;
+    @Autowired
+    private SuiteTokenManageService suiteTokenManageService;
 
     private SuiteVO suite;
 
@@ -35,45 +41,61 @@ public class CallbackServiceImpl implements CallbackService {
     }
 
     @Override
-    public String verifyUrl(String signature, String timestamp, String nonce, String echoString, String content) throws CallbackException {
+    public String verifyUrl(String signature, String timestamp, String nonce, String echoString) throws CallbackException {
 
         String token = this.suite.getToken();
         String suiteKey = this.suite.getSuiteKey();
         String encodingAesKey = this.suite.getEncodingAesKey();
 
-        String resultStr = "success"; //需要返回的明文
         try {
             WXBizMsgCrypt wxcpt = new WXBizMsgCrypt(token, encodingAesKey, suiteKey);
-
-            if(echoString != null){
-                //  走isv验证url流程
-                resultStr = wxcpt.verifyURL(signature, timestamp, nonce, echoString);
-            }else{
-                //TODO  走isv接受消息的流程
-
-            }
-
+            return wxcpt.verifyURL(signature, timestamp, nonce, echoString);
         } catch (AesException e) {
             throw new CallbackException("verify url failed", e);
         }
-        return resultStr;
     }
 
     @Override
-    public Map decryptMessage(String orgMessage) throws CallbackException {
+    public String receiveMessage(String signature, String timestamp, String nonce, String body) throws CallbackException {
         String token = this.suite.getToken();
         String suiteKey = this.suite.getSuiteKey();
         String encodingAesKey = this.suite.getEncodingAesKey();
 
-        Map map;
         try {
             WXBizMsgCrypt wxcpt = new WXBizMsgCrypt(token, encodingAesKey, suiteKey);
             String str = wxcpt.decryptMsg(signature, timestamp, nonce, body);
-            map = XmlUtil.simpleXmlString2Map(str);
+            Map map = XmlUtil.simpleXmlString2Map(str);
+            String infoType = (String)map.get("InfoType");
+
+            switch (infoType) {
+                case "suite_ticket":
+                    handleSuiteTicket(map);
+                    break;
+                default:
+                    //  对于不识别的infoType，直接抛出异常
+                    throw new CallbackException("info type not handled: " + infoType);
+            }
 
         } catch (AesException | ParserConfigurationException | IOException | SAXException e) {
             throw new CallbackException("decrypt message failed", e);
         }
-        return map;
+        return "success";
     }
+
+    private void handleSuiteTicket(Map params){
+        String ticket = (String)params.get("SuiteTicket");
+        assert ticket != null;
+        SuiteTicketVO suiteTicketVO = new SuiteTicketVO();
+        suiteTicketVO.setSuiteKey(this.suite.getSuiteKey());
+        suiteTicketVO.setTicket(ticket);
+        suiteTicketManageService.saveSuiteTicket(suiteTicketVO);
+    }
+
+    private void handleCreateAuth(Map params){}
+
+    private void handleChangeAuth(Map params){}
+
+    private void handleCancelAuth(Map params){}
+
+    private void handleChangeContact(Map params){}
 }

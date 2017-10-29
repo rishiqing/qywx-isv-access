@@ -9,19 +9,22 @@ import java.util.Map;
  */
 public interface CallbackService {
     /**
-     * 验证url签名
+     *  开启接受消息通知验证时使用
      * @param signature
      * @param timestamp
      * @param nonce
-     * @param content
      * @return
      */
-    String verifyUrl(String signature, String timestamp, String nonce, String echoString, String content) throws CallbackException;
+    String verifyUrl(String signature, String timestamp, String nonce, String echoString) throws CallbackException;
 
     /**
-     * 将加密的信息进行解密，解密后的信息存储在map中
-     * @param orgMessage
+     * 接收普通消息
+     * @param signature
+     * @param timestamp
+     * @param nonce
+     * @param body
      * @return
+     * @throws CallbackException
      */
-    Map decryptMessage(String orgMessage) throws CallbackException;
+    String receiveMessage(String signature, String timestamp, String nonce, String body) throws CallbackException;
 }

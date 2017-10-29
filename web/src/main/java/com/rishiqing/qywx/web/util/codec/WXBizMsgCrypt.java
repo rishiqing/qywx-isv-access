@@ -173,7 +173,6 @@ public class WXBizMsgCrypt {
             throw new AesException(AesException.IllegalBuffer);
         }
 
-        System.out.println("from_corpid:" + from_corpid);
         // corpid不相同的情况
         if (!from_corpid.equals(corpId)) {
             throw new AesException(AesException.ValidateCorpidError);

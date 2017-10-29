@@ -5,6 +5,9 @@ import com.rishiqing.qywx.service.model.isv.SuiteVO;
 
 public class SuiteConverter {
     public static SuiteVO suiteVO2SuiteDO(SuiteDO suiteDO){
+        if(suiteDO == null){
+            return null;
+        }
         SuiteVO suiteVO = new SuiteVO();
         suiteVO.setId(suiteDO.getId());
         suiteVO.setSuiteName(suiteDO.getSuiteName());

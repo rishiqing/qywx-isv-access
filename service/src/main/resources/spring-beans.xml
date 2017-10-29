@@ -4,6 +4,8 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <bean id="suiteManageService" class="com.rishiqing.qywx.service.biz.isv.impl.SuiteManageServiceImpl" />
+    <bean id="suiteTicketManageService" class="com.rishiqing.qywx.service.biz.isv.impl.SuiteTicketManageServiceImpl" />
+    <bean id="suiteTokenManageService" class="com.rishiqing.qywx.service.biz.isv.impl.SuiteTokenManageServiceImpl" />
     <bean id="appManageService" class="com.rishiqing.qywx.service.biz.isv.impl.AppManageServiceImpl" />
     <bean id="corpManageService" class="com.rishiqing.qywx.service.biz.corp.impl.CorpManageServiceImpl" />
     <bean id="demoService" class="com.rishiqing.qywx.service.biz.isv.impl.DemoServiceImpl" />

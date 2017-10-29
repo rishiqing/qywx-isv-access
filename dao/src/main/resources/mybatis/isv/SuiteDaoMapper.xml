@@ -14,7 +14,7 @@
     </resultMap>
 
     <sql id="selectAllFields">
-        id, suite_name, suite_key, suite_secret, encoding_aes_key, token, corp_id
+        id, date_created, last_updated, suite_name, suite_key, suite_secret, encoding_aes_key, token, corp_id
     </sql>
 
     <select id="getSuiteBySuiteKey" resultMap="suiteMap">
