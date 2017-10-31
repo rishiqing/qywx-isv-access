@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rishiqing.qywx.dao.mapper.corp.CorpSuiteDao">
+    <resultMap id="corpSuiteMap" type="com.rishiqing.qywx.dao.model.corp.CorpSuiteDO">
+        <id property="id" column="id" />
+        <result property="dateCreated" column="date_created" />
+        <result property="lastUpdated" column="last_updated" />
+        <result property="corpId" column="corp_id" />
+        <result property="suiteKey" column="suite_key" />
+        <result property="permanentCode" column="permanent_code" />
+    </resultMap>
+
+    <sql id="selectAllFields">
+        id, date_created, last_updated, corp_id, suite_key, permanent_code
+    </sql>
+
+    <select id="getCorpSuiteBySuiteKeyAndCorpId" resultMap="corpSuiteMap">
+        SELECT <include refid="selectAllFields" /> FROM isv_corp_suite
+        <![CDATA[
+            WHERE corp_id = #{corpId} and suite_key = #{suiteKey}
+        ]]>
+    </select>
+
+    <insert id="saveOrUpdateCorpSuite" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO isv_corp_suite (
+            date_created,
+            last_updated,
+            corp_id,
+            suite_key,
+            permanent_code
+        ) VALUES (
+            now(),
+            now(),
+            #{corpId},
+            #{suiteKey},
+            #{permanentCode}
+        ) ON DUPLICATE KEY UPDATE
+            last_updated = now(),
+            permanent_code = #{permanentCode}
+    </insert>
+
+    <delete id="removeCorpSuiteBySuiteKeyAndCorpId">
+        DELETE FROM isv_corp_suite WHERE suite_key = #{suiteKey} AND corp_id = #{corpId}
+    </delete>
+</mapper>

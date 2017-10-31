@@ -5,7 +5,7 @@ CREATE TABLE `isv_suite` (
   `date_created` datetime NOT NULL COMMENT '创建时间',
   `last_updated` datetime NOT NULL COMMENT '修改时间',
   `suite_name` varchar(255) NOT NULL COMMENT '套件名字',
-  `suite_key` varchar(100) NOT NULL COMMENT 'suite 的唯一key',
+  `suite_key` varchar(128) NOT NULL COMMENT 'suite 的唯一key',
   `suite_secret` varchar(256) NOT NULL COMMENT 'suite的唯一secrect，与key对应',
   `encoding_aes_key` varchar(256) NOT NULL COMMENT '回调信息加解密参数',
   `token` varchar(128) NOT NULL COMMENT '已填写用于生成签名和校验毁掉请求的合法性',
@@ -18,8 +18,9 @@ CREATE TABLE `isv_suite_ticket` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
   `date_created` datetime NOT NULL COMMENT '创建时间',
   `last_updated` datetime NOT NULL COMMENT '修改时间',
-  `suite_key` varchar(100) NOT NULL COMMENT '套件suitekey',
-  `ticket` varchar(100) NOT NULL COMMENT '套件ticket',
+  `suite_key` varchar(128) NOT NULL COMMENT '套件suitekey',
+  `ticket` varchar(128) NOT NULL COMMENT '套件ticket',
+  `ticket_update_time` datetime NOT NULL COMMENT 'ticket更新的时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY `u_suite_key` (`suite_key`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COMMENT='用于接收推送的套件ticket';
@@ -28,12 +29,13 @@ CREATE TABLE `isv_suite_token` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
   `date_created` datetime NOT NULL COMMENT '创建时间',
   `last_updated` datetime NOT NULL COMMENT '修改时间',
-  `suite_key` varchar(100) NOT NULL COMMENT '套件key',
+  `suite_key` varchar(128) NOT NULL COMMENT '套件key',
   `suite_token` varchar(256) NOT NULL COMMENT '套件token',
-  `expired_time` datetime NOT NULL COMMENT '过期时间',
+  `expires_in` bigint(10) NOT NULL COMMENT '过期时间(s)',
+  `token_update_time` datetime NOT NULL COMMENT 'token更新的时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY `u_suite_key` (`suite_key`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COMMENT='套件的accesstoken表';
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COMMENT='套件的accesstoken表';
 
 CREATE TABLE `isv_app` (
   `id` bigint(20) NOT NULL auto_increment COMMENT 'pk',
@@ -42,9 +44,70 @@ CREATE TABLE `isv_app` (
   `suite_key` VARCHAR(128) NOT NULL COMMENT 'app的key值',
   `app_id` VARCHAR(128) NOT NULL COMMENT '企业微信分配的app id',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_isv_app_app_id` (`app_id`),
-  UNIQUE KEY `uk_isv_app_suite_key` (`suite_key`)
+  UNIQUE KEY `uk_isv_app_app_id` (`suite_key`, `app_id`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT 'isv创建的app';
+
+CREATE TABLE `isv_corp` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `date_created` datetime NOT NULL COMMENT '创建时间',
+  `last_updated` datetime NOT NULL COMMENT '修改时间',
+  `corp_id` varchar(128) NOT NULL COMMENT '授权方企业微信id',
+  `corp_name` varchar(256) DEFAULT NULL COMMENT '授权方企业微信名称',
+  `corp_type` varchar(256) DEFAULT NULL COMMENT '授权方企业微信类型，认证号：verified, 注册号：unverified',
+  `corp_square_logo_url` varchar(767) DEFAULT NULL COMMENT '授权方企业微信方形头像',
+  `corp_user_max` bigint(10) DEFAULT NULL COMMENT '授权方企业微信用户规模',
+  `corp_agent_max` bigint(10) DEFAULT NULL COMMENT 'agent max',
+  `corp_full_name` varchar(256) DEFAULT NULL COMMENT '所绑定的企业微信主体名称',
+  `verified_end_time` bigint(20) DEFAULT NULL COMMENT '认证到期时间',
+  `subject_type` bigint(4) DEFAULT NULL COMMENT '企业类型，1. 企业; 2. 政府以及事业单位; 3. 其他组织, 4.团队号',
+  `corp_wxqrcode` varchar(767) DEFAULT NULL COMMENT '授权方企业微信二维码',
+  `auth_email` varchar(128) DEFAULT NULL COMMENT '授权管理员的邮箱，可能为空（外部管理员一定有，不可更改）',
+  `auth_mobile` varchar(128) DEFAULT NULL COMMENT '授权管理员的手机号，可能为空（内部管理员一定有，可更改）',
+  `auth_user_id` varchar(128) DEFAULT NULL COMMENT '授权管理员的userid，可能为空（内部管理员一定有，不可更改）',
+  `auth_name` varchar(128) DEFAULT NULL COMMENT '授权管理员的name，可能为空（内部管理员一定有，不可更改）',
+  `auth_avatar` varchar(128) DEFAULT NULL COMMENT '授权管理员的头像url',
+  `is_auth_canceled` bit(1) DEFAULT 0 COMMENT '表示该企业是否是取消授权了，默认是未取消',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `u_corp_id` (`corp_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COMMENT='企业信息表';
+
+CREATE TABLE `isv_corp_suite` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `date_created` datetime NOT NULL COMMENT '创建时间',
+  `last_updated` datetime NOT NULL COMMENT '修改时间',
+  `corp_id` varchar(128) NOT NULL COMMENT '企业corpid',
+  `suite_key` varchar(128) NOT NULL COMMENT '套件key',
+  `permanent_code` varchar(255) NOT NULL COMMENT '临时授权码或永久授权码value',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `u_corp_suite` (`corp_id`,`suite_key`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COMMENT='企业对套件的授权记录';
+
+CREATE TABLE `isv_corp_app` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `date_created` datetime NOT NULL COMMENT '创建时间',
+  `last_updated` datetime NOT NULL COMMENT '修改时间',
+  `agent_id` bigint(20) NOT NULL COMMENT '授权方应用id',
+  `name` varchar(128) NOT NULL COMMENT '授权方应用名字',
+  `round_logo_url` varchar(767) DEFAULT NULL COMMENT '授权方应用圆形头像',
+  `square_logo_url` varchar(767) DEFAULT NULL COMMENT '授权方应用方形头像',
+  `suite_key` varchar(128) NOT NULL COMMENT '服务商套件key',
+  `app_id` bigint(20) NOT NULL COMMENT '服务商套件中的对应应用id',
+  `corp_id` varchar(128) NOT NULL COMMENT '使用微应用的企业ID',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `u_corp_app` (`corp_id`,`app_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COMMENT='企业微应用信息表';
+
+CREATE TABLE `isv_corp_token` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `date_created` datetime NOT NULL COMMENT '创建时间',
+  `last_updated` datetime NOT NULL COMMENT '修改时间',
+  `suite_key` varchar(128) NOT NULL COMMENT '套件key',
+  `corp_id` varchar(128) NOT NULL COMMENT '企业id',
+  `corp_token` varchar(512) NOT NULL COMMENT '授权方（企业）access_token,最长为512字节',
+  `expires_in` bigint(10) NOT NULL COMMENT '授权方（企业）access_token超时时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `u_suite_corp` (`corp_id`, `suite_key`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COMMENT='套件能够访问企业数据的accesstoken';
 
 
 

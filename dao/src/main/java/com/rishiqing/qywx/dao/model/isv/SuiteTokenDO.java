@@ -9,7 +9,8 @@ public class SuiteTokenDO {
 
     private String suiteKey;
     private String suiteToken;
-    private String expiredTime;
+    private Long expiresIn;
+    private Date tokenUpdateTime;
 
     public Long getId() {
         return id;
@@ -51,13 +52,22 @@ public class SuiteTokenDO {
         this.suiteToken = suiteToken;
     }
 
-    public String getExpiredTime() {
-        return expiredTime;
+    public Long getExpiresIn() {
+        return expiresIn;
     }
 
-    public void setExpiredTime(String expiredTime) {
-        this.expiredTime = expiredTime;
+    public void setExpiresIn(Long expiresIn) {
+        this.expiresIn = expiresIn;
     }
+
+    public Date getTokenUpdateTime() {
+        return tokenUpdateTime;
+    }
+
+    public void setTokenUpdateTime(Date tokenUpdateTime) {
+        this.tokenUpdateTime = tokenUpdateTime;
+    }
+
 
     @Override
     public String toString() {
@@ -67,7 +77,8 @@ public class SuiteTokenDO {
                 ", lastUpdated=" + lastUpdated +
                 ", suiteKey='" + suiteKey + '\'' +
                 ", suiteToken='" + suiteToken + '\'' +
-                ", expiredTime='" + expiredTime + '\'' +
+                ", expiresIn='" + expiresIn + '\'' +
+                ", tokenUpdateTime=" + tokenUpdateTime +
                 '}';
     }
 }

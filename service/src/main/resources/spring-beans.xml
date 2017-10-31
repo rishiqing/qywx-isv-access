@@ -8,5 +8,8 @@
     <bean id="suiteTokenManageService" class="com.rishiqing.qywx.service.biz.isv.impl.SuiteTokenManageServiceImpl" />
     <bean id="appManageService" class="com.rishiqing.qywx.service.biz.isv.impl.AppManageServiceImpl" />
     <bean id="corpManageService" class="com.rishiqing.qywx.service.biz.corp.impl.CorpManageServiceImpl" />
+    <bean id="corpSuiteManageService" class="com.rishiqing.qywx.service.biz.corp.impl.CorpSuiteManageServiceImpl" />
+    <bean id="corpAppManageService" class="com.rishiqing.qywx.service.biz.corp.impl.CorpAppManageServiceImpl" />
+    <bean id="corpTokenManageService" class="com.rishiqing.qywx.service.biz.corp.impl.CorpTokenManageServiceImpl" />
     <bean id="demoService" class="com.rishiqing.qywx.service.biz.isv.impl.DemoServiceImpl" />
 </beans>

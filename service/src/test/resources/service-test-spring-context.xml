@@ -1,7 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
-    <bean id="demoService" class="com.rishiqing.qywx.service.biz.isv.impl.DemoServiceImpl" />
+    <bean id="propertyPlaceholderConfigurer"
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="ignoreUnresolvablePlaceholders" value="true" />
+        <property name="locations">
+            <list>
+                <value>file:${user.home}/qywx/qywxauth-config.properties</value>
+            </list>
+        </property>
+    </bean>
+
+    <util:map id="isvGlobal">
+        <entry key="suiteKey" value="${isv.suite.key}" />
+        <entry key="appId" value="${isv.app.id}" />
+    </util:map>
+
+    <!--service层的服务beans-->
+    <import resource="classpath:spring-beans.xml" />
+
+    <!--service层的计时任务-->
+    <import resource="classpath:spring-quartz.xml" />
+
+    <!--数据库连接-->
+    <import resource="classpath:spring-jdbc.xml" />
+
+    <!--dao层dao-->
+    <import resource="classpath:spring-dao.xml" />
 </beans>

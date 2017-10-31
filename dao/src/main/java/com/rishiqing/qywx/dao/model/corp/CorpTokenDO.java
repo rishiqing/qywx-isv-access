@@ -1,15 +1,16 @@
-package com.rishiqing.qywx.dao.model.isv;
+package com.rishiqing.qywx.dao.model.corp;
 
 import java.util.Date;
 
-public class SuiteTicketDO {
+public class CorpTokenDO {
     private Long id;
     private Date dateCreated;
     private Date lastUpdated;
 
     private String suiteKey;
-    private String ticket;
-    private Date ticketUpdateTime;
+    private String corpId;
+    private String corpToken;
+    private Long expiresIn;
 
     public Long getId() {
         return id;
@@ -43,31 +44,40 @@ public class SuiteTicketDO {
         this.suiteKey = suiteKey;
     }
 
-    public String getTicket() {
-        return ticket;
+    public String getCorpId() {
+        return corpId;
     }
 
-    public void setTicket(String ticket) {
-        this.ticket = ticket;
+    public void setCorpId(String corpId) {
+        this.corpId = corpId;
     }
 
-    public Date getTicketUpdateTime() {
-        return ticketUpdateTime;
+    public String getCorpToken() {
+        return corpToken;
     }
 
-    public void setTicketUpdateTime(Date ticketUpdateTime) {
-        this.ticketUpdateTime = ticketUpdateTime;
+    public void setCorpToken(String corpToken) {
+        this.corpToken = corpToken;
+    }
+
+    public Long getExpiresIn() {
+        return expiresIn;
+    }
+
+    public void setExpiresIn(Long expiresIn) {
+        this.expiresIn = expiresIn;
     }
 
     @Override
     public String toString() {
-        return "SuiteTicketDO{" +
+        return "CorpTokenDO{" +
                 "id=" + id +
                 ", dateCreated=" + dateCreated +
                 ", lastUpdated=" + lastUpdated +
                 ", suiteKey='" + suiteKey + '\'' +
-                ", ticket='" + ticket + '\'' +
-                ", ticketUpdateTime=" + ticketUpdateTime +
+                ", corpId='" + corpId + '\'' +
+                ", corpToken='" + corpToken + '\'' +
+                ", expiresIn=" + expiresIn +
                 '}';
     }
 }

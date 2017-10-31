@@ -27,6 +27,16 @@
                 <SizeBasedTriggeringPolicy size="50 MB"/>
             </Policies>
         </RollingFile>
+        <RollingFile name="CORP_MANAGE_APPENDER" fileName="${baseDir}/service_corp_manage.log"
+                     filePattern="${baseDir}/$${date:yyyy-MM}/service_corp_manage-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout charset="UTF-8">
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p %C{1.}.%M:%L - %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="6" modulate="true" />
+                <SizeBasedTriggeringPolicy size="50 MB"/>
+            </Policies>
+        </RollingFile>
     </Appenders>
     <Loggers>
         <Root level="error">
@@ -37,6 +47,9 @@
         </Logger>
         <Logger name="ISV_HTTP_REQUEST_LOGGER" level="info" additivity="false" includeLocation="true">
             <AppenderRef ref="ISV_HTTP_REQUEST_APPENDER"/>
+        </Logger>
+        <Logger name="CORP_MANAGE_LOGGER" level="info" additivity="false" includeLocation="true">
+            <AppenderRef ref="CORP_MANAGE_APPENDER"/>
         </Logger>
     </Loggers>
 </Configuration>

@@ -12,6 +12,7 @@ public class SuiteTicketConverter {
         suiteTicketVO.setId(suiteTicketDO.getId());
         suiteTicketVO.setSuiteKey(suiteTicketDO.getSuiteKey());
         suiteTicketVO.setTicket(suiteTicketDO.getTicket());
+        suiteTicketVO.setTicketUpdateTime(suiteTicketDO.getTicketUpdateTime());
         return suiteTicketVO;
     }
 
@@ -23,6 +24,7 @@ public class SuiteTicketConverter {
         suiteTicketDO.setId(suiteTicketVO.getId());
         suiteTicketDO.setSuiteKey(suiteTicketVO.getSuiteKey());
         suiteTicketDO.setTicket(suiteTicketVO.getTicket());
+        suiteTicketDO.setTicketUpdateTime(suiteTicketVO.getTicketUpdateTime());
         return suiteTicketDO;
     }
 }

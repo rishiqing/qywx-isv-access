@@ -7,11 +7,12 @@
         <result property="lastUpdated" column="last_updated" />
         <result property="suiteKey" column="suite_key" />
         <result property="suiteToken" column="suite_token" />
-        <result property="expiredTime" column="expired_time" />
+        <result property="expiresIn" column="expires_in" />
+        <result property="tokenUpdateTime" column="token_update_time" />
     </resultMap>
 
     <sql id="selectAllFields">
-        id, date_created, last_updated, suite_key, suite_token, expired_time
+        id, date_created, last_updated, suite_key, suite_token, expires_in, token_update_time
     </sql>
 
     <select id="getSuiteTokenBySuiteKey" resultMap="suiteTokenMap">
@@ -27,16 +28,19 @@
             last_updated,
             suite_key,
             suite_token,
-            expired_time
+            expires_in,
+            token_update_time
         ) VALUES (
             now(),
             now(),
             #{suiteKey},
             #{suiteToken},
-            #{expired_time}
+            #{expiresIn},
+            now()
         ) ON DUPLICATE KEY UPDATE
             last_updated = now(),
             suite_token = #{suiteToken},
-            expired_time = #{expiredTime}
+            expires_in = #{expiresIn},
+            token_update_time = now()
     </insert>
 </mapper>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rishiqing.qywx.dao.mapper.corp.CorpAppDao">
+    <resultMap id="corpAppMap" type="com.rishiqing.qywx.dao.model.corp.CorpAppDO">
+        <id property="id" column="id" />
+        <result property="dateCreated" column="date_created" />
+        <result property="lastUpdated" column="last_updated" />
+        <result property="agentId" column="agent_id" />
+        <result property="name" column="name" />
+        <result property="roundLogoUrl" column="round_logo_url" />
+        <result property="squareLogoUrl" column="square_logo_url" />
+        <result property="suiteKey" column="suite_key" />
+        <result property="appId" column="app_id" />
+        <result property="corpId" column="corp_id" />
+    </resultMap>
+
+    <sql id="selectAllFields">
+        id, date_created, last_updated, agent_id, `name`, round_logo_url, square_logo_url, suite_key, app_id, corp_id
+    </sql>
+
+    <select id="getCorpAppByAppIdAndCorpId" resultMap="corpAppMap">
+        SELECT <include refid="selectAllFields" /> FROM isv_corp_app
+        <![CDATA[
+            WHERE app_id = #{appId} AND corp_id = #{corpId}
+        ]]>
+    </select>
+
+    <insert id="saveOrUpdateCorpApp" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO isv_corp_app (
+            date_created,
+            last_updated,
+            agent_id,
+            `name`,
+            round_logo_url,
+            square_logo_url,
+            suite_key,
+            app_id,
+            corp_id
+        ) VALUES (
+            now(),
+            now(),
+            #{agentId},
+            #{name},
+            #{roundLogoUrl},
+            #{squareLogoUrl},
+            #{suiteKey},
+            #{appId},
+            #{corpId}
+        ) ON DUPLICATE KEY UPDATE
+            last_updated = now(),
+            `name` = #{name},
+            round_logo_url = #{roundLogoUrl},
+            square_logo_url = #{squareLogoUrl}
+    </insert>
+
+    <delete id="removeCorpAppByAppIdAndCorpId">
+        DELETE FROM isv_corp_app WHERE app_id = #{appId} AND corp_id = #{corpId}
+    </delete>
+</mapper>

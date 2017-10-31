@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rishiqing.qywx.dao.mapper.corp.CorpDao">
+    <resultMap id="corpMap" type="com.rishiqing.qywx.dao.model.corp.CorpDO">
+        <id property="id" column="id" />
+        <result property="dateCreated" column="date_created" />
+        <result property="lastUpdated" column="last_updated" />
+        <result property="corpId" column="corp_id" />
+        <result property="corpName" column="corp_name" />
+        <result property="corpType" column="corp_type" />
+        <result property="corpSquareLogoUrl" column="corp_square_logo_url" />
+        <result property="corpUserMax" column="corp_user_max" />
+        <result property="corpAgentMax" column="corp_agent_max" />
+        <result property="corpFullName" column="corp_full_name" />
+        <result property="verifiedEndTime" column="verified_end_time" />
+        <result property="subjectType" column="subject_type" />
+        <result property="corpWxqrcode" column="corp_wxqrcode" />
+        <result property="authEmail" column="auth_email" />
+        <result property="authMobile" column="auth_mobile" />
+        <result property="authUserId" column="auth_user_id" />
+        <result property="authName" column="auth_name" />
+        <result property="authAvatar" column="auth_avatar" />
+        <result property="authCanceled" column="is_auth_canceled" />
+    </resultMap>
+
+    <sql id="selectAllFields">
+        id, date_created, last_updated, corp_id, corp_name, corp_type, corp_square_logo_url, corp_user_max, corp_agent_max,
+        corp_full_name, verified_end_time, subject_type, corp_wxqrcode,
+        auth_email, auth_mobile, auth_user_id, auth_name, auth_avatar, auth_canceled
+    </sql>
+
+    <select id="getCorpByCorpId" resultMap="corpMap">
+        SELECT <include refid="selectAllFields" /> FROM isv_corp
+        <![CDATA[
+            WHERE corp_id = #{corpId}
+        ]]>
+    </select>
+
+    <insert id="saveOrUpdateCorp" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO isv_corp (
+            date_created,
+            last_updated,
+            corp_id,
+            corp_name,
+            corp_type,
+            corp_square_logo_url,
+            corp_user_max,
+            corp_agent_max,
+            corp_full_name,
+            verified_end_time,
+            subject_type,
+            corp_wxqrcode,
+            auth_email,
+            auth_mobile,
+            auth_user_id,
+            auth_name,
+            auth_avatar,
+            is_auth_canceled
+        ) VALUES (
+            now(),
+            now(),
+            #{corpId},
+            #{corpName},
+            #{corpType},
+            #{corpSquareLogoUrl},
+            #{corpUserMax},
+            #{corpAgentMax},
+            #{corpFullName},
+            #{verifiedEndTime},
+            #{subjectType},
+            #{corpWxqrcode},
+            #{authEmail},
+            #{authMobile},
+            #{authUserId},
+            #{authName},
+            #{authAvatar},
+            0
+        ) ON DUPLICATE KEY UPDATE
+            last_updated = now(),
+            corp_name = #{corpName},
+            corp_square_logo_url = #{corpSquareLogoUrl},
+            corp_user_max = #{corpUserMax},
+            corp_agent_max = #{corpAgentMax},
+            corp_full_name = #{corpFullName},
+            verified_end_time = #{verifiedEndTime},
+            subject_type = #{subjectType},
+            is_auth_canceled = 0
+    </insert>
+
+    <update id="updateCorpSetAuthCanceled">
+        UPDATE isv_corp SET is_auth_canceled = #{isAuthCanceled} WHERE corp_id = #{corpId}
+    </update>
+
+    <delete id="removeCorpByCorpId">
+        DELETE FROM isv_corp WHERE corp_id = #{corpId}
+    </delete>
+</mapper>

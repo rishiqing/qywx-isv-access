@@ -12,7 +12,8 @@ public class SuiteTokenConverter {
         suiteTokenVO.setId(suiteTokenDO.getId());
         suiteTokenVO.setSuiteKey(suiteTokenDO.getSuiteKey());
         suiteTokenVO.setSuiteToken(suiteTokenDO.getSuiteToken());
-        suiteTokenVO.setExpiredTime(suiteTokenDO.getExpiredTime());
+        suiteTokenVO.setExpiresIn(suiteTokenDO.getExpiresIn());
+        suiteTokenVO.setTokenUpdateTime(suiteTokenDO.getTokenUpdateTime());
         return suiteTokenVO;
     }
 
@@ -24,7 +25,8 @@ public class SuiteTokenConverter {
         suiteTokenDO.setId(suiteTokenVO.getId());
         suiteTokenDO.setSuiteKey(suiteTokenVO.getSuiteKey());
         suiteTokenDO.setSuiteToken(suiteTokenVO.getSuiteToken());
-        suiteTokenDO.setExpiredTime(suiteTokenVO.getExpiredTime());
+        suiteTokenDO.setExpiresIn(suiteTokenVO.getExpiresIn());
+        suiteTokenDO.setTokenUpdateTime(suiteTokenVO.getTokenUpdateTime());
         return suiteTokenDO;
     }
 }

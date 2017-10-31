@@ -7,10 +7,11 @@
         <result property="lastUpdated" column="last_updated" />
         <result property="suiteKey" column="suite_key" />
         <result property="ticket" column="ticket" />
+        <result property="ticketUpdateTime" column="ticket_update_time" />
     </resultMap>
 
     <sql id="selectAllFields">
-        id, date_created, last_updated, suite_key, ticket
+        id, date_created, last_updated, suite_key, ticket, ticket_update_time
     </sql>
 
     <select id="getSuiteTicketBySuiteKey" resultMap="suiteTicketMap">
@@ -25,14 +26,17 @@
             date_created,
             last_updated,
             suite_key,
-            ticket
+            ticket,
+            ticket_update_time
         ) VALUES (
             now(),
             now(),
             #{suiteKey},
-            #{ticket}
+            #{ticket},
+            now()
         ) ON DUPLICATE KEY UPDATE
             last_updated = now(),
-            ticket = #{ticket}
+            ticket = #{ticket},
+            ticket_update_time = now()
     </insert>
 </mapper>

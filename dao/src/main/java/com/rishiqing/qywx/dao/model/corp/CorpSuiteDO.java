@@ -1,15 +1,15 @@
-package com.rishiqing.qywx.dao.model.isv;
+package com.rishiqing.qywx.dao.model.corp;
 
 import java.util.Date;
 
-public class SuiteTicketDO {
+public class CorpSuiteDO {
     private Long id;
     private Date dateCreated;
     private Date lastUpdated;
 
+    private String corpId;
     private String suiteKey;
-    private String ticket;
-    private Date ticketUpdateTime;
+    private String permanentCode;
 
     public Long getId() {
         return id;
@@ -35,6 +35,14 @@ public class SuiteTicketDO {
         this.lastUpdated = lastUpdated;
     }
 
+    public String getCorpId() {
+        return corpId;
+    }
+
+    public void setCorpId(String corpId) {
+        this.corpId = corpId;
+    }
+
     public String getSuiteKey() {
         return suiteKey;
     }
@@ -43,31 +51,23 @@ public class SuiteTicketDO {
         this.suiteKey = suiteKey;
     }
 
-    public String getTicket() {
-        return ticket;
+    public String getPermanentCode() {
+        return permanentCode;
     }
 
-    public void setTicket(String ticket) {
-        this.ticket = ticket;
-    }
-
-    public Date getTicketUpdateTime() {
-        return ticketUpdateTime;
-    }
-
-    public void setTicketUpdateTime(Date ticketUpdateTime) {
-        this.ticketUpdateTime = ticketUpdateTime;
+    public void setPermanentCode(String permanentCode) {
+        this.permanentCode = permanentCode;
     }
 
     @Override
     public String toString() {
-        return "SuiteTicketDO{" +
+        return "CorpSuiteDO{" +
                 "id=" + id +
                 ", dateCreated=" + dateCreated +
                 ", lastUpdated=" + lastUpdated +
+                ", corpId='" + corpId + '\'' +
                 ", suiteKey='" + suiteKey + '\'' +
-                ", ticket='" + ticket + '\'' +
-                ", ticketUpdateTime=" + ticketUpdateTime +
+                ", permanentCode='" + permanentCode + '\'' +
                 '}';
     }
 }

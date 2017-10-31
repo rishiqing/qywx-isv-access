@@ -1,15 +1,16 @@
-package com.rishiqing.qywx.web.util.http;
+package com.rishiqing.qywx.service.util.http;
 
 import com.alibaba.fastjson.JSONObject;
-import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.rishiqing.qywx.service.biz.isv.SuiteManageService;
 import com.rishiqing.qywx.service.biz.isv.SuiteTicketManageService;
 import com.rishiqing.qywx.service.model.isv.SuiteTicketVO;
 import com.rishiqing.qywx.service.model.isv.SuiteVO;
-import com.rishiqing.qywx.web.exception.HttpException;
+import com.rishiqing.qywx.service.exception.HttpException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -20,8 +21,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("classpath:web-test-spring-context.xml")
+@ContextConfiguration("classpath:service-test-spring-context.xml")
 public class HttpUtilTest {
+    private static final Logger logger = LoggerFactory.getLogger("ISV_HTTP_REQUEST_LOGGER");
     private static final long TICKET_EXPIRE = 7200L;
     @Autowired
     private Map isvGlobal;
@@ -38,6 +40,7 @@ public class HttpUtilTest {
 
         try {
             JSONObject json = HttpUtil.getSuiteToken(key, suite.getSuiteSecret(), ticket.getTicket());
+            logger.info("response body: " + json);
             String token = json.getString("suite_access_token");
             long expired = json.getLong("expires_in");
             assertNotNull(token);

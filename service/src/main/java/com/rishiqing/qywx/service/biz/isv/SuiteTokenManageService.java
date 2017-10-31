@@ -1,5 +1,7 @@
 package com.rishiqing.qywx.service.biz.isv;
 
+import com.mashape.unirest.http.exceptions.UnirestException;
+import com.rishiqing.qywx.service.exception.HttpException;
 import com.rishiqing.qywx.service.model.isv.SuiteTokenVO;
 
 public interface SuiteTokenManageService {
@@ -11,8 +13,8 @@ public interface SuiteTokenManageService {
     SuiteTokenVO getSuiteToken(String suiteKey);
 
     /**
-     * 保存suiteTicket
-     * @param suiteTokenVO
+     * 根据suiteKey，获取从微信服务器获取到对应suite的token，并保存到本地
+     * @param suiteKey
      */
-    void saveSuiteToken(SuiteTokenVO suiteTokenVO);
+    void fetchAndSaveSuiteToken(String suiteKey) throws HttpException, UnirestException;
 }

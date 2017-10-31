@@ -1,11 +1,14 @@
 package com.rishiqing.qywx.service.model.isv;
 
+import java.util.Date;
+
 public class SuiteTokenVO {
     private Long id;
 
     private String suiteKey;
     private String suiteToken;
-    private String expiredTime;
+    private Long expiresIn;
+    private Date tokenUpdateTime;
 
     public Long getId() {
         return id;
@@ -31,12 +34,20 @@ public class SuiteTokenVO {
         this.suiteToken = suiteToken;
     }
 
-    public String getExpiredTime() {
-        return expiredTime;
+    public Long getExpiresIn() {
+        return expiresIn;
     }
 
-    public void setExpiredTime(String expiredTime) {
-        this.expiredTime = expiredTime;
+    public void setExpiresIn(Long expiresIn) {
+        this.expiresIn = expiresIn;
+    }
+
+    public Date getTokenUpdateTime() {
+        return tokenUpdateTime;
+    }
+
+    public void setTokenUpdateTime(Date tokenUpdateTime) {
+        this.tokenUpdateTime = tokenUpdateTime;
     }
 
     @Override
@@ -45,7 +56,8 @@ public class SuiteTokenVO {
                 "id=" + id +
                 ", suiteKey='" + suiteKey + '\'' +
                 ", suiteToken='" + suiteToken + '\'' +
-                ", expiredTime='" + expiredTime + '\'' +
+                ", expiresIn='" + expiresIn + '\'' +
+                ", tokenUpdateTime=" + tokenUpdateTime +
                 '}';
     }
 }
