@@ -16,6 +16,24 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class XmlUtil {
+
+    /**
+     * 检查ToUserName是否是suiteKey
+     * @param body
+     * @return
+     */
+    public static Boolean checkUserName(String suiteKey, String body) throws ParserConfigurationException, IOException, SAXException {
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilder db = dbf.newDocumentBuilder();
+        StringReader sr = new StringReader(body);
+        InputSource is = new InputSource(sr);
+        Document document = db.parse(is);
+
+        Element root = document.getDocumentElement();
+        NodeList nodeList = root.getElementsByTagName("ToUserName");
+
+        return nodeList.getLength() != 0 && suiteKey.equals(nodeList.item(0).getTextContent());
+    }
     /**
      * 暂时简单处理，只处理第一层
      * @param xmlText

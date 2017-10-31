@@ -55,4 +55,68 @@ public class HttpUtil {
         }
         return jsonResponse;
     }
+
+    public static JSONObject getCorpAuthInfo(
+            String suiteKey,
+            String suiteAccessToken,
+            String corpId,
+            String permanentCode) throws UnirestException, HttpException, SuiteAccessTokenExpiredException {
+        JSONObject params = new JSONObject();
+        params.put("suite_id", suiteKey);
+        params.put("auth_corpid", corpId);
+        params.put("permanent_code", permanentCode);
+        HttpResponse<String> resp =
+                Unirest.post("https://qyapi.weixin.qq.com/cgi-bin/service/get_auth_info")
+                        .queryString("suite_access_token", suiteAccessToken)
+                        .body(params.toString())
+                        .asString();
+        if(resp.getStatus() > 200){
+            throw new HttpException("http request getCorpAuthInfo status error: " + resp.getStatus() + ", " + resp.getBody());
+        }
+        JSONObject jsonResponse = JSON.parseObject(resp.getBody());
+        Long errcode = jsonResponse.getLong("errcode");
+        if(errcode != null && !errcode.equals(0L)){
+            //  如果遇到suiteAccessToken失效，那么抛出SuiteAccessTokenExpiredException异常
+            if(errcode.equals(42009L) || errcode.equals(40082L)){
+                throw new SuiteAccessTokenExpiredException(
+                        "getCorpAuthInfo suiteAccessToken expired, suiteKey is: " + suiteKey +
+                                ", errcode is " + errcode);
+            }else{
+                throw new HttpException(errcode, jsonResponse.getString("errmsg"));
+            }
+        }
+        return jsonResponse;
+    }
+
+    public static JSONObject getCorpAccessToken(
+            String suiteKey,
+            String suiteAccessToken,
+            String corpId,
+            String permanentCode) throws UnirestException, HttpException, SuiteAccessTokenExpiredException {
+        JSONObject params = new JSONObject();
+        params.put("suite_id", suiteKey);
+        params.put("auth_corpid", corpId);
+        params.put("permanent_code", permanentCode);
+        HttpResponse<String> resp =
+                Unirest.post("https://qyapi.weixin.qq.com/cgi-bin/service/get_corp_token")
+                        .queryString("suite_access_token", suiteAccessToken)
+                        .body(params.toString())
+                        .asString();
+        if(resp.getStatus() > 200){
+            throw new HttpException("http request getCorpAccessToken status error: " + resp.getStatus() + ", " + resp.getBody());
+        }
+        JSONObject jsonResponse = JSON.parseObject(resp.getBody());
+        Long errcode = jsonResponse.getLong("errcode");
+        if(errcode != null && !errcode.equals(0L)){
+            //  如果遇到suiteAccessToken失效，那么抛出SuiteAccessTokenExpiredException异常
+            if(errcode.equals(42009L) || errcode.equals(40082L)){
+                throw new SuiteAccessTokenExpiredException(
+                        "getCorpAccessToken suiteAccessToken expired, suiteKey is: " + suiteKey +
+                                ", errcode is " + errcode);
+            }else{
+                throw new HttpException(errcode, jsonResponse.getString("errmsg"));
+            }
+        }
+        return jsonResponse;
+    }
 }

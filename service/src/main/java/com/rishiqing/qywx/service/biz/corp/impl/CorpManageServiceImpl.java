@@ -10,6 +10,7 @@ import com.rishiqing.qywx.dao.model.corp.CorpDO;
 import com.rishiqing.qywx.service.biz.corp.CorpSuiteManageService;
 import com.rishiqing.qywx.service.biz.corp.CorpTokenManageService;
 import com.rishiqing.qywx.service.biz.isv.SuiteTokenManageService;
+import com.rishiqing.qywx.service.constant.ServiceConstant;
 import com.rishiqing.qywx.service.exception.HttpException;
 import com.rishiqing.qywx.service.exception.SuiteAccessTokenExpiredException;
 import com.rishiqing.qywx.service.model.corp.CorpAppVO;
@@ -42,7 +43,6 @@ public class CorpManageServiceImpl implements CorpManageService {
                 suiteToken.getSuiteKey(),
                 suiteToken.getSuiteToken(),
                 authCode);
-        System.out.println("activeCorp----" + json);
         String suiteKey = suiteToken.getSuiteKey();
         //1. 保存corp信息
         CorpVO corpVO = JsonConverter.generateCorp(json);
@@ -59,7 +59,7 @@ public class CorpManageServiceImpl implements CorpManageService {
 
         //4. 保存corpApp信息
         List<CorpAppVO> list = JsonConverter.generateCorpAppList(suiteKey, corpId, json);
-        if(list.size() > 5){
+        if(list.size() > ServiceConstant.CORP_APP_MAX_LIMIT){
             //  报出警告，如果list数量过大，需要修改成批量插入
             logger.warn("too many CorpAppVO to be saved simutaniously, may cause db performance problem, number is {}", list.size());
         }
@@ -73,8 +73,44 @@ public class CorpManageServiceImpl implements CorpManageService {
     }
 
     @Override
-    public CorpVO fetchAndSaveCorpInfo(String corpId) {
-        return null;
+    public CorpVO fetchAndSaveCorpInfo(SuiteTokenVO suiteToken, CorpSuiteVO corpSuite) throws SuiteAccessTokenExpiredException, UnirestException, HttpException {
+        JSONObject json = HttpUtil.getCorpAuthInfo(
+                suiteToken.getSuiteKey(),
+                suiteToken.getSuiteToken(),
+                corpSuite.getCorpId(),
+                corpSuite.getPermanentCode());
+        System.out.println("fetch corp info----" + json);
+        String suiteKey = suiteToken.getSuiteKey();
+        //1. 保存corp信息
+        CorpVO corpVO = JsonConverter.generateCorp(json);
+        String corpId = corpVO.getCorpId();
+        this.saveOrUpdateCorp(corpVO);
+
+        //2. 保存corpApp信息，这里需要进行新旧CorpApp的对比
+        List<CorpAppVO> list = JsonConverter.generateCorpAppList(suiteKey, corpId, json);
+        if(list.size() > ServiceConstant.CORP_APP_MAX_LIMIT){
+            //  报出警告，如果list数量过大，需要修改成批量插入
+            logger.warn("too many CorpAppVO to be saved simutaniously, may cause db performance problem, number is {}", list.size());
+        }
+        List<CorpAppVO> oldList = corpAppManageService.listCorpApp(corpId);
+        for(CorpAppVO oldCorpApp : oldList){
+            //  如果oldCorpApp在list中不存在，则执行删除
+            boolean exists = false;
+            for(CorpAppVO changedCorpApp : list){
+                if(oldCorpApp.getAgentId().equals(changedCorpApp.getAgentId())){
+                    exists = true;
+                    break;
+                }
+            }
+            if(!exists){
+                corpAppManageService.removeCorpApp(oldCorpApp.getAppId(), oldCorpApp.getCorpId());
+            }
+        }
+        for(CorpAppVO corpAppVO : list){
+            corpAppManageService.saveCorpApp(corpAppVO);
+        }
+
+        return corpVO;
     }
 
     @Override

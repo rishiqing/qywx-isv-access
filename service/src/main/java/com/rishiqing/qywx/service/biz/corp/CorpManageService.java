@@ -3,6 +3,7 @@ package com.rishiqing.qywx.service.biz.corp;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.rishiqing.qywx.service.exception.HttpException;
 import com.rishiqing.qywx.service.exception.SuiteAccessTokenExpiredException;
+import com.rishiqing.qywx.service.model.corp.CorpSuiteVO;
 import com.rishiqing.qywx.service.model.corp.CorpVO;
 import com.rishiqing.qywx.service.model.isv.SuiteTokenVO;
 
@@ -17,7 +18,7 @@ public interface CorpManageService {
      * 根据企业的永久授权码获取企业信息
      * @return
      */
-    CorpVO fetchAndSaveCorpInfo(String corpId);
+    CorpVO fetchAndSaveCorpInfo(SuiteTokenVO suiteTokenVO, CorpSuiteVO corpSuiteVO) throws SuiteAccessTokenExpiredException, UnirestException, HttpException;
 
     /**
      * 保存corp信息
