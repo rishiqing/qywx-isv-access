@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping("/suite")
 public class CallbackController {
-    private static final Logger logger = LoggerFactory.getLogger("ISV_CALLBACK_LOGGER");
+    private static final Logger logger = LoggerFactory.getLogger("WEB_CALLBACK_LOGGER");
 
     @Autowired
     private CallbackService callbackService;

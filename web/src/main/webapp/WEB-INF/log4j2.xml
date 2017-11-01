@@ -2,13 +2,16 @@
 <Configuration status="WARN" monitorInterval="60">
     <Properties>
         <Property name="baseDir">$${sys:user.home}/qywx/logs/</Property>
+        <Property name="globalLevel">info</Property>
     </Properties>
     <Appenders>
+        <!--不使用输出到控制台-->
         <Console name="Console" target="SYSTEM_OUT">
             <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
         </Console>
-        <RollingFile name="ISV_CALLBACK_APPENDER" fileName="${baseDir}/web_isv_callback.log"
-                     filePattern="${baseDir}/$${date:yyyy-MM}/web_isv_callback-%d{MM-dd-yyyy}-%i.log.gz">
+        <!--默认输出-->
+        <RollingFile name="ROOT_APPENDER" fileName="${baseDir}/root.log"
+                     filePattern="${baseDir}/$${date:yyyy-MM}/root-%d{MM-dd-yyyy}-%i.log.gz">
             <PatternLayout charset="UTF-8">
                 <Pattern>%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p %C{1.}.%M:%L - %m%n</Pattern>
             </PatternLayout>
@@ -17,8 +20,8 @@
                 <SizeBasedTriggeringPolicy size="50 MB"/>
             </Policies>
         </RollingFile>
-        <RollingFile name="ISV_HTTP_REQUEST_APPENDER" fileName="${baseDir}/web_isv_http_request.log"
-                     filePattern="${baseDir}/$${date:yyyy-MM}/web_isv_http_request-%d{MM-dd-yyyy}-%i.log.gz">
+        <RollingFile name="WEB_CALLBACK_APPENDER" fileName="${baseDir}/web_callback.log"
+                     filePattern="${baseDir}/$${date:yyyy-MM}/web_callback-%d{MM-dd-yyyy}-%i.log.gz">
             <PatternLayout charset="UTF-8">
                 <Pattern>%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p %C{1.}.%M:%L - %m%n</Pattern>
             </PatternLayout>
@@ -27,8 +30,28 @@
                 <SizeBasedTriggeringPolicy size="50 MB"/>
             </Policies>
         </RollingFile>
-        <RollingFile name="CORP_MANAGE_APPENDER" fileName="${baseDir}/service_corp_manage.log"
+        <RollingFile name="SERVICE_CORP_MANAGE_APPENDER" fileName="${baseDir}/service_corp_manage.log"
                      filePattern="${baseDir}/$${date:yyyy-MM}/service_corp_manage-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout charset="UTF-8">
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p %C{1.}.%M:%L - %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="6" modulate="true" />
+                <SizeBasedTriggeringPolicy size="50 MB"/>
+            </Policies>
+        </RollingFile>
+        <RollingFile name="SERVICE_HTTP_REQUEST_APPENDER" fileName="${baseDir}/service_http_request.log"
+                     filePattern="${baseDir}/$${date:yyyy-MM}/service_http_request-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout charset="UTF-8">
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p %C{1.}.%M:%L - %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="6" modulate="true" />
+                <SizeBasedTriggeringPolicy size="50 MB"/>
+            </Policies>
+        </RollingFile>
+        <RollingFile name="SERVICE_EVENT_LISTENER_APPENDER" fileName="${baseDir}/service_event_listener.log"
+                     filePattern="${baseDir}/$${date:yyyy-MM}/service_event_listener-%d{MM-dd-yyyy}-%i.log.gz">
             <PatternLayout charset="UTF-8">
                 <Pattern>%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p %C{1.}.%M:%L - %m%n</Pattern>
             </PatternLayout>
@@ -40,16 +63,19 @@
     </Appenders>
     <Loggers>
         <Root level="error">
-            <AppenderRef ref="Console"/>
+            <AppenderRef ref="ROOT_APPENDER"/>
         </Root>
-        <Logger name="ISV_CALLBACK_LOGGER" level="info" additivity="false" includeLocation="true">
-            <AppenderRef ref="ISV_CALLBACK_APPENDER"/>
+        <Logger name="WEB_CALLBACK_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
+            <AppenderRef ref="WEB_CALLBACK_APPENDER"/>
         </Logger>
-        <Logger name="ISV_HTTP_REQUEST_LOGGER" level="info" additivity="false" includeLocation="true">
-            <AppenderRef ref="ISV_HTTP_REQUEST_APPENDER"/>
+        <Logger name="SERVICE_CORP_MANAGE_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
+            <AppenderRef ref="SERVICE_CORP_MANAGE_APPENDER"/>
         </Logger>
-        <Logger name="CORP_MANAGE_LOGGER" level="info" additivity="false" includeLocation="true">
-            <AppenderRef ref="CORP_MANAGE_APPENDER"/>
+        <Logger name="SERVICE_HTTP_REQUEST_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
+            <AppenderRef ref="SERVICE_HTTP_REQUEST_APPENDER"/>
+        </Logger>
+        <Logger name="SERVICE_EVENT_LISTENER_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
+            <AppenderRef ref="SERVICE_EVENT_LISTENER_APPENDER"/>
         </Logger>
     </Loggers>
 </Configuration>

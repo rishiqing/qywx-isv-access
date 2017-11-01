@@ -2,6 +2,7 @@
 <Configuration status="WARN" monitorInterval="60">
     <Properties>
         <Property name="baseDir">$${sys:user.home}/qywx/test/service/logs/</Property>
+        <Property name="globalLevel">info</Property>
     </Properties>
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT">
@@ -17,8 +18,18 @@
                 <SizeBasedTriggeringPolicy size="50 MB"/>
             </Policies>
         </RollingFile>
-        <RollingFile name="ISV_HTTP_REQUEST_APPENDER" fileName="${baseDir}/web_isv_http_request.log"
-                     filePattern="${baseDir}/$${date:yyyy-MM}/web_isv_http_request-%d{MM-dd-yyyy}-%i.log.gz">
+        <RollingFile name="SERVICE_HTTP_REQUEST_APPENDER" fileName="${baseDir}/service_http_request.log"
+                     filePattern="${baseDir}/$${date:yyyy-MM}/service_http_request-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout charset="UTF-8">
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p %C{1.}.%M:%L - %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="6" modulate="true" />
+                <SizeBasedTriggeringPolicy size="50 MB"/>
+            </Policies>
+        </RollingFile>
+        <RollingFile name="SERVICE_EVENT_LISTENER_APPENDER" fileName="${baseDir}/service_event_listener.log"
+                     filePattern="${baseDir}/$${date:yyyy-MM}/service_event_listener-%d{MM-dd-yyyy}-%i.log.gz">
             <PatternLayout charset="UTF-8">
                 <Pattern>%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p %C{1.}.%M:%L - %m%n</Pattern>
             </PatternLayout>
@@ -32,11 +43,11 @@
         <Root level="error">
             <AppenderRef ref="Console"/>
         </Root>
-        <Logger name="ISV_CALLBACK_LOGGER" level="info" additivity="false" includeLocation="true">
-            <AppenderRef ref="ISV_CALLBACK_APPENDER"/>
+        <Logger name="SERVICE_HTTP_REQUEST_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
+            <AppenderRef ref="SERVICE_HTTP_REQUEST_APPENDER"/>
         </Logger>
-        <Logger name="ISV_HTTP_REQUEST_LOGGER" level="info" additivity="false" includeLocation="true">
-            <AppenderRef ref="ISV_HTTP_REQUEST_APPENDER"/>
+        <Logger name="SERVICE_EVENT_LISTENER_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
+            <AppenderRef ref="SERVICE_EVENT_LISTENER_APPENDER"/>
         </Logger>
     </Loggers>
 </Configuration>

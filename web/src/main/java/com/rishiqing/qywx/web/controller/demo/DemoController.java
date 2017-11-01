@@ -1,10 +1,13 @@
 package com.rishiqing.qywx.web.controller.demo;
 
+import com.rishiqing.qywx.service.biz.isv.DemoService;
 import com.rishiqing.qywx.service.biz.isv.SuiteManageService;
 import com.rishiqing.qywx.service.model.isv.SuiteVO;
 import com.rishiqing.qywx.web.util.codec.AesException;
 import com.rishiqing.qywx.web.util.codec.WXBizMsgCrypt;
 import com.rishiqing.qywx.web.util.common.XmlUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,11 +21,15 @@ import java.util.Map;
 @Controller
 @RequestMapping("/demo")
 public class DemoController {
+    private static final Logger webLogger = LoggerFactory.getLogger("WEB_LOGGER");
+    private static final Logger serviceLogger = LoggerFactory.getLogger("SERVICE_LOGGER");
 
     @Autowired
     private Map isvGlobal;
     @Autowired
     private SuiteManageService suiteManageService;
+    @Autowired
+    private DemoService demoService;
 
     @RequestMapping("/encode")
     @ResponseBody
@@ -63,5 +70,13 @@ public class DemoController {
 
 
         return "success";
+    }
+
+    @RequestMapping("/log4j")
+    @ResponseBody
+    public String demoLog(){
+        webLogger.info("this is webLogger from demoLogController");
+        serviceLogger.info("this is serviceLogger from demoLogController");
+        return demoService.printHelloWorld();
     }
 }

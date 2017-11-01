@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rishiqing.qywx.dao.mapper.corp.CorpStaffDao">
+    <resultMap id="corpStaffMap" type="com.rishiqing.qywx.dao.model.corp.CorpStaffDO">
+        <id property="id" column="id" />
+        <result property="dateCreated" column="date_created" />
+        <result property="lastUpdated" column="last_updated" />
+        <result property="corpId" column="corp_id" />
+        <result property="userId" column="user_id" />
+        <result property="name" column="name" />
+        <result property="department" column="department" />
+        <result property="orderInDepts" column="order_in_depts" />
+        <result property="isLeaderInDepts" column="is_leader_in_depts" />
+        <result property="position" column="position" />
+        <result property="mobile" column="mobile" />
+        <result property="gender" column="gender" />
+        <result property="email" column="email" />
+        <result property="avatar" column="avatar" />
+        <result property="tel" column="tel" />
+        <result property="englishName" column="english_name" />
+        <result property="status" column="status" />
+        <result property="extattr" column="extattr" />
+        <result property="rsqUserId" column="rsq_user_id" />
+        <result property="rsqUsername" column="rsq_username" />
+        <result property="rsqPassword" column="rsq_password" />
+        <result property="rsqLoginToken" column="rsq_login_token" />
+    </resultMap>
+
+    <sql id="selectAllFields">
+        id, date_created, last_updated, corp_id, user_id, `name`, department, order_in_depts, is_leader_in_depts,
+        position, mobile, gender, email, avatar, tel, english_name, `status`, extattr,
+        rsq_user_id, rsq_username, rsq_password, rsq_login_token
+    </sql>
+
+    <select id="getCorpStaffByCorpIdAndUserId" resultMap="corpStaffMap">
+        SELECT <include refid="selectAllFields" /> FROM isv_corp_staff
+        <![CDATA[
+            WHERE corp_id = #{corpId} AND user_id = #{userId}
+        ]]>
+    </select>
+
+    <select id="listCorpStaffByCorpId" resultMap="corpStaffMap">
+        SELECT <include refid="selectAllFields" /> FROM isv_corp_staff
+        <![CDATA[
+            WHERE corp_id = #{corpId}
+        ]]>
+    </select>
+
+    <insert id="saveOrUpdateCorpStaff" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO isv_corp_staff (
+            date_created,
+            last_updated,
+            corp_id,
+            user_id,
+            `name`,
+            department,
+            order_in_depts,
+            is_leader_in_depts,
+            position,
+            mobile,
+            gender,
+            email,
+            avatar,
+            tel,
+            english_name,
+            `status`,
+            extattr,
+            rsq_user_id, rsq_username, rsq_password, rsq_login_token
+        ) VALUES (
+            now(),
+            now(),
+            #{corpId},
+            #{userId},
+            #{name},
+            #{department},
+            #{orderInDepts},
+            #{isLeaderInDepts},
+            #{position},
+            #{mobile},
+            #{gender},
+            #{email},
+            #{avatar},
+            #{tel},
+            #{englishName},
+            #{status},
+            #{extattr},
+            #{rsqUserId},
+            #{rsqUsername},
+            #{rsqPassword},
+            #{rsqLoginToken}
+        ) ON DUPLICATE KEY UPDATE
+            last_updated = now(),
+            `name` = #{name},
+            department = #{department},
+            order_in_depts = #{orderInDepts},
+            is_leader_in_depts = #{isLeaderInDepts},
+            position = #{position},
+            mobile = #{mobile},
+            gender = #{gender},
+            email = #{email},
+            avatar = #{avatar},
+            tel = #{tel},
+            english_name = #{englishName},
+            `status` = #{status},
+            extattr = #{extattr},
+            rsq_user_id = #{rsqUserId},
+            rsq_username = #{rsqUsername},
+            rsq_password = #{rsqPassword},
+            rsq_login_token = #{rsqLoginToken}
+    </insert>
+
+    <delete id="removeCorpStaffByCorpIdAndUserId">
+        DELETE FROM isv_corp_staff WHERE corp_id = #{corpId} AND user_id = #{userId}
+    </delete>
+</mapper>

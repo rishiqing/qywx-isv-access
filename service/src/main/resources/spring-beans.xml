@@ -12,4 +12,22 @@
     <bean id="corpAppManageService" class="com.rishiqing.qywx.service.biz.corp.impl.CorpAppManageServiceImpl" />
     <bean id="corpTokenManageService" class="com.rishiqing.qywx.service.biz.corp.impl.CorpTokenManageServiceImpl" />
     <bean id="demoService" class="com.rishiqing.qywx.service.biz.isv.impl.DemoServiceImpl" />
+
+
+    <!--AsyncEventBus-->
+    <bean id="asyncFetchDeptExecutorFactory" class="com.rishiqing.qywx.service.event.executor.AsyncFetchDeptExecutorFactory" />
+    <bean id="asyncFetchDeptExecutor" factory-bean="asyncFetchDeptExecutorFactory" factory-method="getFetchDeptExecutor" />
+    <bean id="asyncFetchDeptEventBus" class="com.google.common.eventbus.AsyncEventBus">
+        <constructor-arg ref="asyncFetchDeptExecutor" />
+    </bean>
+    <bean id="fetchDeptListener" class="com.rishiqing.qywx.service.event.listener.FetchDeptListener" />
+
+    <bean id="eventBusInitService" class="com.rishiqing.qywx.service.event.EventBusInitServiceImpl"
+          init-method="register">
+        <property name="eventMap">
+            <map>
+                <entry key-ref="asyncFetchDeptEventBus" value-ref="fetchDeptListener" />
+            </map>
+        </property>
+    </bean>
 </beans>

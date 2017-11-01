@@ -109,6 +109,41 @@ CREATE TABLE `isv_corp_token` (
   UNIQUE KEY `u_suite_corp` (`corp_id`, `suite_key`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COMMENT='套件能够访问企业数据的accesstoken';
 
+CREATE TABLE `isv_corp_dept` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'pk',
+  `date_created` datetime NOT NULL COMMENT '创建时间',
+  `last_updated` datetime NOT NULL COMMENT '修改时间',
+  `corp_id` varchar(128) NOT NULL COMMENT '公司id',
+  `dept_id` bigint(10) NOT NULL COMMENT '部门id',
+  `name` varchar(128) COMMENT '部门名称',
+  `order` bigint(10) COMMENT '在父部门中的次序值',
+  `parent_id` bigint(10) COMMENT '父部门的dept_id',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `u_corp_dept` (`corp_id`,`dept_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COMMENT='isv存储的公司部门信息';
+
+CREATE TABLE `isv_corp_staff` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'pk',
+  `date_created` datetime NOT NULL COMMENT '创建时间',
+  `last_updated` datetime NOT NULL COMMENT '修改时间',
+  `corp_id` varchar(128) NOT NULL COMMENT '公司id',
+  `user_id` varchar(128) NOT NULL COMMENT '成员UserID。对应管理端的帐号',
+  `name` varchar(128) COMMENT '成员名称',
+  `department` varchar(1024) COMMENT '成员所属部门id列表',
+  `order_in_depts` varchar(1024) COMMENT '部门内的排序值，默认为0。数量必须和department一致，数值越大排序越前面。值范围是[0, 2^32)',
+  `is_leader_in_depts` varchar(1024) COMMENT '标示是否为上级',
+  `position` varchar(128) COMMENT '职位信息',
+  `mobile` varchar(128) COMMENT '手机号码，第三方仅通讯录套件可获取',
+  `gender` varchar(1) COMMENT '性别。0表示未定义，1表示男性，2表示女性',
+  `email` varchar(128) COMMENT '邮箱，第三方仅通讯录套件可获取',
+  `avatar` varchar(256) COMMENT '头像url。注：如果要获取小图将url最后的”/0”改成”/100”即可',
+  `tel` varchar(128) COMMENT '座机。第三方仅通讯录套件可获取',
+  `english_name` varchar(64) COMMENT '英文名。',
+  `status` bigint(5) COMMENT '激活状态: 1=已激活，2=已禁用，4=未激活 已激活代表已激活企业微信或已关注微信插件。未激活代表既未激活企业微信又未关注微信插件。',
+  `extattr` varchar(1024) COMMENT '扩展属性，第三方仅通讯录套件可获取',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `u_corp_user` (`corp_id`,`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COMMENT='isv存储的公司成员信息';
 
 
 # quartz tables

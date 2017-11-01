@@ -26,7 +26,7 @@ import static org.junit.Assert.assertTrue;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:service-test-spring-context.xml")
 public class HttpCorpUtilTest {
-    private static final Logger logger = LoggerFactory.getLogger("ISV_HTTP_REQUEST_LOGGER");
+    private static final Logger logger = LoggerFactory.getLogger("SERVICE_HTTP_REQUEST_LOGGER");
     @Autowired
     private CorpTokenDao corpTokenDao;
     @Autowired

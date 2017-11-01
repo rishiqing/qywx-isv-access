@@ -76,7 +76,7 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
         </dependency>
-        
+
         <!--jms-->
         <dependency>
             <groupId>org.springframework</groupId>

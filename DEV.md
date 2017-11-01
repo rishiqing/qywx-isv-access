@@ -51,9 +51,9 @@ spring-mybatis会扫描`*Dao`文件，并生成相关的bean
   2. 添加jcl-over-slf4j的依赖
 - log的存放路径为`${sys:user.home}/qywx/logs/`
 - log名称按照[layerName]_[typeName]_[functionName].log的格式
-  1. layerName取值包括：web/service/dao等
-  2. typeName取值包括：corp/isv/scheduler等
-  3. functionName，可以是callback/request等
+  1. layerName取值包括：web/service/dao等，一般是项目名
+  2. typeName取值包括：corp/scheduler等,一般跟包名相关
+  3. functionName，可以是callback/request等，一般跟具体功能相关
   
 ## 测试
 

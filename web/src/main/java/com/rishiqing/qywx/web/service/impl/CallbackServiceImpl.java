@@ -28,7 +28,7 @@ import java.io.IOException;
 import java.util.Map;
 
 public class CallbackServiceImpl implements CallbackService {
-    private static final Logger logger = LoggerFactory.getLogger("ISV_CALLBACK_LOGGER");
+    private static final Logger logger = LoggerFactory.getLogger("WEB_CALLBACK_LOGGER");
 
     @Autowired
     private Map isvGlobal;

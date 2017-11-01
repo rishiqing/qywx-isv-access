@@ -15,7 +15,7 @@ import java.util.List;
 
 @Controller
 public class CorpController {
-    private static final Logger logger = LoggerFactory.getLogger("ISV_CALLBACK_LOGGER");
+    private static final Logger logger = LoggerFactory.getLogger("WEB_CALLBACK_LOGGER");
     @Autowired
     private CorpManageService corpManageService;
     @Autowired

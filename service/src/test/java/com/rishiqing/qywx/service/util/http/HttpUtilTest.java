@@ -23,7 +23,7 @@ import static org.junit.Assert.assertNotNull;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:service-test-spring-context.xml")
 public class HttpUtilTest {
-    private static final Logger logger = LoggerFactory.getLogger("ISV_HTTP_REQUEST_LOGGER");
+    private static final Logger logger = LoggerFactory.getLogger("SERVICE_HTTP_REQUEST_LOGGER");
     private static final long TICKET_EXPIRE = 7200L;
     @Autowired
     private Map isvGlobal;
