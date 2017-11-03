@@ -1,7 +1,7 @@
 package com.rishiqing.qywx.web.controller.corp;
 
-import com.rishiqing.qywx.service.biz.corp.CorpManageService;
-import com.rishiqing.qywx.service.biz.isv.AppManageService;
+import com.rishiqing.qywx.service.common.corp.CorpManageService;
+import com.rishiqing.qywx.service.common.isv.AppManageService;
 import com.rishiqing.qywx.service.model.isv.AppVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

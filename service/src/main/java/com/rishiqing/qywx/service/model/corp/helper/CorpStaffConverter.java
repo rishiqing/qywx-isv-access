@@ -9,6 +9,8 @@ public class CorpStaffConverter {
         newObj.setId(obj.getId());
         newObj.setCorpId(obj.getCorpId());
         newObj.setUserId(obj.getUserId());
+        newObj.setName(obj.getName());
+        newObj.setAvatar(obj.getAvatar());
         newObj.setDepartment(obj.getDepartment());
         newObj.setOrderInDepts(obj.getOrderInDepts());
         newObj.setIsLeaderInDepts(obj.getIsLeaderInDepts());
@@ -32,6 +34,8 @@ public class CorpStaffConverter {
         newObj.setId(obj.getId());
         newObj.setCorpId(obj.getCorpId());
         newObj.setUserId(obj.getUserId());
+        newObj.setName(obj.getName());
+        newObj.setAvatar(obj.getAvatar());
         newObj.setDepartment(obj.getDepartment());
         newObj.setOrderInDepts(obj.getOrderInDepts());
         newObj.setIsLeaderInDepts(obj.getIsLeaderInDepts());

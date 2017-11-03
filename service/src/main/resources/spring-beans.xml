@@ -3,30 +3,46 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="suiteManageService" class="com.rishiqing.qywx.service.biz.isv.impl.SuiteManageServiceImpl" />
-    <bean id="suiteTicketManageService" class="com.rishiqing.qywx.service.biz.isv.impl.SuiteTicketManageServiceImpl" />
-    <bean id="suiteTokenManageService" class="com.rishiqing.qywx.service.biz.isv.impl.SuiteTokenManageServiceImpl" />
-    <bean id="appManageService" class="com.rishiqing.qywx.service.biz.isv.impl.AppManageServiceImpl" />
-    <bean id="corpManageService" class="com.rishiqing.qywx.service.biz.corp.impl.CorpManageServiceImpl" />
-    <bean id="corpSuiteManageService" class="com.rishiqing.qywx.service.biz.corp.impl.CorpSuiteManageServiceImpl" />
-    <bean id="corpAppManageService" class="com.rishiqing.qywx.service.biz.corp.impl.CorpAppManageServiceImpl" />
-    <bean id="corpTokenManageService" class="com.rishiqing.qywx.service.biz.corp.impl.CorpTokenManageServiceImpl" />
-    <bean id="demoService" class="com.rishiqing.qywx.service.biz.isv.impl.DemoServiceImpl" />
+    <!--基础service-->
+    <bean id="suiteManageService" class="com.rishiqing.qywx.service.common.isv.impl.SuiteManageServiceImpl" />
+    <bean id="suiteTicketManageService" class="com.rishiqing.qywx.service.common.isv.impl.SuiteTicketManageServiceImpl" />
+    <bean id="suiteTokenManageService" class="com.rishiqing.qywx.service.common.isv.impl.SuiteTokenManageServiceImpl" />
+    <bean id="appManageService" class="com.rishiqing.qywx.service.common.isv.impl.AppManageServiceImpl" />
+    <bean id="corpManageService" class="com.rishiqing.qywx.service.common.corp.impl.CorpManageServiceImpl" />
+    <bean id="corpDeptManageService" class="com.rishiqing.qywx.service.common.corp.impl.CorpDeptManageServiceImpl" />
+    <bean id="corpStaffManageService" class="com.rishiqing.qywx.service.common.corp.impl.CorpStaffManageServiceImpl" />
+    <bean id="corpSuiteManageService" class="com.rishiqing.qywx.service.common.corp.impl.CorpSuiteManageServiceImpl" />
+    <bean id="corpAppManageService" class="com.rishiqing.qywx.service.common.corp.impl.CorpAppManageServiceImpl" />
+    <bean id="corpTokenManageService" class="com.rishiqing.qywx.service.common.corp.impl.CorpTokenManageServiceImpl" />
+    <bean id="demoService" class="com.rishiqing.qywx.service.demo.DemoServiceImpl" />
 
+    <!--业务service-->
+    <bean id="corpService" class="com.rishiqing.qywx.service.biz.corp.impl.CorpServiceImpl" />
+    <bean id="deptService" class="com.rishiqing.qywx.service.biz.corp.impl.DeptServiceImpl" />
+    <bean id="staffService" class="com.rishiqing.qywx.service.biz.corp.impl.StaffServiceImpl" />
+
+    <!--工具类-->
+    <bean id="requestClient" class="com.rishiqing.qywx.service.util.http.RequestClient" />
+    <bean id="httpUtil" class="com.rishiqing.qywx.service.util.http.HttpUtil">
+        <constructor-arg ref="requestClient" />
+    </bean>
+    <bean id="httpUtilCorp" class="com.rishiqing.qywx.service.util.http.HttpUtilCorp">
+        <constructor-arg ref="requestClient" />
+    </bean>
 
     <!--AsyncEventBus-->
-    <bean id="asyncFetchDeptExecutorFactory" class="com.rishiqing.qywx.service.event.executor.AsyncFetchDeptExecutorFactory" />
-    <bean id="asyncFetchDeptExecutor" factory-bean="asyncFetchDeptExecutorFactory" factory-method="getFetchDeptExecutor" />
-    <bean id="asyncFetchDeptEventBus" class="com.google.common.eventbus.AsyncEventBus">
-        <constructor-arg ref="asyncFetchDeptExecutor" />
+    <bean id="asyncFetchDeptAndStaffExecutorFactory" class="com.rishiqing.qywx.service.event.executor.AsyncFetchDeptAndStaffExecutorFactory" />
+    <bean id="asyncFetchDeptAndStaffExecutor" factory-bean="asyncFetchDeptAndStaffExecutorFactory" factory-method="getFetchDeptAndStaffExecutor" />
+    <bean id="asyncFetchDeptAndStaffEventBus" class="com.google.common.eventbus.AsyncEventBus">
+        <constructor-arg ref="asyncFetchDeptAndStaffExecutor" />
     </bean>
-    <bean id="fetchDeptListener" class="com.rishiqing.qywx.service.event.listener.FetchDeptListener" />
+    <bean id="fetchDeptAndStaffListener" class="com.rishiqing.qywx.service.event.listener.FetchDeptAndStaffListener" />
 
     <bean id="eventBusInitService" class="com.rishiqing.qywx.service.event.EventBusInitServiceImpl"
           init-method="register">
         <property name="eventMap">
             <map>
-                <entry key-ref="asyncFetchDeptEventBus" value-ref="fetchDeptListener" />
+                <entry key-ref="asyncFetchDeptAndStaffEventBus" value-ref="fetchDeptAndStaffListener" />
             </map>
         </property>
     </bean>

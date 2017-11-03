@@ -29,4 +29,7 @@
 
     <!--dao层dao-->
     <import resource="classpath:spring-dao.xml" />
+
+    <bean id="demoFactory" class="com.rishiqing.qywx.service.demo.DemoFactory" />
+    <bean id="demoPrototype" class="com.rishiqing.qywx.service.demo.DemoPrototype" scope="prototype" />
 </beans>

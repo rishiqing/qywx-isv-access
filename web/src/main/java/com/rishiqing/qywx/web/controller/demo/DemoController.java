@@ -1,7 +1,7 @@
 package com.rishiqing.qywx.web.controller.demo;
 
-import com.rishiqing.qywx.service.biz.isv.DemoService;
-import com.rishiqing.qywx.service.biz.isv.SuiteManageService;
+import com.rishiqing.qywx.service.demo.DemoService;
+import com.rishiqing.qywx.service.common.isv.SuiteManageService;
 import com.rishiqing.qywx.service.model.isv.SuiteVO;
 import com.rishiqing.qywx.web.util.codec.AesException;
 import com.rishiqing.qywx.web.util.codec.WXBizMsgCrypt;
@@ -78,5 +78,12 @@ public class DemoController {
         webLogger.info("this is webLogger from demoLogController");
         serviceLogger.info("this is serviceLogger from demoLogController");
         return demoService.printHelloWorld();
+    }
+
+    @RequestMapping("/send/event")
+    @ResponseBody
+    public String sendEvent(){
+        demoService.sendAsyncEvent();
+        return "success";
     }
 }

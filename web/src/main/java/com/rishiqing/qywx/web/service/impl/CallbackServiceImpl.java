@@ -1,11 +1,12 @@
 package com.rishiqing.qywx.web.service.impl;
 
 import com.mashape.unirest.http.exceptions.UnirestException;
-import com.rishiqing.qywx.service.biz.corp.CorpManageService;
-import com.rishiqing.qywx.service.biz.corp.CorpSuiteManageService;
-import com.rishiqing.qywx.service.biz.isv.SuiteManageService;
-import com.rishiqing.qywx.service.biz.isv.SuiteTicketManageService;
-import com.rishiqing.qywx.service.biz.isv.SuiteTokenManageService;
+import com.rishiqing.qywx.service.biz.corp.CorpService;
+import com.rishiqing.qywx.service.common.corp.CorpManageService;
+import com.rishiqing.qywx.service.common.corp.CorpSuiteManageService;
+import com.rishiqing.qywx.service.common.isv.SuiteManageService;
+import com.rishiqing.qywx.service.common.isv.SuiteTicketManageService;
+import com.rishiqing.qywx.service.common.isv.SuiteTokenManageService;
 import com.rishiqing.qywx.service.exception.HttpException;
 import com.rishiqing.qywx.service.exception.SuiteAccessTokenExpiredException;
 import com.rishiqing.qywx.service.model.corp.CorpSuiteVO;
@@ -40,6 +41,8 @@ public class CallbackServiceImpl implements CallbackService {
     private SuiteTokenManageService suiteTokenManageService;
     @Autowired
     private CorpManageService corpManageService;
+    @Autowired
+    private CorpService corpService;
     @Autowired
     private CorpSuiteManageService corpSuiteManageService;
 
@@ -114,17 +117,6 @@ public class CallbackServiceImpl implements CallbackService {
             throw new CallbackException("decrypt message failed", e);
         } catch (UnirestException | HttpException e) {
             throw new CallbackException("http request failed", e);
-        } catch (SuiteAccessTokenExpiredException e) {
-            //  如果是suiteAccessTokenExpiredException，那么先重新获取suiteAccessToken，然后在执行本方法
-//            suiteTokenManageService.fetchAndSaveSuiteToken(suiteKey);
-            logger.info("suite access token expired");
-            try {
-                suiteTokenManageService.fetchAndSaveSuiteToken(suiteKey);
-            } catch (HttpException | UnirestException e1) {
-                //  需要加入重试机制
-                throw new CallbackException("http request failed in fetch expired suite access token", e1);
-            }
-            this.receiveMessage(signature, timestamp, nonce, body);
         }
         return "success";
     }
@@ -146,20 +138,20 @@ public class CallbackServiceImpl implements CallbackService {
      * 授权成功的回调，获取返回值中包括临时授权码
      * @param params
      */
-    private void handleCreateAuth(Map params) throws SuiteAccessTokenExpiredException, UnirestException, HttpException {
+    private void handleCreateAuth(Map params) throws UnirestException, HttpException {
         String authCode = (String)params.get("AuthCode");
         assert authCode != null;
         SuiteTokenVO suiteTokenVO = suiteTokenManageService.getSuiteToken(this.suite.getSuiteKey());
-        corpManageService.activeCorp(suiteTokenVO, authCode);
+        corpService.activeCorp(suiteTokenVO, authCode);
     }
 
-    private void handleChangeAuth(Map params) throws SuiteAccessTokenExpiredException, UnirestException, HttpException {
+    private void handleChangeAuth(Map params) throws UnirestException, HttpException {
         String corpId = (String)params.get("AuthCorpId");
         assert corpId != null;
         String suiteKey = this.suite.getSuiteKey();
         SuiteTokenVO suiteTokenVO = suiteTokenManageService.getSuiteToken(suiteKey);
         CorpSuiteVO corpSuiteVO = corpSuiteManageService.getCorpSuite(suiteKey, corpId);
-        corpManageService.fetchAndSaveCorpInfo(suiteTokenVO, corpSuiteVO);
+        corpService.fetchAndSaveCorpInfo(suiteTokenVO, corpSuiteVO);
     }
 
     /**

@@ -2,8 +2,8 @@ package com.rishiqing.qywx.service.util.http;
 
 import com.alibaba.fastjson.JSONObject;
 import com.mashape.unirest.http.exceptions.UnirestException;
-import com.rishiqing.qywx.service.biz.isv.SuiteManageService;
-import com.rishiqing.qywx.service.biz.isv.SuiteTicketManageService;
+import com.rishiqing.qywx.service.common.isv.SuiteManageService;
+import com.rishiqing.qywx.service.common.isv.SuiteTicketManageService;
 import com.rishiqing.qywx.service.model.isv.SuiteTicketVO;
 import com.rishiqing.qywx.service.model.isv.SuiteVO;
 import com.rishiqing.qywx.service.exception.HttpException;
@@ -31,6 +31,8 @@ public class HttpUtilTest {
     private SuiteManageService suiteManageService;
     @Autowired
     private SuiteTicketManageService suiteTicketManageService;
+    @Autowired
+    private HttpUtil httpUtil;
 
     @Test
     public void test_getSuiteToken(){
@@ -39,7 +41,7 @@ public class HttpUtilTest {
         SuiteTicketVO ticket = suiteTicketManageService.getSuiteTicket(key);
 
         try {
-            JSONObject json = HttpUtil.getSuiteToken(key, suite.getSuiteSecret(), ticket.getTicket());
+            JSONObject json = httpUtil.getSuiteToken(suite, ticket);
             logger.info("response body: " + json);
             String token = json.getString("suite_access_token");
             long expired = json.getLong("expires_in");
