@@ -11,7 +11,7 @@ public class CorpTokenManageServiceImpl implements CorpTokenManageService {
     private CorpTokenDao corpTokenDao;
     @Override
     public CorpTokenVO getCorpToken(String suiteKey, String corpId) {
-        CorpTokenVO token =  CorpTokenConverter.corpTokenDO2CorpTokenVO(
+        CorpTokenVO token = CorpTokenConverter.corpTokenDO2CorpTokenVO(
                 corpTokenDao.getCorpTokenBySuiteKeyAndCorpId(suiteKey, corpId)
         );
         return token;

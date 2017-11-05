@@ -3,6 +3,7 @@ package com.rishiqing.qywx.service.biz.corp;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.rishiqing.qywx.service.exception.HttpException;
 import com.rishiqing.qywx.service.exception.SuiteAccessTokenExpiredException;
+import com.rishiqing.qywx.service.model.corp.CorpJsapiTicketVO;
 import com.rishiqing.qywx.service.model.corp.CorpSuiteVO;
 import com.rishiqing.qywx.service.model.corp.CorpVO;
 import com.rishiqing.qywx.service.model.isv.SuiteTokenVO;
@@ -20,4 +21,10 @@ public interface CorpService {
      */
     CorpVO fetchAndSaveCorpInfo(SuiteTokenVO suiteTokenVO, CorpSuiteVO corpSuiteVO) throws UnirestException, HttpException;
 
+    /**
+     * 获取并保存jsapi ticket
+     * @param corpSuiteVO
+     * @return
+     */
+    CorpJsapiTicketVO fetchAndSaveCorpJsapiTicket(CorpSuiteVO corpSuiteVO);
 }

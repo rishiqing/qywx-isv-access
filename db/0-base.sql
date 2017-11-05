@@ -145,6 +145,19 @@ CREATE TABLE `isv_corp_staff` (
   UNIQUE KEY `u_corp_user` (`corp_id`,`user_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COMMENT='isv存储的公司成员信息';
 
+CREATE TABLE `isv_corp_jsapi_ticket` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `date_created` datetime NOT NULL COMMENT '创建时间',
+  `last_updated` datetime NOT NULL COMMENT '修改时间',
+  `suite_key` varchar(100) NOT NULL COMMENT '套件key',
+  `corp_id` varchar(100) NOT NULL COMMENT '企业id',
+  `corp_jsapi_ticket` varchar(256) NOT NULL COMMENT '企业js_ticket',
+  `expires_in` bigint(10) NOT NULL COMMENT '过期时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `u_suite_corp` (`suite_key`,`corp_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COMMENT='企业使用jsapi的js ticket表';
+
+
 
 # quartz tables
 CREATE TABLE `qrtz_calendars` (

@@ -23,6 +23,18 @@ public class HttpUtilCorp {
         this.requestClient = requestClient;
     }
 
+    public JSONObject getJsapiTicket(CorpTokenVO corpTokenVO) throws HttpException, UnirestException {
+        Map<String, String> options = new HashMap<>();
+        options.put("corpId", corpTokenVO.getCorpId());
+        Map<String, Object> queryMap = new HashMap<>();
+        queryMap.put("access_token", corpTokenVO.getCorpToken());
+        return requestClient.get(
+                RequestUrl.CORP_JSAPI_TICKET,
+                queryMap,
+                options
+        );
+    }
+
     public JSONObject getDepartmentList(CorpTokenVO corpTokenVO, CorpDeptVO corpDeptVO) throws UnirestException, HttpException {
         Map<String, String> options = new HashMap<>();
         options.put("corpId", corpTokenVO.getCorpId());

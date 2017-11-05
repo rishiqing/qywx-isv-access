@@ -2,6 +2,7 @@ package com.rishiqing.qywx.service.util.http.converter;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.rishiqing.qywx.dao.model.corp.CorpJsapiTicketDO;
 import com.rishiqing.qywx.dao.model.corp.CorpTokenDO;
 import com.rishiqing.qywx.service.model.corp.*;
 import com.rishiqing.qywx.service.model.isv.SuiteTokenVO;
@@ -161,5 +162,14 @@ public class Json2BeanConverter {
             list.add(staffVO);
         }
         return list;
+    }
+
+    public static CorpJsapiTicketVO generateCorpJsapiTicket(String suiteKey, String corpId, JSONObject json){
+        CorpJsapiTicketVO corpJsapiTicketVO = new CorpJsapiTicketVO();
+        corpJsapiTicketVO.setSuiteKey(suiteKey);
+        corpJsapiTicketVO.setCorpId(corpId);
+        corpJsapiTicketVO.setCorpJsapiTicket(json.getString("ticket"));
+        corpJsapiTicketVO.setExpiresIn(json.getLong("expires_in"));
+        return corpJsapiTicketVO;
     }
 }

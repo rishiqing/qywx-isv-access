@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rishiqing.qywx.dao.mapper.corp.CorpJsapiTicketDao">
+    <resultMap id="corpJsapiTicketMap" type="com.rishiqing.qywx.dao.model.corp.CorpJsapiTicketDO">
+        <id property="id" column="id" />
+        <result property="dateCreated" column="date_created" />
+        <result property="lastUpdated" column="last_updated" />
+        <result property="corpId" column="corp_id" />
+        <result property="suiteKey" column="suite_key" />
+        <result property="corpJsapiTicket" column="corp_jsapi_ticket" />
+        <result property="expiresIn" column="expires_in" />
+    </resultMap>
+
+    <sql id="selectAllFields">
+        id, date_created, last_updated, corp_id, suite_key, corp_jsapi_ticket, expires_in
+    </sql>
+
+    <select id="getCorpJsapiTicketBySuiteKeyAndCorpId" resultMap="corpJsapiTicketMap">
+        SELECT <include refid="selectAllFields" /> FROM isv_corp_jsapi_ticket
+        <![CDATA[
+            WHERE corp_id = #{corpId} and suite_key = #{suiteKey}
+        ]]>
+    </select>
+
+    <insert id="saveOrUpdateCorpJsapiTicket" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO isv_corp_jsapi_ticket (
+            date_created,
+            last_updated,
+            corp_id,
+            suite_key,
+            corp_jsapi_ticket,
+            expires_in
+        ) VALUES (
+            now(),
+            now(),
+            #{corpId},
+            #{suiteKey},
+            #{corpJsapiTicket},
+            #{expiresIn}
+        ) ON DUPLICATE KEY UPDATE
+            last_updated = now(),
+            corp_jsapi_ticket = #{corpJsapiTicket},
+            expires_in = #{expiresIn}
+    </insert>
+
+    <delete id="removeCorpJsapiTicketBySuiteKeyAndCorpId">
+        DELETE FROM isv_corp_jsapi_ticket WHERE suite_key = #{suiteKey} AND corp_id = #{corpId}
+    </delete>
+</mapper>

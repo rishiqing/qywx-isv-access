@@ -12,10 +12,7 @@ import com.rishiqing.qywx.service.constant.ServiceConstant;
 import com.rishiqing.qywx.service.event.message.CorpSuiteMessage;
 import com.rishiqing.qywx.service.exception.HttpException;
 import com.rishiqing.qywx.service.exception.SuiteAccessTokenExpiredException;
-import com.rishiqing.qywx.service.model.corp.CorpAppVO;
-import com.rishiqing.qywx.service.model.corp.CorpSuiteVO;
-import com.rishiqing.qywx.service.model.corp.CorpTokenVO;
-import com.rishiqing.qywx.service.model.corp.CorpVO;
+import com.rishiqing.qywx.service.model.corp.*;
 import com.rishiqing.qywx.service.model.isv.SuiteTokenVO;
 import com.rishiqing.qywx.service.util.http.HttpUtil;
 import com.rishiqing.qywx.service.util.http.converter.Json2BeanConverter;
@@ -109,5 +106,10 @@ public class CorpServiceImpl implements CorpService {
         }
 
         return corpVO;
+    }
+
+    @Override
+    public CorpJsapiTicketVO fetchAndSaveCorpJsapiTicket(CorpSuiteVO corpSuiteVO) {
+        return null;
     }
 }

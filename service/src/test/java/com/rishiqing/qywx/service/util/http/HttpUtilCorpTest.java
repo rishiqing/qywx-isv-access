@@ -61,4 +61,18 @@ public class HttpUtilCorpTest {
             e.printStackTrace();
         }
     }
+
+    @Test
+    public void test_getJsapiTicket(){
+        String corpId = "wxec002534a59ea2e7";
+        String suiteKey = "tj146dbe5cecf74725";
+        CorpTokenVO corpTokenVO = corpTokenManageService.getCorpToken(suiteKey, corpId);
+        try {
+            JSONObject json = httpUtilCorp.getJsapiTicket(corpTokenVO);
+            System.out.println(json);
+            assertTrue(json.containsKey("ticket"));
+        } catch (UnirestException | HttpException e) {
+            e.printStackTrace();
+        }
+    }
 }
