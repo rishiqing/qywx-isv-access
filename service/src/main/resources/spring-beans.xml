@@ -24,10 +24,16 @@
 
     <!--工具类-->
     <bean id="requestClient" class="com.rishiqing.qywx.service.util.http.RequestClient" />
+    <!--isv相关的http请求工具-->
     <bean id="httpUtil" class="com.rishiqing.qywx.service.util.http.HttpUtil">
         <constructor-arg ref="requestClient" />
     </bean>
+    <!--公司及通讯录相关的http请求工具-->
     <bean id="httpUtilCorp" class="com.rishiqing.qywx.service.util.http.HttpUtilCorp">
+        <constructor-arg ref="requestClient" />
+    </bean>
+    <!--授权认证相关的http请求工具-->
+    <bean id="httpUtilAuth" class="com.rishiqing.qywx.service.util.http.HttpUtilAuth">
         <constructor-arg ref="requestClient" />
     </bean>
 

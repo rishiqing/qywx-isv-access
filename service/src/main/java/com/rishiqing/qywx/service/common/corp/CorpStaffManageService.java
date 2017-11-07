@@ -9,4 +9,12 @@ public interface CorpStaffManageService {
      * @param corpStaffVO
      */
     void saveOrUpdateCorpStaff(CorpStaffVO corpStaffVO);
+
+    /**
+     * 用户登录之后获取用户基本信息
+     * @param corpId
+     * @param userId
+     * @return
+     */
+    CorpStaffVO getCorpLoginStaffInfo(String corpId, String userId);
 }

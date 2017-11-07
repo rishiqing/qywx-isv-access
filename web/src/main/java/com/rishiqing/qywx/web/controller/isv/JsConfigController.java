@@ -28,17 +28,43 @@ public class JsConfigController {
     @ResponseBody
     public String getJsConfig(
             @RequestParam("url") String url,
-            @RequestParam("corpid") String corpId,
-            @RequestParam(value = "appid", required = false) String appId
+            @RequestParam("corpId") String corpId,
+            @RequestParam(value = "agentId", required = false) String agentId
     ){
-        Map<String, Object> map = null;
-        String result = "";
+        logger.info("----get_js_config----, url: {}, corpId: {}, agentId: {}", url, corpId, agentId);
+        Map<String, Object> map;
         try {
             map = jsConfigService.getJsapiSignature(url, corpId);
             map.put("errcode", ResultCode.NO_ERROR);
             map.put("errmsg", ResultCode.NO_ERROR_MSG);
         } catch (JsConfigException e) {
             logger.error("get_js_config error: ", e);
+            map = new HashMap<>();
+            map.put("errcode", ResultCode.JS_CONFIG_ERROR);
+            map.put("errmsg", ResultCode.JS_CONFIG_ERROR_MSG);
+        } catch (Exception e){
+            logger.error("internal error: ", e);
+            map = new HashMap<>();
+            map.put("errcode", ResultCode.SYS_ERROR);
+            map.put("errmsg", ResultCode.SYS_ERROR_MSG);
+        }
+        return JSONObject.toJSONString(map);
+    }
+
+    @RequestMapping("/refresh_js_ticket")
+    @ResponseBody
+    public String getJsConfig(
+            @RequestParam("corpId") String corpId,
+            @RequestParam(value = "agentId", required = false) String agentId
+    ){
+        logger.info("----refresh_js_ticket----corpId: {}, agentId: {}", corpId, agentId);
+        Map<String, Object> map = new HashMap<>();
+        try {
+            jsConfigService.refreshJsapiTicket(corpId);
+            map.put("errcode", ResultCode.NO_ERROR);
+            map.put("errmsg", ResultCode.NO_ERROR_MSG);
+        } catch (JsConfigException e) {
+            logger.error("refresh_js_ticket error: ", e);
             map = new HashMap<>();
             map.put("errcode", ResultCode.JS_CONFIG_ERROR);
             map.put("errmsg", ResultCode.JS_CONFIG_ERROR_MSG);

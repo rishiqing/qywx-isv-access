@@ -172,4 +172,24 @@ public class Json2BeanConverter {
         corpJsapiTicketVO.setExpiresIn(json.getLong("expires_in"));
         return corpJsapiTicketVO;
     }
+
+    public static LoginUserVO generateLoginUser(String corpId, JSONObject json){
+        LoginUserVO loginUserVO = new LoginUserVO();
+        loginUserVO.setCorpId(corpId);
+        loginUserVO.setDeviceId(json.getString("DeviceId"));
+
+        if(json.containsKey("UserId")){
+            loginUserVO.setUserId(json.getString("UserId"));
+        }
+        if(json.containsKey("user_ticket")){
+            loginUserVO.setUserTicket(json.getString("user_ticket"));
+        }
+        if(json.containsKey("expires_in")){
+            loginUserVO.setExpiresIn(json.getLong("expires_in"));
+        }
+        if(json.containsKey("OpenId")){
+            loginUserVO.setOpenId(json.getString("OpenId"));
+        }
+        return loginUserVO;
+    }
 }

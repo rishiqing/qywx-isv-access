@@ -2,6 +2,7 @@ package com.rishiqing.qywx.service.model.corp.helper;
 
 import com.rishiqing.qywx.dao.model.corp.CorpStaffDO;
 import com.rishiqing.qywx.service.model.corp.CorpStaffVO;
+import com.rishiqing.qywx.service.model.corp.LoginUserVO;
 
 public class CorpStaffConverter {
     public static CorpStaffVO corpStaffDO2CorpStaffVO(CorpStaffDO obj){
@@ -57,6 +58,16 @@ public class CorpStaffConverter {
         newObj.setRsqUsername(obj.getRsqUsername());
         newObj.setRsqPassword(obj.getRsqPassword());
         newObj.setRsqLoginToken(obj.getRsqLoginToken());
+        return newObj;
+    }
+
+    public static LoginUserVO corpStaffVO2LoginUserVO(CorpStaffVO obj){
+        if(obj == null){
+            return null;
+        }
+        LoginUserVO newObj = new LoginUserVO();
+        newObj.setId(obj.getId());
+        newObj.setUserId(obj.getUserId());
         return newObj;
     }
 }

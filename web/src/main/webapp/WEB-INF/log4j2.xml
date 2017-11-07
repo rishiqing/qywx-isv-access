@@ -53,6 +53,17 @@
                 <SizeBasedTriggeringPolicy size="50 MB"/>
             </Policies>
         </RollingFile>
+        <!--公司相关的接口日志-->
+        <RollingFile name="WEB_CORP_APPENDER" fileName="${baseDir}/web_corp.log"
+                     filePattern="${baseDir}/$${date:yyyy-MM}/web_corp-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout charset="UTF-8">
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p %C{1.}.%M:%L - %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="6" modulate="true" />
+                <SizeBasedTriggeringPolicy size="50 MB"/>
+            </Policies>
+        </RollingFile>
         <!--本地公司信息维护的日志输出-->
         <RollingFile name="SERVICE_CORP_MANAGE_APPENDER" fileName="${baseDir}/service_corp_manage.log"
                      filePattern="${baseDir}/$${date:yyyy-MM}/service_corp_manage-%d{MM-dd-yyyy}-%i.log.gz">
@@ -121,6 +132,9 @@
         </Logger>
         <Logger name="WEB_OAUTH_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
             <AppenderRef ref="WEB_OAUTH_APPENDER"/>
+        </Logger>
+        <Logger name="WEB_CORP_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
+            <AppenderRef ref="WEB_CORP_APPENDER"/>
         </Logger>
         <Logger name="SERVICE_CORP_MANAGE_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
             <AppenderRef ref="SERVICE_CORP_MANAGE_APPENDER"/>
