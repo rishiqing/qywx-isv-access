@@ -31,6 +31,28 @@
                 <SizeBasedTriggeringPolicy size="50 MB"/>
             </Policies>
         </RollingFile>
+        <!--js config相关的日志-->
+        <RollingFile name="WEB_JS_CONFIG_APPENDER" fileName="${baseDir}/web_js_config.log"
+                     filePattern="${baseDir}/$${date:yyyy-MM}/web_js_config-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout charset="UTF-8">
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p %C{1.}.%M:%L - %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="6" modulate="true" />
+                <SizeBasedTriggeringPolicy size="50 MB"/>
+            </Policies>
+        </RollingFile>
+        <!--OAUTH授权相关-->
+        <RollingFile name="WEB_OAUTH_APPENDER" fileName="${baseDir}/web_oauth.log"
+                     filePattern="${baseDir}/$${date:yyyy-MM}/web_oauth-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout charset="UTF-8">
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p %C{1.}.%M:%L - %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="6" modulate="true" />
+                <SizeBasedTriggeringPolicy size="50 MB"/>
+            </Policies>
+        </RollingFile>
         <!--本地公司信息维护的日志输出-->
         <RollingFile name="SERVICE_CORP_MANAGE_APPENDER" fileName="${baseDir}/service_corp_manage.log"
                      filePattern="${baseDir}/$${date:yyyy-MM}/service_corp_manage-%d{MM-dd-yyyy}-%i.log.gz">
@@ -93,6 +115,12 @@
         </Root>
         <Logger name="WEB_CALLBACK_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
             <AppenderRef ref="WEB_CALLBACK_APPENDER"/>
+        </Logger>
+        <Logger name="WEB_JS_CONFIG_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
+            <AppenderRef ref="WEB_JS_CONFIG_APPENDER"/>
+        </Logger>
+        <Logger name="WEB_OAUTH_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
+            <AppenderRef ref="WEB_OAUTH_APPENDER"/>
         </Logger>
         <Logger name="SERVICE_CORP_MANAGE_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
             <AppenderRef ref="SERVICE_CORP_MANAGE_APPENDER"/>

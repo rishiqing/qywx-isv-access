@@ -5,6 +5,9 @@ import com.rishiqing.qywx.service.model.corp.CorpSuiteVO;
 
 public class CorpSuiteConverter {
     public static CorpSuiteVO corpSuiteDO2CorpSuiteVO(CorpSuiteDO corpSuiteDO){
+        if(corpSuiteDO == null){
+            return null;
+        }
         CorpSuiteVO corpSuiteVO = new CorpSuiteVO();
         corpSuiteVO.setId(corpSuiteDO.getId());
         corpSuiteVO.setSuiteKey(corpSuiteDO.getSuiteKey());
@@ -14,6 +17,9 @@ public class CorpSuiteConverter {
     }
 
     public static CorpSuiteDO corpSuiteVO2CorpSuiteDO(CorpSuiteVO corpSuiteVO){
+        if(corpSuiteVO == null){
+            return null;
+        }
         CorpSuiteDO corpSuiteDO = new CorpSuiteDO();
         corpSuiteDO.setId(corpSuiteVO.getId());
         corpSuiteDO.setSuiteKey(corpSuiteVO.getSuiteKey());

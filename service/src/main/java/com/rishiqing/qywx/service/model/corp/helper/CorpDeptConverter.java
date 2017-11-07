@@ -5,6 +5,9 @@ import com.rishiqing.qywx.service.model.corp.CorpDeptVO;
 
 public class CorpDeptConverter {
     public static CorpDeptVO corpDeptDO2CorpDeptVO(CorpDeptDO obj){
+        if(obj == null){
+            return null;
+        }
         CorpDeptVO newObj = new CorpDeptVO();
         newObj.setId(obj.getId());
         newObj.setCorpId(obj.getCorpId());
@@ -17,6 +20,9 @@ public class CorpDeptConverter {
     }
 
     public static CorpDeptDO corpDeptVO2CorpDeptDO(CorpDeptVO obj){
+        if(obj == null){
+            return null;
+        }
         CorpDeptDO newObj = new CorpDeptDO();
         newObj.setId(obj.getId());
         newObj.setCorpId(obj.getCorpId());

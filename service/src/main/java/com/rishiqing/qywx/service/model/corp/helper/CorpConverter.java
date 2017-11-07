@@ -5,6 +5,9 @@ import com.rishiqing.qywx.service.model.corp.CorpVO;
 
 public class CorpConverter {
     public static CorpVO corpDO2CorpVO(CorpDO corpDO){
+        if(corpDO == null){
+            return null;
+        }
         CorpVO corpVO = new CorpVO();
         corpVO.setId(corpDO.getId());
         corpVO.setCorpId(corpDO.getCorpId());
@@ -27,6 +30,9 @@ public class CorpConverter {
         return corpVO;
     }
     public static CorpDO corpVO2CorpDO(CorpVO corpVO){
+        if(corpVO == null){
+            return null;
+        }
         CorpDO corpDO = new CorpDO();
         corpDO.setId(corpVO.getId());
         corpDO.setCorpId(corpVO.getCorpId());

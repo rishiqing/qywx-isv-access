@@ -5,6 +5,9 @@ import com.rishiqing.qywx.service.model.corp.CorpStaffVO;
 
 public class CorpStaffConverter {
     public static CorpStaffVO corpStaffDO2CorpStaffVO(CorpStaffDO obj){
+        if(obj == null){
+            return null;
+        }
         CorpStaffVO newObj = new CorpStaffVO();
         newObj.setId(obj.getId());
         newObj.setCorpId(obj.getCorpId());
@@ -30,6 +33,9 @@ public class CorpStaffConverter {
     }
 
     public static CorpStaffDO corpStaffVO2CorpStaffDO(CorpStaffVO obj){
+        if(obj == null){
+            return null;
+        }
         CorpStaffDO newObj = new CorpStaffDO();
         newObj.setId(obj.getId());
         newObj.setCorpId(obj.getCorpId());

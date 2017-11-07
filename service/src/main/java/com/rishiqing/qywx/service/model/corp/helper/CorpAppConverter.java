@@ -5,6 +5,9 @@ import com.rishiqing.qywx.service.model.corp.CorpAppVO;
 
 public class CorpAppConverter {
     public static CorpAppVO corpAppDO2CorpAppVO(CorpAppDO corpAppDO){
+        if(corpAppDO == null){
+            return null;
+        }
         CorpAppVO corpAppVO = new CorpAppVO();
         corpAppVO.setId(corpAppDO.getId());
         corpAppVO.setSuiteKey(corpAppDO.getSuiteKey());
@@ -17,6 +20,9 @@ public class CorpAppConverter {
         return corpAppVO;
     }
     public static CorpAppDO corpAppVO2CorpAppDO(CorpAppVO corpAppVO){
+        if(corpAppVO == null){
+            return null;
+        }
         CorpAppDO corpAppDO = new CorpAppDO();
         corpAppDO.setId(corpAppVO.getId());
         corpAppDO.setSuiteKey(corpAppVO.getSuiteKey());

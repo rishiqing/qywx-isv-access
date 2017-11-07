@@ -5,6 +5,9 @@ import com.rishiqing.qywx.service.model.corp.CorpTokenVO;
 
 public class CorpTokenConverter {
     public static CorpTokenVO corpTokenDO2CorpTokenVO(CorpTokenDO corpTokenDO){
+        if(corpTokenDO == null){
+            return null;
+        }
         CorpTokenVO corpTokenVO = new CorpTokenVO();
         corpTokenVO.setId(corpTokenDO.getId());
         corpTokenVO.setSuiteKey(corpTokenDO.getSuiteKey());
@@ -15,6 +18,9 @@ public class CorpTokenConverter {
     }
     
     public static CorpTokenDO corpTokenVO2CorpTokenDO(CorpTokenVO corpTokenVO){
+        if(corpTokenVO == null){
+            return null;
+        }
         CorpTokenDO corpTokenDO = new CorpTokenDO();
         corpTokenDO.setId(corpTokenVO.getId());
         corpTokenDO.setSuiteKey(corpTokenVO.getSuiteKey());

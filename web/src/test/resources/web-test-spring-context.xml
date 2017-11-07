@@ -24,6 +24,7 @@
 
     <!--web层需要用到的service-->
     <bean id="callbackService" class="com.rishiqing.qywx.web.service.impl.CallbackServiceImpl" />
+    <bean id="jsConfigService" class="com.rishiqing.qywx.web.service.impl.JsConfigServiceImpl" />
 
     <!--service层的服务beans-->
     <import resource="classpath:spring-beans.xml" />
