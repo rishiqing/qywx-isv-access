@@ -53,6 +53,17 @@
                 <SizeBasedTriggeringPolicy size="50 MB"/>
             </Policies>
         </RollingFile>
+        <!--id映射授权相关-->
+        <RollingFile name="WEB_ID_MAP_APPENDER" fileName="${baseDir}/web_id_map.log"
+                     filePattern="${baseDir}/$${date:yyyy-MM}/web_id_map-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout charset="UTF-8">
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p %C{1.}.%M:%L - %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="6" modulate="true" />
+                <SizeBasedTriggeringPolicy size="50 MB"/>
+            </Policies>
+        </RollingFile>
         <!--公司相关的接口日志-->
         <RollingFile name="WEB_CORP_APPENDER" fileName="${baseDir}/web_corp.log"
                      filePattern="${baseDir}/$${date:yyyy-MM}/web_corp-%d{MM-dd-yyyy}-%i.log.gz">
@@ -132,6 +143,9 @@
         </Logger>
         <Logger name="WEB_OAUTH_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
             <AppenderRef ref="WEB_OAUTH_APPENDER"/>
+        </Logger>
+        <Logger name="WEB_ID_MAP_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
+            <AppenderRef ref="WEB_ID_MAP_APPENDER"/>
         </Logger>
         <Logger name="WEB_CORP_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
             <AppenderRef ref="WEB_CORP_APPENDER"/>

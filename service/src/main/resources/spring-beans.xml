@@ -21,6 +21,7 @@
     <bean id="corpService" class="com.rishiqing.qywx.service.biz.corp.impl.CorpServiceImpl" />
     <bean id="deptService" class="com.rishiqing.qywx.service.biz.corp.impl.DeptServiceImpl" />
     <bean id="staffService" class="com.rishiqing.qywx.service.biz.corp.impl.StaffServiceImpl" />
+    <bean id="idMapService" class="com.rishiqing.qywx.service.biz.rsq.impl.IdMapServiceImpl" />
 
     <!--工具类-->
     <bean id="requestClient" class="com.rishiqing.qywx.service.util.http.RequestClient" />

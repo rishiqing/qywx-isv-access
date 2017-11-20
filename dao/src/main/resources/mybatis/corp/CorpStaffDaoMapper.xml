@@ -112,4 +112,43 @@
     <delete id="removeCorpStaffByCorpIdAndUserId">
         DELETE FROM isv_corp_staff WHERE corp_id = #{corpId} AND user_id = #{userId}
     </delete>
+
+    <resultMap type="com.rishiqing.qywx.dao.model.corp.CorpStaffIdsDO" id="corpStaffIdsMap">
+        <result property="userId" column="user_id" />
+        <result property="rsqUserId" column="rsq_user_id" />
+        <result property="avatar" column="avatar" />
+        <result property="name" column="name" />
+    </resultMap>
+
+    <select id="getUserIdFromRsqId" resultMap="corpStaffIdsMap">
+        SELECT user_id, rsq_user_id, avatar, `name`  FROM isv_corp_staff
+        WHERE corp_id = #{corpId}
+        AND rsq_user_id IN
+        <foreach collection="rsqIds" item="item" index="index"
+                 open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        ORDER BY FIELD(rsq_user_id,
+        <foreach collection="rsqIds" item="item" index="index"
+                 open="" separator="," close="">
+            #{item}
+        </foreach>
+        )
+    </select>
+
+    <select id="getRsqIdFromUserId" resultMap="corpStaffIdsMap">
+        SELECT user_id, rsq_user_id, avatar, `name` FROM isv_corp_staff
+        WHERE corp_id = #{corpId}
+        AND user_id IN
+        <foreach collection="userIds" item="item" index="index"
+                 open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        ORDER BY FIELD(user_id,
+        <foreach collection="userIds" item="item" index="index"
+                 open="" separator="," close="">
+            #{item}
+        </foreach>
+        )
+    </select>
 </mapper>
