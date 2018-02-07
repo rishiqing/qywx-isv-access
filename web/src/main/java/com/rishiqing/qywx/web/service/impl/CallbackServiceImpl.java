@@ -61,9 +61,10 @@ public class CallbackServiceImpl implements CallbackService {
         String token = this.suite.getToken();
         String suiteKey = this.suite.getSuiteKey();
         String encodingAesKey = this.suite.getEncodingAesKey();
+        String corpId = this.suite.getCorpId();
 
         try {
-            WXBizMsgCrypt wxcpt = new WXBizMsgCrypt(token, encodingAesKey, suiteKey);
+            WXBizMsgCrypt wxcpt = new WXBizMsgCrypt(token, encodingAesKey, corpId);
             return wxcpt.verifyURL(signature, timestamp, nonce, echoString);
         } catch (AesException e) {
             throw new CallbackException("verify url failed", e);

@@ -57,7 +57,7 @@ public class CorpServiceImpl implements CorpService {
         List<CorpAppVO> list = Json2BeanConverter.generateCorpAppList(suiteKey, corpId, json);
         if(list.size() > ServiceConstant.CORP_APP_MAX_LIMIT){
             //  报出警告，如果list数量过大，需要修改成批量插入
-            logger.warn("too many CorpAppVO to be saved simutaniously, may cause db performance problem, number is {}", list.size());
+            logger.warn("too many CorpAppVO to be saved simultaneously, may cause db performance problem, number is {}", list.size());
         }
         for(CorpAppVO corpAppVO : list){
             corpAppManageService.saveCorpApp(corpAppVO);

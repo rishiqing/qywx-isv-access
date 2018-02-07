@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import com.mashape.unirest.request.GetRequest;
 import com.mashape.unirest.request.HttpRequestWithBody;
 import com.rishiqing.qywx.service.common.corp.CorpSuiteManageService;
 import com.rishiqing.qywx.service.common.corp.CorpTokenManageService;
@@ -121,7 +122,7 @@ public class RequestClient {
      * @throws HttpException
      */
     public JSONObject get(String path, Map<String, Object> queryMap, Map<String, String> options) throws UnirestException, HttpException {
-        HttpRequestWithBody request = Unirest.post(path);
+        GetRequest request = Unirest.get(path);
         if(queryMap != null && !queryMap.isEmpty()){
             request.queryString(queryMap);
         }
