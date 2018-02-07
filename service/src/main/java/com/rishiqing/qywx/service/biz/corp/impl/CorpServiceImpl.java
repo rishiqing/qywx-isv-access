@@ -74,7 +74,6 @@ public class CorpServiceImpl implements CorpService {
     @Override
     public CorpVO fetchAndSaveCorpInfo(SuiteTokenVO suiteToken, CorpSuiteVO corpSuite) throws UnirestException, HttpException {
         JSONObject json = httpUtil.getCorpAuthInfo(suiteToken, corpSuite);
-        System.out.println("fetch corp info----" + json);
         String suiteKey = suiteToken.getSuiteKey();
         //1. 保存corp信息
         CorpVO corpVO = Json2BeanConverter.generateCorp(json);

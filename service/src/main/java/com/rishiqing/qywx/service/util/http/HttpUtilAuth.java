@@ -39,39 +39,39 @@ public class HttpUtilAuth {
         );
     }
 
-    public JSONObject getDepartmentList(CorpTokenVO corpTokenVO, CorpDeptVO corpDeptVO) throws UnirestException, HttpException {
-        Map<String, String> options = new HashMap<>();
-        options.put("corpId", corpTokenVO.getCorpId());
-        Map<String, Object> queryMap = new HashMap<>();
-        queryMap.put("access_token", corpTokenVO.getCorpToken());
-        if(corpDeptVO != null){
-            queryMap.put("id", corpDeptVO.getDeptId());
-        }
-        return requestClient.get(
-                RequestUrl.DEPARTMENT_LIST,
-                queryMap,
-                options
-        );
-    }
-
-    public JSONObject getDepartmentStaffList(CorpTokenVO corpTokenVO, @Nullable CorpDeptVO corpDeptVO) throws HttpException, UnirestException {
-        Map<String, String> options = new HashMap<>();
-        options.put("corpId", corpTokenVO.getCorpId());
-        Map<String, Object> queryMap = new HashMap<>();
-        queryMap.put("access_token", corpTokenVO.getCorpToken());
-        queryMap.put("fetch_child", "1");  //递归获取
-        Long deptId = 1L;
-        if(corpDeptVO != null){
-            deptId = corpDeptVO.getDeptId();
-        }
-        queryMap.put("department_id", deptId);
-
-        return requestClient.get(
-                RequestUrl.DEPARTMENT_STAFF_LIST,
-                queryMap,
-                options
-        );
-    }
+//    public JSONObject getDepartmentList(CorpTokenVO corpTokenVO, CorpDeptVO corpDeptVO) throws UnirestException, HttpException {
+//        Map<String, String> options = new HashMap<>();
+//        options.put("corpId", corpTokenVO.getCorpId());
+//        Map<String, Object> queryMap = new HashMap<>();
+//        queryMap.put("access_token", corpTokenVO.getCorpToken());
+//        if(corpDeptVO != null){
+//            queryMap.put("id", corpDeptVO.getDeptId());
+//        }
+//        return requestClient.get(
+//                RequestUrl.DEPARTMENT_LIST,
+//                queryMap,
+//                options
+//        );
+//    }
+//
+//    public JSONObject getDepartmentStaffList(CorpTokenVO corpTokenVO, @Nullable CorpDeptVO corpDeptVO) throws HttpException, UnirestException {
+//        Map<String, String> options = new HashMap<>();
+//        options.put("corpId", corpTokenVO.getCorpId());
+//        Map<String, Object> queryMap = new HashMap<>();
+//        queryMap.put("access_token", corpTokenVO.getCorpToken());
+//        queryMap.put("fetch_child", "1");  //递归获取
+//        Long deptId = 1L;
+//        if(corpDeptVO != null){
+//            deptId = corpDeptVO.getDeptId();
+//        }
+//        queryMap.put("department_id", deptId);
+//
+//        return requestClient.get(
+//                RequestUrl.DEPARTMENT_STAFF_LIST,
+//                queryMap,
+//                options
+//        );
+//    }
 
     public RequestClient getRequestClient() {
         return requestClient;

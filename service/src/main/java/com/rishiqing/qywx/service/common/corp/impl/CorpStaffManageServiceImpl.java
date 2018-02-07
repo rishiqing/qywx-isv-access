@@ -23,4 +23,15 @@ public class CorpStaffManageServiceImpl implements CorpStaffManageService {
                 corpStaffDao.getCorpStaffByCorpIdAndUserId(corpId, userId)
         );
     }
+
+    @Override
+    public CorpStaffVO getCorpStaffByCorpIdAndUserId(String corpId, String userId) {
+        CorpStaffDO corpStaffDO = corpStaffDao.getCorpStaffByCorpIdAndUserId(corpId, userId);
+        return CorpStaffConverter.corpStaffDO2CorpStaffVO(corpStaffDO);
+    }
+
+    @Override
+    public void deleteCorpStaffByCorpIdAndUserId(String corpId, String userId) {
+        corpStaffDao.removeCorpStaffByCorpIdAndUserId(corpId, userId);
+    }
 }

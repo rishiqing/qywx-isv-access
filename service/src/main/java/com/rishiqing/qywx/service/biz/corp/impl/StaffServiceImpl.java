@@ -5,9 +5,11 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import com.rishiqing.qywx.service.biz.corp.StaffService;
 import com.rishiqing.qywx.service.common.corp.CorpStaffManageService;
 import com.rishiqing.qywx.service.exception.HttpException;
+import com.rishiqing.qywx.service.exception.ObjectNotExistException;
 import com.rishiqing.qywx.service.model.corp.CorpDeptVO;
 import com.rishiqing.qywx.service.model.corp.CorpStaffVO;
 import com.rishiqing.qywx.service.model.corp.CorpTokenVO;
+import com.rishiqing.qywx.service.model.corp.helper.CorpStaffConverter;
 import com.rishiqing.qywx.service.util.http.HttpUtilCorp;
 import com.rishiqing.qywx.service.util.http.converter.Json2BeanConverter;
 import org.slf4j.Logger;
@@ -39,5 +41,35 @@ public class StaffServiceImpl implements StaffService {
         for(CorpStaffVO staff : staffList){
             corpStaffManageService.saveOrUpdateCorpStaff(staff);
         }
+    }
+
+    @Override
+    public void createStaff(CorpStaffVO corpStaffVO) {
+        corpStaffManageService.saveOrUpdateCorpStaff(corpStaffVO);
+    }
+
+    @Override
+    public void updateStaff(CorpStaffVO corpStaffVO) throws ObjectNotExistException {
+        CorpStaffVO existsCorpStaff = corpStaffManageService.getCorpStaffByCorpIdAndUserId(
+                corpStaffVO.getCorpId(),
+                corpStaffVO.getUserId());
+        if(null == existsCorpStaff){
+            throw new ObjectNotExistException("updateStaff exception, corp staff with corpId and userId not exist"
+                    + corpStaffVO.getCorpId() + corpStaffVO.getUserId());
+        }
+        CorpStaffConverter.mergeCorpStaffVO(corpStaffVO, existsCorpStaff);
+        corpStaffManageService.saveOrUpdateCorpStaff(existsCorpStaff);
+    }
+
+    @Override
+    public void deleteStaff(CorpStaffVO corpStaffVO) throws ObjectNotExistException {
+        CorpStaffVO existsCorpStaff = corpStaffManageService.getCorpStaffByCorpIdAndUserId(
+                corpStaffVO.getCorpId(),
+                corpStaffVO.getUserId());
+        if(null == existsCorpStaff){
+            throw new ObjectNotExistException("deleteStaff exception, corp staff with corpId and userId not exist"
+                    + corpStaffVO.getCorpId() + corpStaffVO.getUserId());
+        }
+        corpStaffManageService.deleteCorpStaffByCorpIdAndUserId(corpStaffVO.getCorpId(), corpStaffVO.getUserId());
     }
 }

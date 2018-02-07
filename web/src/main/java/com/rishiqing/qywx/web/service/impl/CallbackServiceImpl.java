@@ -2,17 +2,23 @@ package com.rishiqing.qywx.web.service.impl;
 
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.rishiqing.qywx.service.biz.corp.CorpService;
+import com.rishiqing.qywx.service.biz.corp.DeptService;
+import com.rishiqing.qywx.service.biz.corp.StaffService;
 import com.rishiqing.qywx.service.common.corp.CorpManageService;
 import com.rishiqing.qywx.service.common.corp.CorpSuiteManageService;
 import com.rishiqing.qywx.service.common.isv.SuiteManageService;
 import com.rishiqing.qywx.service.common.isv.SuiteTicketManageService;
 import com.rishiqing.qywx.service.common.isv.SuiteTokenManageService;
 import com.rishiqing.qywx.service.exception.HttpException;
+import com.rishiqing.qywx.service.exception.ObjectNotExistException;
 import com.rishiqing.qywx.service.exception.SuiteAccessTokenExpiredException;
+import com.rishiqing.qywx.service.model.corp.CorpDeptVO;
+import com.rishiqing.qywx.service.model.corp.CorpStaffVO;
 import com.rishiqing.qywx.service.model.corp.CorpSuiteVO;
 import com.rishiqing.qywx.service.model.isv.SuiteTicketVO;
 import com.rishiqing.qywx.service.model.isv.SuiteTokenVO;
 import com.rishiqing.qywx.service.model.isv.SuiteVO;
+import com.rishiqing.qywx.service.util.http.converter.Xml2BeanConverter;
 import com.rishiqing.qywx.web.exception.CallbackException;
 import com.rishiqing.qywx.web.service.CallbackService;
 import com.rishiqing.qywx.web.util.codec.AesException;
@@ -45,6 +51,10 @@ public class CallbackServiceImpl implements CallbackService {
     private CorpService corpService;
     @Autowired
     private CorpSuiteManageService corpSuiteManageService;
+    @Autowired
+    private DeptService deptService;
+    @Autowired
+    private StaffService staffService;
 
     private SuiteVO suite;
 
@@ -109,6 +119,10 @@ public class CallbackServiceImpl implements CallbackService {
                 case "cancel_auth":
                     handleCancelAuth(map);
                     break;
+                case "change_contact":
+                    //  通讯录变更,包括部门变更/人员变更
+                    handleChangeContact(map);
+                    break;
                 default:
                     //  对于不识别的infoType，直接抛出异常
                     throw new CallbackException("info type not handled: " + infoType);
@@ -118,6 +132,8 @@ public class CallbackServiceImpl implements CallbackService {
             throw new CallbackException("decrypt message failed", e);
         } catch (UnirestException | HttpException e) {
             throw new CallbackException("http request failed", e);
+        } catch (ObjectNotExistException e) {
+            throw new CallbackException("database error", e);
         }
         return "success";
     }
@@ -146,6 +162,12 @@ public class CallbackServiceImpl implements CallbackService {
         corpService.activeCorp(suiteTokenVO, authCode);
     }
 
+    /**
+     * 授权变更
+     * @param params
+     * @throws UnirestException
+     * @throws HttpException
+     */
     private void handleChangeAuth(Map params) throws UnirestException, HttpException {
         String corpId = (String)params.get("AuthCorpId");
         assert corpId != null;
@@ -165,5 +187,88 @@ public class CallbackServiceImpl implements CallbackService {
         corpManageService.markRemoveCorp(corpId, true);
     }
 
-    private void handleChangeContact(Map params){}
+    /**
+     * 通讯录变更,包括了部门变更/成员变更等
+     * @param map
+     */
+    private void handleChangeContact(Map map) throws CallbackException, ObjectNotExistException {
+        String changeType = (String)map.get("ChangeType");
+        switch (changeType) {
+            case "create_party":
+                handleChangeContactCreateDept(map);
+                break;
+            case "update_party":
+                handleChangeContactUpdateDept(map);
+                break;
+            case "delete_party":
+                handleChangeContactDeleteDept(map);
+                break;
+            case "create_user":
+                handleChangeContactCreateUser(map);
+                break;
+            case "update_user":
+                handleChangeContactUpdateUser(map);
+                break;
+            case "delete_user":
+                handleChangeContactDeleteUser(map);
+                break;
+            default:
+                //  对于不识别的infoType，直接抛出异常
+                throw new CallbackException("contact change, changeType not handled: " + changeType);
+        }
+    }
+
+    /**
+     * 通讯录变更之创建部门
+     * @param map
+     */
+    private void handleChangeContactCreateDept(Map map){
+        CorpDeptVO deptVO = Xml2BeanConverter.generateCorpDept(map);
+        deptService.createDept(deptVO);
+    }
+
+    /**
+     * 通讯录变更之更新部门
+     * @param map
+     */
+    private void handleChangeContactUpdateDept(Map map) throws ObjectNotExistException {
+        CorpDeptVO deptVO = Xml2BeanConverter.generateCorpDept(map);
+        deptService.updateDept(deptVO);
+    }
+
+    /**
+     * 通讯录变更之删除部门
+     * @param map
+     */
+    private void handleChangeContactDeleteDept(Map map) throws ObjectNotExistException {
+        CorpDeptVO deptVO = Xml2BeanConverter.generateCorpDept(map);
+        deptService.deleteDept(deptVO);
+    }
+
+    /**
+     * 通讯录变更之添加成员
+     * @param map
+     */
+    private void handleChangeContactCreateUser(Map map){
+        CorpStaffVO staffVO = Xml2BeanConverter.generateCorpStaff(map);
+        staffService.createStaff(staffVO);
+    }
+
+    /**
+     * 通讯录变更之更新成员
+     * @param map
+     */
+    private void handleChangeContactUpdateUser(Map map) throws ObjectNotExistException {
+        CorpStaffVO staffVO = Xml2BeanConverter.generateCorpStaff(map);
+        staffService.updateStaff(staffVO);
+    }
+
+    /**
+     * 通讯录变更之删除成员
+     * @param map
+     */
+    private void handleChangeContactDeleteUser(Map map) throws ObjectNotExistException {
+        CorpStaffVO staffVO = Xml2BeanConverter.generateCorpStaff(map);
+        staffService.deleteStaff(staffVO);
+    }
 }

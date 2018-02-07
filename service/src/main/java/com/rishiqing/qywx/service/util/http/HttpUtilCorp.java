@@ -55,7 +55,8 @@ public class HttpUtilCorp {
         options.put("corpId", corpTokenVO.getCorpId());
         Map<String, Object> queryMap = new HashMap<>();
         queryMap.put("access_token", corpTokenVO.getCorpToken());
-        queryMap.put("fetch_child", "1");  //递归获取
+//        默认不使用递归调用
+//        queryMap.put("fetch_child", "1");  //递归获取
         Long deptId = 1L;
         if(corpDeptVO != null){
             deptId = corpDeptVO.getDeptId();

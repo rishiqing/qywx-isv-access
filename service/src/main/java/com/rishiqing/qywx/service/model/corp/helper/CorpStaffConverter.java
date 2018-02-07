@@ -70,4 +70,41 @@ public class CorpStaffConverter {
         newObj.setUserId(obj.getUserId());
         return newObj;
     }
+
+    public static void mergeCorpStaffVO(CorpStaffVO old, CorpStaffVO target) {
+        if(null != old.getName())
+            target.setName(old.getName());
+        if(null != old.getAvatar())
+            target.setAvatar(old.getAvatar());
+        if(null != old.getDepartment())
+            target.setDepartment(old.getDepartment());
+        if(null != old.getOrderInDepts())
+            target.setOrderInDepts(old.getOrderInDepts());
+        if(null != old.getIsLeaderInDepts())
+            target.setIsLeaderInDepts(old.getIsLeaderInDepts());
+        if(null != old.getPosition())
+            target.setPosition(old.getPosition());
+        if(null != old.getMobile())
+            target.setMobile(old.getMobile());
+        if(null != old.getGender())
+            target.setGender(old.getGender());
+        if(null != old.getEmail())
+            target.setEmail(old.getEmail());
+        if(null != old.getTel())
+            target.setTel(old.getTel());
+        if(null != old.getEnglishName())
+            target.setEnglishName(old.getEnglishName());
+        if(null != old.getStatus())
+            target.setStatus(old.getStatus());
+        if(null != old.getExtattr())
+            target.setExtattr(old.getExtattr());
+        if(null != old.getRsqUserId())
+            target.setRsqUserId(old.getRsqUserId());
+        if(null != old.getRsqUsername())
+            target.setRsqUsername(old.getRsqUsername());
+        if(null != old.getRsqPassword())
+            target.setRsqPassword(old.getRsqPassword());
+        if(null != old.getRsqLoginToken())
+            target.setRsqLoginToken(old.getRsqLoginToken());
+    }
 }
