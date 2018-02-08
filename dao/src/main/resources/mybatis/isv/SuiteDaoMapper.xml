@@ -11,10 +11,12 @@
         <result property="encodingAesKey" column="encoding_aes_key" />
         <result property="token" column="token" />
         <result property="corpId" column="corp_id" />
+        <result property="rsqAppName" column="rsq_app_name" />
+        <result property="rsqAppToken" column="rsq_app_token" />
     </resultMap>
 
     <sql id="selectAllFields">
-        id, date_created, last_updated, suite_name, suite_key, suite_secret, encoding_aes_key, token, corp_id
+        id, date_created, last_updated, suite_name, suite_key, suite_secret, encoding_aes_key, token, corp_id, rsq_app_name, rsq_app_token
     </sql>
 
     <select id="getSuiteBySuiteKey" resultMap="suiteMap">

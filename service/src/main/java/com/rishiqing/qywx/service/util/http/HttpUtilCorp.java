@@ -1,34 +1,30 @@
 package com.rishiqing.qywx.service.util.http;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.rishiqing.qywx.service.constant.RequestUrl;
-import com.rishiqing.qywx.service.exception.AccessTokenExpiredException;
-import com.rishiqing.qywx.service.exception.HttpException;
+import com.rishiqing.common.exception.HttpException;
 import com.rishiqing.qywx.service.model.corp.CorpDeptVO;
 import com.rishiqing.qywx.service.model.corp.CorpTokenVO;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.rishiqing.common.util.http.client.RestHttpClient;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
 public class HttpUtilCorp {
-    private RequestClient requestClient;
+    private RestHttpClient restHttpClient;
 
-    public HttpUtilCorp(RequestClient requestClient) {
-        this.requestClient = requestClient;
+    public HttpUtilCorp(RestHttpClient restHttpClient) {
+        this.restHttpClient = restHttpClient;
     }
 
     public JSONObject getJsapiTicket(CorpTokenVO corpTokenVO) throws HttpException, UnirestException {
-        Map<String, String> options = new HashMap<>();
+        Map<String, Object> options = new HashMap<>();
         options.put("corpId", corpTokenVO.getCorpId());
         Map<String, Object> queryMap = new HashMap<>();
         queryMap.put("access_token", corpTokenVO.getCorpToken());
-        return requestClient.get(
+        return restHttpClient.get(
                 RequestUrl.CORP_JSAPI_TICKET,
                 queryMap,
                 options
@@ -36,14 +32,14 @@ public class HttpUtilCorp {
     }
 
     public JSONObject getDepartmentList(CorpTokenVO corpTokenVO, CorpDeptVO corpDeptVO) throws UnirestException, HttpException {
-        Map<String, String> options = new HashMap<>();
+        Map<String, Object> options = new HashMap<>();
         options.put("corpId", corpTokenVO.getCorpId());
         Map<String, Object> queryMap = new HashMap<>();
         queryMap.put("access_token", corpTokenVO.getCorpToken());
         if(corpDeptVO != null){
             queryMap.put("id", corpDeptVO.getDeptId());
         }
-        return requestClient.get(
+        return restHttpClient.get(
                 RequestUrl.DEPARTMENT_LIST,
                 queryMap,
                 options
@@ -51,7 +47,7 @@ public class HttpUtilCorp {
     }
 
     public JSONObject getDepartmentStaffList(CorpTokenVO corpTokenVO, @Nullable CorpDeptVO corpDeptVO) throws HttpException, UnirestException {
-        Map<String, String> options = new HashMap<>();
+        Map<String, Object> options = new HashMap<>();
         options.put("corpId", corpTokenVO.getCorpId());
         Map<String, Object> queryMap = new HashMap<>();
         queryMap.put("access_token", corpTokenVO.getCorpToken());
@@ -63,18 +59,18 @@ public class HttpUtilCorp {
         }
         queryMap.put("department_id", deptId);
 
-        return requestClient.get(
+        return restHttpClient.get(
                 RequestUrl.DEPARTMENT_STAFF_LIST,
                 queryMap,
                 options
         );
     }
 
-    public RequestClient getRequestClient() {
-        return requestClient;
+    public RestHttpClient getRestHttpClient() {
+        return restHttpClient;
     }
 
-    public void setRequestClient(RequestClient requestClient) {
-        this.requestClient = requestClient;
+    public void setRestHttpClient(RestHttpClient restHttpClient) {
+        this.restHttpClient = restHttpClient;
     }
 }

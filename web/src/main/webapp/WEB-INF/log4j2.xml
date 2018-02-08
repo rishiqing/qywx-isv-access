@@ -86,7 +86,18 @@
                 <SizeBasedTriggeringPolicy size="50 MB"/>
             </Policies>
         </RollingFile>
-        <!--发送http请求数据的日志输出-->
+        <!--默认的发送http请求数据的日志输出-->
+        <RollingFile name="DEFAULT_HTTP_REQUEST_APPENDER" fileName="${baseDir}/default_http_request.log"
+                     filePattern="${baseDir}/$${date:yyyy-MM}/default_http_request-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout charset="UTF-8">
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p %C{1.}.%M:%L - %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="6" modulate="true" />
+                <SizeBasedTriggeringPolicy size="50 MB"/>
+            </Policies>
+        </RollingFile>
+        <!--发送企业微信相关的http请求数据的日志输出-->
         <RollingFile name="SERVICE_HTTP_REQUEST_APPENDER" fileName="${baseDir}/service_http_request.log"
                      filePattern="${baseDir}/$${date:yyyy-MM}/service_http_request-%d{MM-dd-yyyy}-%i.log.gz">
             <PatternLayout charset="UTF-8">
@@ -152,6 +163,9 @@
         </Logger>
         <Logger name="SERVICE_CORP_MANAGE_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
             <AppenderRef ref="SERVICE_CORP_MANAGE_APPENDER"/>
+        </Logger>
+        <Logger name="DEFAULT_HTTP_REQUEST_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
+            <AppenderRef ref="DEFAULT_HTTP_REQUEST_APPENDER"/>
         </Logger>
         <Logger name="SERVICE_HTTP_REQUEST_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
             <AppenderRef ref="SERVICE_HTTP_REQUEST_APPENDER"/>

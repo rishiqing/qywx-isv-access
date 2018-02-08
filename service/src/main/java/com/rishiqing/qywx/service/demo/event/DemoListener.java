@@ -1,16 +1,11 @@
 package com.rishiqing.qywx.service.demo.event;
 
 import com.google.common.eventbus.Subscribe;
-import com.mashape.unirest.http.exceptions.UnirestException;
 import com.rishiqing.qywx.dao.mapper.corp.CorpTokenDao;
 import com.rishiqing.qywx.dao.model.corp.CorpTokenDO;
-import com.rishiqing.qywx.service.biz.corp.DeptService;
-import com.rishiqing.qywx.service.biz.corp.StaffService;
 import com.rishiqing.qywx.service.common.corp.CorpTokenManageService;
 import com.rishiqing.qywx.service.event.listener.EventListener;
 import com.rishiqing.qywx.service.event.message.CorpSuiteMessage;
-import com.rishiqing.qywx.service.exception.HttpException;
-import com.rishiqing.qywx.service.model.corp.CorpTokenVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

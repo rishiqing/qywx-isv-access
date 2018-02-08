@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.rishiqing.qywx.service.common.corp.CorpJsapiTicketManageService;
 import com.rishiqing.qywx.service.common.corp.CorpTokenManageService;
-import com.rishiqing.qywx.service.exception.HttpException;
+import com.rishiqing.common.exception.HttpException;
 import com.rishiqing.qywx.service.model.corp.CorpJsapiTicketVO;
 import com.rishiqing.qywx.service.model.corp.CorpTokenVO;
 import com.rishiqing.qywx.service.util.http.HttpUtilCorp;
@@ -12,8 +12,6 @@ import com.rishiqing.qywx.service.util.http.converter.Json2BeanConverter;
 import com.rishiqing.qywx.web.exception.JsConfigException;
 import com.rishiqing.qywx.web.service.JsConfigService;
 import com.rishiqing.qywx.web.util.codec.JsapiSignature;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.UnsupportedEncodingException;

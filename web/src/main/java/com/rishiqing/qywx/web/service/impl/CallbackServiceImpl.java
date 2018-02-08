@@ -9,9 +9,8 @@ import com.rishiqing.qywx.service.common.corp.CorpSuiteManageService;
 import com.rishiqing.qywx.service.common.isv.SuiteManageService;
 import com.rishiqing.qywx.service.common.isv.SuiteTicketManageService;
 import com.rishiqing.qywx.service.common.isv.SuiteTokenManageService;
-import com.rishiqing.qywx.service.exception.HttpException;
+import com.rishiqing.common.exception.HttpException;
 import com.rishiqing.qywx.service.exception.ObjectNotExistException;
-import com.rishiqing.qywx.service.exception.SuiteAccessTokenExpiredException;
 import com.rishiqing.qywx.service.model.corp.CorpDeptVO;
 import com.rishiqing.qywx.service.model.corp.CorpStaffVO;
 import com.rishiqing.qywx.service.model.corp.CorpSuiteVO;
@@ -159,6 +158,7 @@ public class CallbackServiceImpl implements CallbackService {
         String authCode = (String)params.get("AuthCode");
         assert authCode != null;
         SuiteTokenVO suiteTokenVO = suiteTokenManageService.getSuiteToken(this.suite.getSuiteKey());
+        //TODO 修改成异步开通
         corpService.activeCorp(suiteTokenVO, authCode);
     }
 

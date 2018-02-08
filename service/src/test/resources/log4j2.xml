@@ -1,101 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="WARN" monitorInterval="60">
     <Properties>
-        <Property name="baseDir">$${sys:user.home}/qywx/test/service/logs/</Property>
-        <Property name="globalLevel">info</Property>
+        <Property name="globalLevel">debug</Property>
     </Properties>
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT">
             <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
         </Console>
-        <!--回调接口的日志输出-->
-        <RollingFile name="WEB_CALLBACK_APPENDER" fileName="${baseDir}/web_callback.log"
-                     filePattern="${baseDir}/$${date:yyyy-MM}/web_callback-%d{MM-dd-yyyy}-%i.log.gz">
-            <PatternLayout charset="UTF-8">
-                <Pattern>%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p %C{1.}.%M:%L - %m%n</Pattern>
-            </PatternLayout>
-            <Policies>
-                <TimeBasedTriggeringPolicy interval="6" modulate="true" />
-                <SizeBasedTriggeringPolicy size="50 MB"/>
-            </Policies>
-        </RollingFile>
-        <!--本地公司信息维护的日志输出-->
-        <RollingFile name="SERVICE_CORP_MANAGE_APPENDER" fileName="${baseDir}/service_corp_manage.log"
-                     filePattern="${baseDir}/$${date:yyyy-MM}/service_corp_manage-%d{MM-dd-yyyy}-%i.log.gz">
-            <PatternLayout charset="UTF-8">
-                <Pattern>%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p %C{1.}.%M:%L - %m%n</Pattern>
-            </PatternLayout>
-            <Policies>
-                <TimeBasedTriggeringPolicy interval="6" modulate="true" />
-                <SizeBasedTriggeringPolicy size="50 MB"/>
-            </Policies>
-        </RollingFile>
-        <!--发送http请求数据的日志输出-->
-        <RollingFile name="SERVICE_HTTP_REQUEST_APPENDER" fileName="${baseDir}/service_http_request.log"
-                     filePattern="${baseDir}/$${date:yyyy-MM}/service_http_request-%d{MM-dd-yyyy}-%i.log.gz">
-            <PatternLayout charset="UTF-8">
-                <Pattern>%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p %C{1.}.%M:%L - %m%n</Pattern>
-            </PatternLayout>
-            <Policies>
-                <TimeBasedTriggeringPolicy interval="6" modulate="true" />
-                <SizeBasedTriggeringPolicy size="50 MB"/>
-            </Policies>
-        </RollingFile>
-        <!--异步消息的日志输出-->
-        <RollingFile name="SERVICE_EVENT_LISTENER_APPENDER" fileName="${baseDir}/service_event_listener.log"
-                     filePattern="${baseDir}/$${date:yyyy-MM}/service_event_listener-%d{MM-dd-yyyy}-%i.log.gz">
-            <PatternLayout charset="UTF-8">
-                <Pattern>%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p %C{1.}.%M:%L - %m%n</Pattern>
-            </PatternLayout>
-            <Policies>
-                <TimeBasedTriggeringPolicy interval="6" modulate="true" />
-                <SizeBasedTriggeringPolicy size="50 MB"/>
-            </Policies>
-        </RollingFile>
-        <!--从第三方服务器获取公司信息的日志输出-->
-        <RollingFile name="SERVICE_CORP_TRANSFER_APPENDER" fileName="${baseDir}/service_corp_transfer.log"
-                     filePattern="${baseDir}/$${date:yyyy-MM}/service_corp_transfer-%d{MM-dd-yyyy}-%i.log.gz">
-            <PatternLayout charset="UTF-8">
-                <Pattern>%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p %C{1.}.%M:%L - %m%n</Pattern>
-            </PatternLayout>
-            <Policies>
-                <TimeBasedTriggeringPolicy interval="6" modulate="true" />
-                <SizeBasedTriggeringPolicy size="50 MB"/>
-            </Policies>
-        </RollingFile>
-        <!--达到系统限制值的警告输出-->
-        <RollingFile name="SYS_LIMIT_WARN_APPENDER" fileName="${baseDir}/sys_limit_warn.log"
-                     filePattern="${baseDir}/$${date:yyyy-MM}/sys_limit_warn-%d{MM-dd-yyyy}-%i.log.gz">
-            <PatternLayout charset="UTF-8">
-                <Pattern>%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p %C{1.}.%M:%L - %m%n</Pattern>
-            </PatternLayout>
-            <Policies>
-                <TimeBasedTriggeringPolicy interval="6" modulate="true" />
-                <SizeBasedTriggeringPolicy size="50 MB"/>
-            </Policies>
-        </RollingFile>
     </Appenders>
     <Loggers>
         <Root level="error">
             <AppenderRef ref="Console"/>
         </Root>
         <Logger name="WEB_CALLBACK_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
-            <AppenderRef ref="WEB_CALLBACK_APPENDER"/>
+            <AppenderRef ref="Console"/>
         </Logger>
         <Logger name="SERVICE_CORP_MANAGE_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
-            <AppenderRef ref="SERVICE_CORP_MANAGE_APPENDER"/>
+            <AppenderRef ref="Console"/>
+        </Logger>
+        <Logger name="DEFAULT_HTTP_REQUEST_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
+            <AppenderRef ref="Console"/>
         </Logger>
         <Logger name="SERVICE_HTTP_REQUEST_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
-            <AppenderRef ref="SERVICE_HTTP_REQUEST_APPENDER"/>
+            <AppenderRef ref="Console"/>
         </Logger>
         <Logger name="SERVICE_EVENT_LISTENER_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
-            <AppenderRef ref="SERVICE_EVENT_LISTENER_APPENDER"/>
+            <AppenderRef ref="Console"/>
         </Logger>
         <Logger name="SERVICE_CORP_TRANSFER_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
-            <AppenderRef ref="SERVICE_CORP_TRANSFER_APPENDER"/>
+            <AppenderRef ref="Console"/>
         </Logger>
         <Logger name="SYS_LIMIT_WARN_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
-            <AppenderRef ref="SYS_LIMIT_WARN_APPENDER"/>
+            <AppenderRef ref="Console"/>
         </Logger>
     </Loggers>
 </Configuration>

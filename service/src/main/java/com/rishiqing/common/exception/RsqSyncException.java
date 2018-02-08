@@ -1,31 +1,31 @@
-package com.rishiqing.qywx.service.exception;
+package com.rishiqing.common.exception;
 
-public class HttpException extends Exception {
+public class RsqSyncException extends Exception {
 
     private long errcode;
     private String errmsg;
 
-    public HttpException() {
+    public RsqSyncException() {
         super();
     }
 
-    public HttpException(String message) {
+    public RsqSyncException(String message) {
         super(message);
     }
 
-    public HttpException(String message, Throwable cause) {
+    public RsqSyncException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public HttpException(Throwable cause) {
+    public RsqSyncException(Throwable cause) {
         super(cause);
     }
 
-    protected HttpException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    protected RsqSyncException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 
-    public HttpException(long errcode, String errmsg){
+    public RsqSyncException(long errcode, String errmsg){
         super(buildMessage(errcode, errmsg));
         this.errcode = errcode;
         this.errmsg = errmsg;

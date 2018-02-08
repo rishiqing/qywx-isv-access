@@ -1,7 +1,7 @@
 package com.rishiqing.qywx.web.service;
 
 import com.mashape.unirest.http.exceptions.UnirestException;
-import com.rishiqing.qywx.service.exception.HttpException;
+import com.rishiqing.common.exception.HttpException;
 import com.rishiqing.qywx.service.model.corp.LoginUserVO;
 
 public interface OauthService {

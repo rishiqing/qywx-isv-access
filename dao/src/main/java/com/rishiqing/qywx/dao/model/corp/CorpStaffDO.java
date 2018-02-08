@@ -23,6 +23,8 @@ public class CorpStaffDO {
     private Long status;
     private String extattr;
 
+    private Boolean isAdmin;
+
     private String rsqUserId;
     private String rsqUsername;
     private String rsqPassword;
@@ -204,6 +206,14 @@ public class CorpStaffDO {
         this.rsqLoginToken = rsqLoginToken;
     }
 
+    public Boolean getAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(Boolean admin) {
+        isAdmin = admin;
+    }
+
     @Override
     public String toString() {
         return "CorpStaffDO{" +
@@ -225,6 +235,7 @@ public class CorpStaffDO {
                 ", englishName='" + englishName + '\'' +
                 ", status=" + status +
                 ", extattr='" + extattr + '\'' +
+                ", isAdmin=" + isAdmin +
                 ", rsqUserId='" + rsqUserId + '\'' +
                 ", rsqUsername='" + rsqUsername + '\'' +
                 ", rsqPassword='" + rsqPassword + '\'' +

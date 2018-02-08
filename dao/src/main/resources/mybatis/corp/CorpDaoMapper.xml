@@ -21,12 +21,13 @@
         <result property="authName" column="auth_name" />
         <result property="authAvatar" column="auth_avatar" />
         <result property="authCanceled" column="is_auth_canceled" />
+        <result property="rsqId" column="rsq_id" />
     </resultMap>
 
     <sql id="selectAllFields">
         id, date_created, last_updated, corp_id, corp_name, corp_type, corp_square_logo_url, corp_user_max, corp_agent_max,
         corp_full_name, verified_end_time, subject_type, corp_wxqrcode,
-        auth_email, auth_mobile, auth_user_id, auth_name, auth_avatar, auth_canceled
+        auth_email, auth_mobile, auth_user_id, auth_name, auth_avatar, auth_canceled, rsq_id
     </sql>
 
     <select id="getCorpByCorpId" resultMap="corpMap">

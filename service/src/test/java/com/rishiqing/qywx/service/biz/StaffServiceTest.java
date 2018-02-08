@@ -1,10 +1,9 @@
 package com.rishiqing.qywx.service.biz;
 
 import com.mashape.unirest.http.exceptions.UnirestException;
-import com.rishiqing.qywx.service.biz.corp.DeptService;
 import com.rishiqing.qywx.service.biz.corp.StaffService;
 import com.rishiqing.qywx.service.common.corp.CorpTokenManageService;
-import com.rishiqing.qywx.service.exception.HttpException;
+import com.rishiqing.common.exception.HttpException;
 import com.rishiqing.qywx.service.model.corp.CorpTokenVO;
 import org.junit.Test;
 import org.junit.runner.RunWith;

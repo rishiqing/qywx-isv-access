@@ -14,4 +14,15 @@ ALTER TABLE `isv_corp_staff`
 # isv_corp_app  新版企业微信一个套件只能有一个应用,所以去掉了这里的appid,相应的将该表的app_id字段设置为可空
 # 2018-02-07 by Wallace Mao
 ALTER TABLE isv_corp_app
-  MODIFY app_id bigint(20) NULL COMMENT '服务商套件中的对应应用id'
+  MODIFY app_id bigint(20) NULL COMMENT '服务商套件中的对应应用id';
+
+# 在suite中添加日事清集成的相关字段
+# 2018-02-08 by Wallace Mao
+ALTER TABLE `isv_suite`
+  ADD COLUMN `rsq_app_name`  varchar(255) NULL COMMENT '日事清接口调用对应的name',
+  ADD COLUMN `rsq_app_token`  varchar(255) NULL COMMENT '日事清接口调用对应的token';
+
+# 添加是否为管理员字段
+# 2018-02-08 by Wallace Mao
+ALTER TABLE `isv_corp_staff`
+    ADD COLUMN `is_admin` bit(1) DEFAULT 0 COMMENT '表示该用户是否为企业管理员'

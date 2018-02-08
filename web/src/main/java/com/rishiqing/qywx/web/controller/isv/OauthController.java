@@ -1,15 +1,8 @@
 package com.rishiqing.qywx.web.controller.isv;
 
-import com.alibaba.fastjson.JSONObject;
 import com.mashape.unirest.http.exceptions.UnirestException;
-import com.rishiqing.qywx.service.common.corp.CorpTokenManageService;
-import com.rishiqing.qywx.service.exception.HttpException;
-import com.rishiqing.qywx.service.model.corp.CorpTokenVO;
+import com.rishiqing.common.exception.HttpException;
 import com.rishiqing.qywx.service.model.corp.LoginUserVO;
-import com.rishiqing.qywx.service.util.http.HttpUtilAuth;
-import com.rishiqing.qywx.web.constant.ResultCode;
-import com.rishiqing.qywx.web.exception.JsConfigException;
-import com.rishiqing.qywx.web.service.JsConfigService;
 import com.rishiqing.qywx.web.service.OauthService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,11 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
 import java.util.Map;
 
 @Controller

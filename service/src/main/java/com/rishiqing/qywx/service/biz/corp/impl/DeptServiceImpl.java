@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.rishiqing.qywx.service.biz.corp.DeptService;
 import com.rishiqing.qywx.service.common.corp.CorpDeptManageService;
-import com.rishiqing.qywx.service.exception.HttpException;
+import com.rishiqing.common.exception.HttpException;
 import com.rishiqing.qywx.service.exception.ObjectNotExistException;
 import com.rishiqing.qywx.service.model.corp.CorpDeptVO;
 import com.rishiqing.qywx.service.model.corp.CorpTokenVO;
@@ -13,7 +13,6 @@ import com.rishiqing.qywx.service.util.http.HttpUtilCorp;
 import com.rishiqing.qywx.service.util.http.converter.Json2BeanConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.Nullable;

@@ -6,7 +6,7 @@ import com.rishiqing.qywx.service.common.isv.SuiteManageService;
 import com.rishiqing.qywx.service.common.isv.SuiteTicketManageService;
 import com.rishiqing.qywx.service.model.isv.SuiteTicketVO;
 import com.rishiqing.qywx.service.model.isv.SuiteVO;
-import com.rishiqing.qywx.service.exception.HttpException;
+import com.rishiqing.common.exception.HttpException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;

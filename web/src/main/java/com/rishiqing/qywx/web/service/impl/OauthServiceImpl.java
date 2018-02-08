@@ -3,7 +3,7 @@ package com.rishiqing.qywx.web.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.rishiqing.qywx.service.common.corp.CorpTokenManageService;
-import com.rishiqing.qywx.service.exception.HttpException;
+import com.rishiqing.common.exception.HttpException;
 import com.rishiqing.qywx.service.model.corp.CorpTokenVO;
 import com.rishiqing.qywx.service.model.corp.LoginUserVO;
 import com.rishiqing.qywx.service.util.http.HttpUtilAuth;

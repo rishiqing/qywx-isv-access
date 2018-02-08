@@ -21,21 +21,34 @@
     <bean id="corpService" class="com.rishiqing.qywx.service.biz.corp.impl.CorpServiceImpl" />
     <bean id="deptService" class="com.rishiqing.qywx.service.biz.corp.impl.DeptServiceImpl" />
     <bean id="staffService" class="com.rishiqing.qywx.service.biz.corp.impl.StaffServiceImpl" />
+    <!--日事清相关-->
     <bean id="idMapService" class="com.rishiqing.qywx.service.biz.rsq.impl.IdMapServiceImpl" />
+    <bean id="rsqCorpService" class="com.rishiqing.qywx.service.biz.rsq.impl.RsqCorpServiceImpl" />
+    <bean id="rsqDeptService" class="com.rishiqing.qywx.service.biz.rsq.impl.RsqDeptServiceImpl" />
+    <bean id="rsqStaffService" class="com.rishiqing.qywx.service.biz.rsq.impl.RsqStaffServiceImpl" />
 
     <!--工具类-->
-    <bean id="requestClient" class="com.rishiqing.qywx.service.util.http.RequestClient" />
+    <!--默认的httpClient-->
+    <bean id="defaultRestHttpClient" class="com.rishiqing.common.util.http.client.impl.DefaultRestHttpClient" />
+    <!--自动进行suiteCheck的httpClient-->
+    <bean id="suiteCheckRestHttpClient" class="com.rishiqing.qywx.service.util.http.client.impl.SuiteCheckRestHttpClient" />
+
     <!--isv相关的http请求工具-->
     <bean id="httpUtil" class="com.rishiqing.qywx.service.util.http.HttpUtil">
-        <constructor-arg ref="requestClient" />
+        <constructor-arg ref="suiteCheckRestHttpClient" />
     </bean>
     <!--公司及通讯录相关的http请求工具-->
     <bean id="httpUtilCorp" class="com.rishiqing.qywx.service.util.http.HttpUtilCorp">
-        <constructor-arg ref="requestClient" />
+        <constructor-arg ref="suiteCheckRestHttpClient" />
     </bean>
     <!--授权认证相关的http请求工具-->
     <bean id="httpUtilAuth" class="com.rishiqing.qywx.service.util.http.HttpUtilAuth">
-        <constructor-arg ref="requestClient" />
+        <constructor-arg ref="suiteCheckRestHttpClient" />
+    </bean>
+    <!--日事清相关的请求-->
+    <bean id="httpUtilRsqSync" class="com.rishiqing.common.util.http.impl.HttpUtilRsqSyncImpl">
+        <constructor-arg index="0" value="${isv.rsq.url.root}"/>
+        <constructor-arg index="1" ref="defaultRestHttpClient"/>
     </bean>
 
     <!--AsyncEventBus-->

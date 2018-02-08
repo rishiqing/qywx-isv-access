@@ -3,19 +3,18 @@ package com.rishiqing.qywx.service.util.http;
 import com.alibaba.fastjson.JSONObject;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.rishiqing.qywx.service.constant.RequestUrl;
-import com.rishiqing.qywx.service.exception.HttpException;
-import com.rishiqing.qywx.service.model.corp.CorpDeptVO;
+import com.rishiqing.common.exception.HttpException;
 import com.rishiqing.qywx.service.model.corp.CorpTokenVO;
+import com.rishiqing.common.util.http.client.RestHttpClient;
 
-import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
 public class HttpUtilAuth {
-    private RequestClient requestClient;
+    private RestHttpClient restHttpClient;
 
-    public HttpUtilAuth(RequestClient requestClient) {
-        this.requestClient = requestClient;
+    public HttpUtilAuth(RestHttpClient restHttpClient) {
+        this.restHttpClient = restHttpClient;
     }
 
     /**
@@ -27,12 +26,12 @@ public class HttpUtilAuth {
      * @throws UnirestException
      */
     public JSONObject getLoginUser(CorpTokenVO corpTokenVO, String code) throws HttpException, UnirestException {
-        Map<String, String> options = new HashMap<>();
+        Map<String, Object> options = new HashMap<>();
         options.put("corpId", corpTokenVO.getCorpId());
         Map<String, Object> queryMap = new HashMap<>();
         queryMap.put("access_token", corpTokenVO.getCorpToken());
         queryMap.put("code", code);
-        return requestClient.get(
+        return restHttpClient.get(
                 RequestUrl.AUTH_LOGIN_USER,
                 queryMap,
                 options
@@ -73,11 +72,12 @@ public class HttpUtilAuth {
 //        );
 //    }
 
-    public RequestClient getRequestClient() {
-        return requestClient;
+
+    public RestHttpClient getRestHttpClient() {
+        return restHttpClient;
     }
 
-    public void setRequestClient(RequestClient requestClient) {
-        this.requestClient = requestClient;
+    public void setRestHttpClient(RestHttpClient restHttpClient) {
+        this.restHttpClient = restHttpClient;
     }
 }

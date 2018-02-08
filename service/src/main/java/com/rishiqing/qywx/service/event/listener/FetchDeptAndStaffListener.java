@@ -1,13 +1,13 @@
 package com.rishiqing.qywx.service.event.listener;
 
+import com.google.common.eventbus.AllowConcurrentEvents;
 import com.google.common.eventbus.Subscribe;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.rishiqing.qywx.service.biz.corp.DeptService;
 import com.rishiqing.qywx.service.biz.corp.StaffService;
 import com.rishiqing.qywx.service.common.corp.CorpTokenManageService;
-import com.rishiqing.qywx.service.demo.DemoService;
 import com.rishiqing.qywx.service.event.message.CorpSuiteMessage;
-import com.rishiqing.qywx.service.exception.HttpException;
+import com.rishiqing.common.exception.HttpException;
 import com.rishiqing.qywx.service.model.corp.CorpTokenVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +22,7 @@ public class FetchDeptAndStaffListener implements EventListener {
     @Autowired
     private StaffService staffService;
     @Subscribe
+    @AllowConcurrentEvents  //  event并行执行
     public void listenFetchDeptAndStaff(CorpSuiteMessage corpSuiteMessage){
         String suiteKey = corpSuiteMessage.getSuiteKey();
         String corpId = corpSuiteMessage.getCorpId();

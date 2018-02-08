@@ -30,6 +30,7 @@ public class CorpStaffConverter {
         newObj.setRsqUsername(obj.getRsqUsername());
         newObj.setRsqPassword(obj.getRsqPassword());
         newObj.setRsqLoginToken(obj.getRsqLoginToken());
+        newObj.setAdmin(obj.getAdmin());
         return newObj;
     }
 
@@ -58,6 +59,7 @@ public class CorpStaffConverter {
         newObj.setRsqUsername(obj.getRsqUsername());
         newObj.setRsqPassword(obj.getRsqPassword());
         newObj.setRsqLoginToken(obj.getRsqLoginToken());
+        newObj.setAdmin(obj.getAdmin());
         return newObj;
     }
 
@@ -106,5 +108,7 @@ public class CorpStaffConverter {
             target.setRsqPassword(old.getRsqPassword());
         if(null != old.getRsqLoginToken())
             target.setRsqLoginToken(old.getRsqLoginToken());
+        if(null != old.getAdmin())
+            target.setAdmin(old.getAdmin());
     }
 }

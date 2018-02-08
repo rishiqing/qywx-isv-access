@@ -26,6 +26,7 @@ public class CorpConverter {
         corpVO.setSubjectType(corpDO.getSubjectType());
         corpVO.setVerifiedEndTime(corpDO.getVerifiedEndTime());
         corpVO.setAuthCanceled(corpDO.getAuthCanceled());
+        corpVO.setRsqId(corpDO.getRsqId());
 
         return corpVO;
     }
@@ -51,6 +52,7 @@ public class CorpConverter {
         corpDO.setSubjectType(corpVO.getSubjectType());
         corpDO.setVerifiedEndTime(corpVO.getVerifiedEndTime());
         corpDO.setAuthCanceled(corpVO.getAuthCanceled());
+        corpDO.setRsqId(corpVO.getRsqId());
 
         return corpDO;
     }

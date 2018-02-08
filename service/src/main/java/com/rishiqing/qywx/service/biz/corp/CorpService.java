@@ -1,8 +1,7 @@
 package com.rishiqing.qywx.service.biz.corp;
 
 import com.mashape.unirest.http.exceptions.UnirestException;
-import com.rishiqing.qywx.service.exception.HttpException;
-import com.rishiqing.qywx.service.exception.SuiteAccessTokenExpiredException;
+import com.rishiqing.common.exception.HttpException;
 import com.rishiqing.qywx.service.model.corp.CorpJsapiTicketVO;
 import com.rishiqing.qywx.service.model.corp.CorpSuiteVO;
 import com.rishiqing.qywx.service.model.corp.CorpVO;
