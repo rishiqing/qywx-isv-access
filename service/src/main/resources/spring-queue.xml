@@ -17,6 +17,20 @@
         <property name="sessionCacheSize" value="100" />
     </bean>
 
+    <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+        <constructor-arg ref="connectionFactory" />
+    </bean>
+
     <!--获取企业-->
     <amq:queue id="pullOrgInfoQueue" physicalName="pullOrgInfo.queue" />
+
+    <!--测试queue-->
+    <amq:queue id="demoQueue" physicalName="demo.queue" />
+    <bean id="demoMqListener" class="com.rishiqing.qywx.service.event.listener.mq.DemoMqListener" />
+    <bean id="demoJmsContainer"
+          class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+        <property name="connectionFactory" ref="connectionFactory" />
+        <property name="destination" ref="demoQueue" />
+        <property name="messageListener" ref="demoMqListener" />
+    </bean>
 </beans>

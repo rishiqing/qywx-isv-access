@@ -59,19 +59,19 @@
     </bean>
     <bean id="fetchDeptAndStaffListener" class="com.rishiqing.qywx.service.event.listener.FetchDeptAndStaffListener" />
 
-    <bean id="demoExecutorFactory" class="com.rishiqing.qywx.service.demo.event.DemoExecutorFactory" />
-    <bean id="demoExecutor" factory-bean="demoExecutorFactory" factory-method="getFetchDeptAndStaffExecutor" />
-    <bean id="demoEventBus" class="com.google.common.eventbus.AsyncEventBus">
-        <constructor-arg ref="demoExecutor" />
-    </bean>
-    <bean id="demoListener" class="com.rishiqing.qywx.service.demo.event.DemoListener" />
+    <!--<bean id="demoExecutorFactory" class="com.rishiqing.qywx.service.demo.event.DemoExecutorFactory" />-->
+    <!--<bean id="demoExecutor" factory-bean="demoExecutorFactory" factory-method="getFetchDeptAndStaffExecutor" />-->
+    <!--<bean id="demoEventBus" class="com.google.common.eventbus.AsyncEventBus">-->
+        <!--<constructor-arg ref="demoExecutor" />-->
+    <!--</bean>-->
+    <!--<bean id="demoListener" class="com.rishiqing.qywx.service.demo.event.DemoListener" />-->
 
     <bean id="eventBusInitService" class="com.rishiqing.qywx.service.event.EventBusInitServiceImpl"
           init-method="register">
         <property name="eventMap">
             <map>
                 <entry key-ref="asyncFetchDeptAndStaffEventBus" value-ref="fetchDeptAndStaffListener" />
-                <entry key-ref="demoEventBus" value-ref="demoListener" />
+                <!--<entry key-ref="demoEventBus" value-ref="demoListener" />-->
             </map>
         </property>
     </bean>

@@ -2,6 +2,7 @@ package com.rishiqing.qywx.web.controller.demo;
 
 import com.rishiqing.qywx.service.demo.DemoService;
 import com.rishiqing.qywx.service.common.isv.SuiteManageService;
+import com.rishiqing.qywx.service.event.message.mq.DemoMessage;
 import com.rishiqing.qywx.service.model.isv.SuiteVO;
 import com.rishiqing.qywx.web.util.codec.AesException;
 import com.rishiqing.qywx.web.util.codec.WXBizMsgCrypt;
@@ -9,11 +10,14 @@ import com.rishiqing.qywx.web.util.common.XmlUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.xml.sax.SAXException;
 
+import javax.jms.Queue;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.util.Map;
@@ -30,6 +34,11 @@ public class DemoController {
     private SuiteManageService suiteManageService;
     @Autowired
     private DemoService demoService;
+    @Autowired
+    private JmsTemplate jmsTemplate;
+    @Autowired
+    @Qualifier("demoQueue")
+    private Queue demoQueue;
 
     @RequestMapping("/encode")
     @ResponseBody
@@ -84,6 +93,15 @@ public class DemoController {
     @ResponseBody
     public String sendEvent(){
         demoService.sendAsyncEvent();
+        return "success";
+    }
+
+    @RequestMapping("/send/mq")
+    @ResponseBody
+    public String sendMq(){
+        System.out.println("=======begin");
+        jmsTemplate.send(demoQueue,new DemoMessage("xxxxxx", "hello mq message"));
+        System.out.println("=======end");
         return "success";
     }
 }

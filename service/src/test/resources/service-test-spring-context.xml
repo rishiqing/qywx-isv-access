@@ -29,4 +29,7 @@
 
     <!--dao层dao-->
     <import resource="classpath:spring-dao.xml" />
+
+    <!--queue层-->
+    <import resource="classpath:spring-queue.xml" />
 </beans>

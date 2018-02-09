@@ -63,7 +63,7 @@ public class RsqStaffServiceImpl implements RsqStaffService {
         for (CorpStaffVO corpStaffVO : list) {
             List<CorpDeptVO> deptList = corpDeptIds2CorpDeptVO(corpVO.getCorpId(), corpStaffVO.getDepartment());
             pushAndCreateStaff(corpVO, deptList, corpStaffVO);
-            if(corpStaffVO.getAdmin()){
+            if(corpStaffVO.getAdminType() != -1){
                 adminList.add(corpStaffVO);
             }
         }
