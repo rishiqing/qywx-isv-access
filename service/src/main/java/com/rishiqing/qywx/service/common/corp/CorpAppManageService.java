@@ -5,6 +5,8 @@ import com.rishiqing.qywx.service.model.corp.CorpAppVO;
 import java.util.List;
 
 public interface CorpAppManageService {
+    CorpAppVO getCorpAppBySuiteKeyAndCorpId(String suiteKey, String corpId);
+
     /**
      * 根据appId和corpId获取corpApp
      * @param appId

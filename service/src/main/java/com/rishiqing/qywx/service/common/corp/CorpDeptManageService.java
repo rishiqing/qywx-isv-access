@@ -2,10 +2,14 @@ package com.rishiqing.qywx.service.common.corp;
 
 import com.rishiqing.qywx.service.model.corp.CorpDeptVO;
 
+import java.util.List;
+
 /**
  * @author Wallace Mao
  */
 public interface CorpDeptManageService {
+
+    List<CorpDeptVO> listCorpDeptListByCorpIdAndParentId(String corpId, Long parentId);
 
     /**
      * 根据corpId和deptId获取到CorpDept bean

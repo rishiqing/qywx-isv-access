@@ -14,6 +14,12 @@ public class CorpAppManageServiceImpl implements CorpAppManageService {
     @Autowired
     private CorpAppDao corpAppDao;
     @Override
+    public CorpAppVO getCorpAppBySuiteKeyAndCorpId(String suiteKey, String corpId){
+        return CorpAppConverter.corpAppDO2CorpAppVO(
+                corpAppDao.getCorpAppBySuiteKeyAndCorpId(suiteKey, corpId)
+        );
+    }
+    @Override
     public CorpAppVO getCorpApp(Long appId, String corpId) {
         return CorpAppConverter.corpAppDO2CorpAppVO(
                 corpAppDao.getCorpAppByAppIdAndCorpId(appId, corpId)

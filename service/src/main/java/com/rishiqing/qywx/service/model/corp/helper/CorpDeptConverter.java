@@ -1,9 +1,15 @@
 package com.rishiqing.qywx.service.model.corp.helper;
 
+import com.rishiqing.common.model.RsqDepartmentVO;
 import com.rishiqing.qywx.dao.model.corp.CorpDeptDO;
 import com.rishiqing.qywx.service.model.corp.CorpDeptVO;
+import com.rishiqing.qywx.service.model.corp.CorpVO;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CorpDeptConverter {
+
     public static CorpDeptVO corpDeptDO2CorpDeptVO(CorpDeptDO obj){
         if(obj == null){
             return null;
@@ -32,6 +38,36 @@ public class CorpDeptConverter {
         newObj.setParentId(obj.getParentId());
         newObj.setRsqId(obj.getRsqId());
         return newObj;
+    }
+
+    public static List<CorpDeptVO> corpDeptDOList2CorpDeptVOList(List<CorpDeptDO> doList){
+        if(null == doList){
+            return null;
+        }
+        List<CorpDeptVO> voList = new ArrayList<CorpDeptVO>(doList.size());
+        for(CorpDeptDO corpDeptDO : doList){
+            voList.add(corpDeptDO2CorpDeptVO(corpDeptDO));
+        }
+        return voList;
+    }
+
+    public static RsqDepartmentVO corpDeptVO2RsqDepartment(CorpVO corpVO, CorpDeptVO parentCorpDeptVO, CorpDeptVO corpDeptVO){
+        RsqDepartmentVO rsqDepartmentVO = new RsqDepartmentVO();
+        //  properties required
+        rsqDepartmentVO.setCorpId(corpDeptVO.getCorpId());
+        rsqDepartmentVO.setDeptId(String.valueOf(corpDeptVO.getDeptId()));
+
+        //  properties optional (can be null)
+        rsqDepartmentVO.setName(corpDeptVO.getName());
+        rsqDepartmentVO.setOrderNum(corpDeptVO.getOrder());
+        rsqDepartmentVO.setTeamId(corpVO.getRsqId());
+        if(null != corpDeptVO.getRsqId()){
+            rsqDepartmentVO.setId(Long.valueOf(corpDeptVO.getRsqId()));
+        }
+        if(null != parentCorpDeptVO){
+            rsqDepartmentVO.setParentId(parentCorpDeptVO.getRsqId());
+        }
+        return rsqDepartmentVO;
     }
 
     /**

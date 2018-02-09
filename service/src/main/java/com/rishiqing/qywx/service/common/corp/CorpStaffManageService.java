@@ -3,6 +3,8 @@ package com.rishiqing.qywx.service.common.corp;
 
 import com.rishiqing.qywx.service.model.corp.CorpStaffVO;
 
+import java.util.List;
+
 public interface CorpStaffManageService {
     /**
      * 根据corpId和userId获取到CorpStaff bean
@@ -16,6 +18,8 @@ public interface CorpStaffManageService {
      * @param corpStaffVO
      */
     void saveOrUpdateCorpStaff(CorpStaffVO corpStaffVO);
+
+    List<CorpStaffVO> listCorpStaffByCorpId(String corpId);
 
     /**
      * 用户登录之后获取用户基本信息

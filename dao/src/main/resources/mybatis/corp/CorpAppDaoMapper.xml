@@ -18,6 +18,13 @@
         id, date_created, last_updated, agent_id, `name`, round_logo_url, square_logo_url, suite_key, app_id, corp_id
     </sql>
 
+    <select id="getCorpAppBySuiteKeyAndCorpId" resultMap="corpAppMap">
+        SELECT <include refid="selectAllFields" /> FROM isv_corp_app
+        <![CDATA[
+            WHERE suite_key = #{suiteKey} AND corp_id = #{corpId}
+        ]]>
+    </select>
+
     <select id="getCorpAppByAppIdAndCorpId" resultMap="corpAppMap">
         SELECT <include refid="selectAllFields" /> FROM isv_corp_app
         <![CDATA[

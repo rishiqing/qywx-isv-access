@@ -1,8 +1,15 @@
 package com.rishiqing.qywx.service.model.corp.helper;
 
+import com.alibaba.fastjson.JSONArray;
+import com.rishiqing.common.model.RsqCommonUserVO;
 import com.rishiqing.qywx.dao.model.corp.CorpStaffDO;
+import com.rishiqing.qywx.service.model.corp.CorpDeptVO;
 import com.rishiqing.qywx.service.model.corp.CorpStaffVO;
+import com.rishiqing.qywx.service.model.corp.CorpVO;
 import com.rishiqing.qywx.service.model.corp.LoginUserVO;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CorpStaffConverter {
     public static CorpStaffVO corpStaffDO2CorpStaffVO(CorpStaffDO obj){
@@ -30,7 +37,8 @@ public class CorpStaffConverter {
         newObj.setRsqUsername(obj.getRsqUsername());
         newObj.setRsqPassword(obj.getRsqPassword());
         newObj.setRsqLoginToken(obj.getRsqLoginToken());
-        newObj.setAdmin(obj.getAdmin());
+        newObj.setAdminType(obj.getAdminType());
+        newObj.setUnionId(obj.getUnionId());
         return newObj;
     }
 
@@ -59,8 +67,20 @@ public class CorpStaffConverter {
         newObj.setRsqUsername(obj.getRsqUsername());
         newObj.setRsqPassword(obj.getRsqPassword());
         newObj.setRsqLoginToken(obj.getRsqLoginToken());
-        newObj.setAdmin(obj.getAdmin());
+        newObj.setAdminType(obj.getAdminType());
+        newObj.setUnionId(obj.getUnionId());
         return newObj;
+    }
+
+    public static List<CorpStaffVO> corpStaffDOList2CorpStaffVOList(List<CorpStaffDO> corpStaffDOList){
+        if(null == corpStaffDOList){
+            return null;
+        }
+        List<CorpStaffVO> voList = new ArrayList<CorpStaffVO>(corpStaffDOList.size());
+        for(CorpStaffDO corpStaffDO : corpStaffDOList){
+            voList.add(corpStaffDO2CorpStaffVO(corpStaffDO));
+        }
+        return voList;
     }
 
     public static LoginUserVO corpStaffVO2LoginUserVO(CorpStaffVO obj){
@@ -71,6 +91,40 @@ public class CorpStaffConverter {
         newObj.setId(obj.getId());
         newObj.setUserId(obj.getUserId());
         return newObj;
+    }
+
+    public static RsqCommonUserVO corpStaffVO2RsqCommonUserVO(CorpVO corpVO, List<CorpDeptVO> corpDeptVOList, CorpStaffVO corpStaffVO){
+        RsqCommonUserVO user = new RsqCommonUserVO();
+        //  properties required
+        user.setCorpId(corpStaffVO.getCorpId());
+        user.setUserId(corpStaffVO.getUserId());
+
+        if(null != corpStaffVO.getRsqUserId())
+            user.setId(Long.valueOf(corpStaffVO.getRsqUserId()));
+        if(null != corpStaffVO.getRsqUsername())
+            user.setUsername(corpStaffVO.getRsqUsername());
+        if(null != corpStaffVO.getRsqPassword())
+            user.setPassword(corpStaffVO.getRsqPassword());
+        if(null != corpStaffVO.getName())
+            user.setRealName(corpStaffVO.getName());
+        if(null != corpStaffVO.getUnionId())
+            user.setUnionId(corpStaffVO.getUnionId());
+        if(null != corpStaffVO.getAdminType())
+            user.setAdmin(corpStaffVO.getAdminType() != -1);
+
+        //  关联属性
+        if(null != corpVO.getRsqId())
+            user.setTeamId(Long.valueOf(corpVO.getRsqId()));
+        if(null != corpDeptVOList && corpDeptVOList.size() > 0){
+            JSONArray idArrays = new JSONArray();
+            for(CorpDeptVO corpDept : corpDeptVOList){
+                if(null != corpDept.getRsqId()){
+                    idArrays.add(Long.valueOf(corpDept.getRsqId()));
+                }
+            }
+            user.setDepartment(JSONArray.toJSONString(idArrays));
+        }
+        return user;
     }
 
     public static void mergeCorpStaffVO(CorpStaffVO old, CorpStaffVO target) {
@@ -108,7 +162,7 @@ public class CorpStaffConverter {
             target.setRsqPassword(old.getRsqPassword());
         if(null != old.getRsqLoginToken())
             target.setRsqLoginToken(old.getRsqLoginToken());
-        if(null != old.getAdmin())
-            target.setAdmin(old.getAdmin());
+        if(null != old.getAdminType())
+            target.setAdminType(old.getAdminType());
     }
 }

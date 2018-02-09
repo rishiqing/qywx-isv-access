@@ -98,7 +98,7 @@ public class HttpUtilRsqSyncImpl implements HttpUtilRsqSync {
             jsonObject = restHttpClient.post(url, queryMap, null, JSONObject.toJSONString(params), null);
             checkResponse(jsonObject);
         } catch (HttpException e) {
-            e.printStackTrace();
+            throw new RsqSyncException("http request error", e);
         }
 
         return RsqResponseConverter.Json2RsqDepartmentVO(jsonObject);
@@ -111,22 +111,23 @@ public class HttpUtilRsqSyncImpl implements HttpUtilRsqSync {
         queryMap.put("token", appToken);
         JSONObject params = new JSONObject();
         params.put("id", rsqDepartmentVO.getId());
-        params.put("name", rsqDepartmentVO.getName());
-
-        String parentId = "0";
-        if(null != rsqDepartmentVO.getParentId()){
-            parentId = rsqDepartmentVO.getParentId();
+        //  only update changed properties
+        if(null != rsqDepartmentVO.getName()){
+            params.put("name", rsqDepartmentVO.getName());
         }
-        params.put("parentId", parentId);
-
-        params.put("orderNum", rsqDepartmentVO.getOrderNum());
+        if(null != rsqDepartmentVO.getParentId()){
+            params.put("parentId", rsqDepartmentVO.getParentId());
+        }
+        if(null != rsqDepartmentVO.getOrderNum()){
+            params.put("orderNum", rsqDepartmentVO.getOrderNum());
+        }
 
         JSONObject jsonObject = null;
         try {
             jsonObject = restHttpClient.post(url, queryMap, null, JSONObject.toJSONString(params), null);
             checkResponse(jsonObject);
         } catch (HttpException e) {
-            e.printStackTrace();
+            throw new RsqSyncException("http request error", e);
         }
 
         return RsqResponseConverter.Json2RsqDepartmentVO(jsonObject);
@@ -138,6 +139,7 @@ public class HttpUtilRsqSyncImpl implements HttpUtilRsqSync {
         Map queryMap = new HashMap<String, String>();
         queryMap.put("token", appToken);
         JSONObject params = new JSONObject();
+        //  only need id property
         params.put("id", rsqDepartmentVO.getId());
 
         JSONObject jsonObject = null;
@@ -145,7 +147,7 @@ public class HttpUtilRsqSyncImpl implements HttpUtilRsqSync {
             jsonObject = restHttpClient.post(url, queryMap, null, JSONObject.toJSONString(params), null);
             checkResponse(jsonObject);
         } catch (HttpException e) {
-            e.printStackTrace();
+            throw new RsqSyncException("http request error", e);
         }
 
         return RsqResponseConverter.Json2RsqDepartmentVO(jsonObject);
@@ -174,7 +176,7 @@ public class HttpUtilRsqSyncImpl implements HttpUtilRsqSync {
             jsonObject = restHttpClient.post(url, queryMap, null, JSONObject.toJSONString(params), null);
             checkResponse(jsonObject);
         } catch (HttpException e) {
-            e.printStackTrace();
+            throw new RsqSyncException("http request error", e);
         }
 
         return RsqResponseConverter.Json2RsqCommonUserVO(jsonObject);
@@ -199,7 +201,7 @@ public class HttpUtilRsqSyncImpl implements HttpUtilRsqSync {
             jsonObject = restHttpClient.post(url, queryMap, null, JSONObject.toJSONString(params), null);
             checkResponse(jsonObject);
         } catch (HttpException e) {
-            e.printStackTrace();
+            throw new RsqSyncException("http request error", e);
         }
 
         return RsqResponseConverter.Json2RsqCommonUserVO(jsonObject);
@@ -218,7 +220,7 @@ public class HttpUtilRsqSyncImpl implements HttpUtilRsqSync {
             jsonObject = restHttpClient.post(url, queryMap, null, JSONObject.toJSONString(params), null);
             checkResponse(jsonObject);
         } catch (HttpException e) {
-            e.printStackTrace();
+            throw new RsqSyncException("http request error", e);
         }
 
         return RsqResponseConverter.Json2RsqCommonUserVO(jsonObject);
@@ -238,7 +240,7 @@ public class HttpUtilRsqSyncImpl implements HttpUtilRsqSync {
             jsonObject = restHttpClient.post(url, queryMap, null, JSONObject.toJSONString(params), null);
             checkResponse(jsonObject);
         } catch (HttpException e) {
-            e.printStackTrace();
+            throw new RsqSyncException("http request error", e);
         }
 
         return RsqResponseConverter.Json2RsqCommonUserVO(jsonObject);

@@ -192,4 +192,21 @@ public class Json2BeanConverter {
         }
         return loginUserVO;
     }
+    public static List<CorpStaffVO> generateCorpAdminList(String corpId, JSONObject json){
+        if(!json.containsKey("admin")){
+            return null;
+        }
+        JSONArray jsonStaffList = json.getJSONArray("admin");
+        List<CorpStaffVO> list = new ArrayList<>(jsonStaffList.size());
+        Iterator<Object> it = jsonStaffList.iterator();
+        while (it.hasNext()){
+            JSONObject jsonStaff = (JSONObject)it.next();
+            CorpStaffVO staffVO = new CorpStaffVO();
+            staffVO.setCorpId(corpId);
+            staffVO.setUserId(jsonStaff.getString("userid"));
+            staffVO.setAdminType(jsonStaff.getLong("auth_type"));
+            list.add(staffVO);
+        }
+        return list;
+    }
 }

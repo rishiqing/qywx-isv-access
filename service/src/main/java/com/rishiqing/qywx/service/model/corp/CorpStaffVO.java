@@ -21,7 +21,8 @@ public class CorpStaffVO {
     private Long status;
     private String extattr;
 
-    private Boolean isAdmin;
+    private Long adminType;
+    private String unionId;
 
     private String rsqUserId;
     private String rsqUsername;
@@ -188,12 +189,20 @@ public class CorpStaffVO {
         this.rsqLoginToken = rsqLoginToken;
     }
 
-    public Boolean getAdmin() {
-        return isAdmin;
+    public Long getAdminType() {
+        return adminType;
     }
 
-    public void setAdmin(Boolean admin) {
-        isAdmin = admin;
+    public void setAdminType(Long adminType) {
+        this.adminType = adminType;
+    }
+
+    public String getUnionId() {
+        return unionId;
+    }
+
+    public void setUnionId(String unionId) {
+        this.unionId = unionId;
     }
 
     @Override
@@ -215,7 +224,8 @@ public class CorpStaffVO {
                 ", englishName='" + englishName + '\'' +
                 ", status=" + status +
                 ", extattr='" + extattr + '\'' +
-                ", isAdmin=" + isAdmin +
+                ", adminType=" + adminType +
+                ", unionId='" + unionId + '\'' +
                 ", rsqUserId='" + rsqUserId + '\'' +
                 ", rsqUsername='" + rsqUsername + '\'' +
                 ", rsqPassword='" + rsqPassword + '\'' +

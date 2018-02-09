@@ -4,9 +4,13 @@ import com.alibaba.fastjson.JSONObject;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.rishiqing.qywx.service.constant.RequestUrl;
 import com.rishiqing.common.exception.HttpException;
+import com.rishiqing.qywx.service.model.corp.CorpAppVO;
 import com.rishiqing.qywx.service.model.corp.CorpDeptVO;
+import com.rishiqing.qywx.service.model.corp.CorpSuiteVO;
 import com.rishiqing.qywx.service.model.corp.CorpTokenVO;
 import com.rishiqing.common.util.http.client.RestHttpClient;
+import com.rishiqing.qywx.service.model.isv.SuiteTokenVO;
+import com.rishiqing.qywx.service.util.http.converter.Bean2JsonConverter;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -63,6 +67,20 @@ public class HttpUtilCorp {
                 RequestUrl.DEPARTMENT_STAFF_LIST,
                 queryMap,
                 options
+        );
+    }
+
+    public JSONObject getAppAdminList(SuiteTokenVO suiteTokenVO, CorpAppVO corpAppVO) throws HttpException, UnirestException {
+        JSONObject params = Bean2JsonConverter.prepareGetAdminList(suiteTokenVO, corpAppVO);
+        Map<String, Object> queryMap = new HashMap<>();
+        queryMap.put("suite_access_token", suiteTokenVO.getSuiteToken());
+
+        return restHttpClient.post(
+                RequestUrl.GET_APP_ADMIN_LIST,
+                queryMap,
+                null,
+                JSONObject.toJSONString(params),
+                null
         );
     }
 

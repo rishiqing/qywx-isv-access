@@ -24,12 +24,15 @@
         <result property="rsqUsername" column="rsq_username" />
         <result property="rsqPassword" column="rsq_password" />
         <result property="rsqLoginToken" column="rsq_login_token" />
+        <result property="adminType" column="admin_type" />
+        <result property="union_id" column="union_id" />
     </resultMap>
 
     <sql id="selectAllFields">
         id, date_created, last_updated, corp_id, user_id, `name`, department, order_in_depts, is_leader_in_depts,
         position, mobile, gender, email, avatar, tel, english_name, `status`, extattr,
-        rsq_user_id, rsq_username, rsq_password, rsq_login_token
+        rsq_user_id, rsq_username, rsq_password, rsq_login_token,
+        admin_type, union_id
     </sql>
 
     <select id="getCorpStaffByCorpIdAndUserId" resultMap="corpStaffMap">

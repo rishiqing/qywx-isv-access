@@ -1,6 +1,7 @@
 package com.rishiqing.qywx.service.util.http.converter;
 
 import com.alibaba.fastjson.JSONObject;
+import com.rishiqing.qywx.service.model.corp.CorpAppVO;
 import com.rishiqing.qywx.service.model.corp.CorpSuiteVO;
 import com.rishiqing.qywx.service.model.corp.CorpTokenVO;
 import com.rishiqing.qywx.service.model.isv.SuiteTicketVO;
@@ -34,6 +35,13 @@ public class Bean2JsonConverter {
         JSONObject params = new JSONObject();
         params.put("suite_id", suiteToken.getSuiteKey());
         params.put("auth_code", authCode);
+        return params;
+    }
+
+    public static JSONObject prepareGetAdminList(SuiteTokenVO suiteTokenVO, CorpAppVO corpAppVO){
+        JSONObject params = new JSONObject();
+        params.put("auth_corpid", corpAppVO.getCorpId());
+        params.put("agentid", corpAppVO.getAgentId());
         return params;
     }
 }

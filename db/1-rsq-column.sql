@@ -25,4 +25,9 @@ ALTER TABLE `isv_suite`
 # 添加是否为管理员字段
 # 2018-02-08 by Wallace Mao
 ALTER TABLE `isv_corp_staff`
-    ADD COLUMN `is_admin` bit(1) DEFAULT 0 COMMENT '表示该用户是否为企业管理员'
+    ADD COLUMN `admin_type` bigint(20) DEFAULT -1 COMMENT '表示该用户是否为企业管理员, -1为默认值，0是有发消息权限，1是有管理权限';
+
+# 添加unionId字段
+# 2018-02-09 by Wallace Mao
+ALTER TABLE `isv_corp_staff`
+    ADD COLUMN `union_id` varchar(255) NULL COMMENT '与网站扫码登录共享的union_id';

@@ -18,6 +18,12 @@
         <Logger name="SERVICE_CORP_MANAGE_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
             <AppenderRef ref="Console"/>
         </Logger>
+        <Logger name="SERVICE_CORP_TRANSFER_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
+            <AppenderRef ref="Console"/>
+        </Logger>
+        <Logger name="SERVICE_CORP_PUSH_RSQ_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
+            <AppenderRef ref="Console"/>
+        </Logger>
         <Logger name="DEFAULT_HTTP_REQUEST_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
             <AppenderRef ref="Console"/>
         </Logger>
@@ -25,9 +31,6 @@
             <AppenderRef ref="Console"/>
         </Logger>
         <Logger name="SERVICE_EVENT_LISTENER_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
-            <AppenderRef ref="Console"/>
-        </Logger>
-        <Logger name="SERVICE_CORP_TRANSFER_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
             <AppenderRef ref="Console"/>
         </Logger>
         <Logger name="SYS_LIMIT_WARN_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">

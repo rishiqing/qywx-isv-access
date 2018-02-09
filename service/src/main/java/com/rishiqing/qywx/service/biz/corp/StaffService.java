@@ -3,9 +3,11 @@ package com.rishiqing.qywx.service.biz.corp;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.rishiqing.common.exception.HttpException;
 import com.rishiqing.qywx.service.exception.ObjectNotExistException;
+import com.rishiqing.qywx.service.model.corp.CorpAppVO;
 import com.rishiqing.qywx.service.model.corp.CorpDeptVO;
 import com.rishiqing.qywx.service.model.corp.CorpStaffVO;
 import com.rishiqing.qywx.service.model.corp.CorpTokenVO;
+import com.rishiqing.qywx.service.model.isv.SuiteTokenVO;
 
 import javax.annotation.Nullable;
 
@@ -16,6 +18,8 @@ public interface StaffService {
      * @param corpDeptVO
      */
     void fetchAndSaveStaffList(CorpTokenVO corpTokenVO, @Nullable CorpDeptVO corpDeptVO) throws HttpException, UnirestException;
+
+    void fetchAndSaveAdminList(SuiteTokenVO suiteTokenVO, CorpAppVO corpAppVO) throws HttpException, UnirestException;
 
     /**
      * 保存staff到本地

@@ -7,6 +7,8 @@ import com.rishiqing.qywx.service.model.corp.CorpStaffVO;
 import com.rishiqing.qywx.service.model.corp.helper.CorpStaffConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
+
 public class CorpStaffManageServiceImpl implements CorpStaffManageService {
     @Autowired
     private CorpStaffDao corpStaffDao;
@@ -14,6 +16,13 @@ public class CorpStaffManageServiceImpl implements CorpStaffManageService {
     public void saveOrUpdateCorpStaff(CorpStaffVO corpStaffVO) {
         corpStaffDao.saveOrUpdateCorpStaff(
                 CorpStaffConverter.corpStaffVO2CorpStaffDO(corpStaffVO)
+        );
+    }
+
+    @Override
+    public List<CorpStaffVO> listCorpStaffByCorpId(String corpId){
+        return CorpStaffConverter.corpStaffDOList2CorpStaffVOList(
+                corpStaffDao.listCorpStaffByCorpId(corpId)
         );
     }
 
