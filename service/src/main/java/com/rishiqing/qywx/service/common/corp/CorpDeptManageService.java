@@ -11,6 +11,8 @@ public interface CorpDeptManageService {
 
     List<CorpDeptVO> listCorpDeptListByCorpIdAndParentId(String corpId, Long parentId);
 
+    List<CorpDeptVO> listCorpDeptListByCorpIdAndDeptIdString(String corpId, String strDeptIds);
+
     /**
      * 根据corpId和deptId获取到CorpDept bean
      * @param corpId

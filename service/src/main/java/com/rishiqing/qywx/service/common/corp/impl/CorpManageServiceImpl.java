@@ -14,6 +14,13 @@ public class CorpManageServiceImpl implements CorpManageService {
     private CorpDao corpDao;
 
     @Override
+    public CorpVO getCorpByCorpId(String corpId) {
+        return CorpConverter.corpDO2CorpVO(
+                corpDao.getCorpByCorpId(corpId)
+        );
+    }
+
+    @Override
     public void saveOrUpdateCorp(CorpVO corpVO) {
         corpDao.saveOrUpdateCorp(
                 CorpConverter.corpVO2CorpDO(corpVO)

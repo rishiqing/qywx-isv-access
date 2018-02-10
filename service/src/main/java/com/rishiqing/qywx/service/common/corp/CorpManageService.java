@@ -3,6 +3,8 @@ package com.rishiqing.qywx.service.common.corp;
 import com.rishiqing.qywx.service.model.corp.CorpVO;
 
 public interface CorpManageService {
+
+    CorpVO getCorpByCorpId(String corpId);
     /**
      * 保存corp信息
      * @param corpVO

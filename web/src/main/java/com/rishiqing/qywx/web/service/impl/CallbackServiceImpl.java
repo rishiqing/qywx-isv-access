@@ -6,7 +6,7 @@ import com.rishiqing.qywx.service.biz.corp.DeptService;
 import com.rishiqing.qywx.service.biz.corp.StaffService;
 import com.rishiqing.qywx.service.common.corp.CorpManageService;
 import com.rishiqing.qywx.service.common.corp.CorpSuiteManageService;
-import com.rishiqing.qywx.service.common.isv.SuiteManageService;
+import com.rishiqing.qywx.service.common.isv.GlobalSuite;
 import com.rishiqing.qywx.service.common.isv.SuiteTicketManageService;
 import com.rishiqing.qywx.service.common.isv.SuiteTokenManageService;
 import com.rishiqing.common.exception.HttpException;
@@ -28,7 +28,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.xml.sax.SAXException;
 
-import javax.annotation.PostConstruct;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.util.Map;
@@ -37,9 +36,7 @@ public class CallbackServiceImpl implements CallbackService {
     private static final Logger logger = LoggerFactory.getLogger("WEB_CALLBACK_LOGGER");
 
     @Autowired
-    private Map isvGlobal;
-    @Autowired
-    private SuiteManageService suiteManageService;
+    private GlobalSuite suite;
     @Autowired
     private SuiteTicketManageService suiteTicketManageService;
     @Autowired
@@ -55,22 +52,13 @@ public class CallbackServiceImpl implements CallbackService {
     @Autowired
     private StaffService staffService;
 
-    private SuiteVO suite;
-
-    @PostConstruct
-    private void init(){
-        //  读取套件基本信息
-        String suiteKey = (String)isvGlobal.get("suiteKey");
-        this.suite = suiteManageService.getSuiteInfoByKey(suiteKey);
-    }
-
     @Override
     public String verifyUrl(String signature, String timestamp, String nonce, String echoString) throws CallbackException {
 
-        String token = this.suite.getToken();
-        String suiteKey = this.suite.getSuiteKey();
-        String encodingAesKey = this.suite.getEncodingAesKey();
-        String corpId = this.suite.getCorpId();
+        String token = suite.getToken();
+        String suiteKey = suite.getSuiteKey();
+        String encodingAesKey = suite.getEncodingAesKey();
+        String corpId = suite.getCorpId();
 
         try {
             WXBizMsgCrypt wxcpt = new WXBizMsgCrypt(token, encodingAesKey, corpId);
@@ -82,9 +70,9 @@ public class CallbackServiceImpl implements CallbackService {
 
     @Override
     public String receiveMessage(String signature, String timestamp, String nonce, String body) throws CallbackException {
-        String token = this.suite.getToken();
-        String suiteKey = this.suite.getSuiteKey();
-        String encodingAesKey = this.suite.getEncodingAesKey();
+        String token = suite.getToken();
+        String suiteKey = suite.getSuiteKey();
+        String encodingAesKey = suite.getEncodingAesKey();
 
         //  如果body中的ToUserName不是suiteKey，那么就不做处理
         Boolean canHandle;
@@ -145,7 +133,7 @@ public class CallbackServiceImpl implements CallbackService {
         String ticket = (String)params.get("SuiteTicket");
         assert ticket != null;
         SuiteTicketVO suiteTicketVO = new SuiteTicketVO();
-        suiteTicketVO.setSuiteKey(this.suite.getSuiteKey());
+        suiteTicketVO.setSuiteKey(suite.getSuiteKey());
         suiteTicketVO.setTicket(ticket);
         suiteTicketManageService.saveSuiteTicket(suiteTicketVO);
     }
@@ -157,7 +145,7 @@ public class CallbackServiceImpl implements CallbackService {
     private void handleCreateAuth(Map params) throws UnirestException, HttpException {
         String authCode = (String)params.get("AuthCode");
         assert authCode != null;
-        SuiteTokenVO suiteTokenVO = suiteTokenManageService.getSuiteToken(this.suite.getSuiteKey());
+        SuiteTokenVO suiteTokenVO = suiteTokenManageService.getSuiteToken(suite.getSuiteKey());
         //TODO 修改成异步开通
         corpService.activeCorp(suiteTokenVO, authCode);
     }
@@ -171,7 +159,7 @@ public class CallbackServiceImpl implements CallbackService {
     private void handleChangeAuth(Map params) throws UnirestException, HttpException {
         String corpId = (String)params.get("AuthCorpId");
         assert corpId != null;
-        String suiteKey = this.suite.getSuiteKey();
+        String suiteKey = suite.getSuiteKey();
         SuiteTokenVO suiteTokenVO = suiteTokenManageService.getSuiteToken(suiteKey);
         CorpSuiteVO corpSuiteVO = corpSuiteManageService.getCorpSuite(suiteKey, corpId);
         corpService.fetchAndSaveCorpInfo(suiteTokenVO, corpSuiteVO);

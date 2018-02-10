@@ -3,29 +3,22 @@ package com.rishiqing.qywx.service.biz.rsq.impl;
 import com.rishiqing.common.exception.RsqSyncException;
 import com.rishiqing.common.exception.RsqUpdateNotExistsException;
 import com.rishiqing.common.model.RsqCommonUserVO;
-import com.rishiqing.common.model.RsqDepartmentVO;
 import com.rishiqing.common.model.RsqTeamVO;
 import com.rishiqing.common.util.http.HttpUtilRsqSync;
 import com.rishiqing.qywx.service.biz.rsq.RsqStaffService;
 import com.rishiqing.qywx.service.common.corp.CorpDeptManageService;
 import com.rishiqing.qywx.service.common.corp.CorpStaffManageService;
-import com.rishiqing.qywx.service.common.isv.SuiteManageService;
+import com.rishiqing.qywx.service.common.isv.GlobalSuite;
 import com.rishiqing.qywx.service.model.corp.CorpDeptVO;
 import com.rishiqing.qywx.service.model.corp.CorpStaffVO;
 import com.rishiqing.qywx.service.model.corp.CorpVO;
 import com.rishiqing.qywx.service.model.corp.helper.CorpConverter;
-import com.rishiqing.qywx.service.model.corp.helper.CorpDeptConverter;
 import com.rishiqing.qywx.service.model.corp.helper.CorpStaffConverter;
-import com.rishiqing.qywx.service.model.isv.SuiteVO;
-import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.annotation.PostConstruct;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 /**
@@ -36,9 +29,7 @@ public class RsqStaffServiceImpl implements RsqStaffService {
     private static final Logger logger = LoggerFactory.getLogger("SERVICE_CORP_PUSH_RSQ_LOGGER");
 
     @Autowired
-    private Map isvGlobal;
-    @Autowired
-    private SuiteManageService suiteManageService;
+    private GlobalSuite suite;
     @Autowired
     private HttpUtilRsqSync httpUtilRsqSync;
     @Autowired
@@ -46,22 +37,13 @@ public class RsqStaffServiceImpl implements RsqStaffService {
     @Autowired
     private CorpDeptManageService corpDeptManageService;
 
-    private SuiteVO suite;
-
-    @PostConstruct
-    private void init(){
-        //  读取套件基本信息
-        String suiteKey = (String)isvGlobal.get("suiteKey");
-        this.suite = suiteManageService.getSuiteInfoByKey(suiteKey);
-    }
-
     @Override
     public void pushAndCreateAllCorpStaff(CorpVO corpVO){
         List<CorpStaffVO> list = corpStaffManageService.listCorpStaffByCorpId(corpVO.getCorpId());
         List<CorpStaffVO> adminList = new ArrayList<>();
 
         for (CorpStaffVO corpStaffVO : list) {
-            List<CorpDeptVO> deptList = corpDeptIds2CorpDeptVO(corpVO.getCorpId(), corpStaffVO.getDepartment());
+            List<CorpDeptVO> deptList = corpDeptManageService.listCorpDeptListByCorpIdAndDeptIdString(corpVO.getCorpId(), corpStaffVO.getDepartment());
             pushAndCreateStaff(corpVO, deptList, corpStaffVO);
             if(corpStaffVO.getAdminType() != -1){
                 adminList.add(corpStaffVO);
@@ -94,10 +76,10 @@ public class RsqStaffServiceImpl implements RsqStaffService {
         RsqCommonUserVO user = CorpStaffConverter.corpStaffVO2RsqCommonUserVO(corpVO, corpDeptVOList, corpStaffVO);
         try {
             //  自动生成用户名和密码
-            user.setUsername(generateRsqUsername(this.suite.getRsqAppName()));
-            user.setPassword(generateRsqPassword(this.suite.getRsqAppName()));
+            user.setUsername(generateRsqUsername(suite.getRsqAppName()));
+            user.setPassword(generateRsqPassword(suite.getRsqAppName()));
 
-            user = httpUtilRsqSync.createUser(this.suite.getRsqAppName(), this.suite.getRsqAppToken(), team, user);
+            user = httpUtilRsqSync.createUser(suite.getRsqAppName(), suite.getRsqAppToken(), team, user);
             corpStaffVO.setRsqUserId(String.valueOf(user.getId()));
             corpStaffVO.setRsqUsername(user.getUsername());
             corpStaffVO.setRsqPassword(user.getPassword());
@@ -131,7 +113,7 @@ public class RsqStaffServiceImpl implements RsqStaffService {
                 throw new RsqUpdateNotExistsException("corpStaffVO.getRsqUserId not exists: corpId: " + corpStaffVO.getCorpId() + ", deptId: " + corpStaffVO.getUserId());
             }
 //            corpDeptManageService.saveOrUpdateCorpDept(corpDeptVO);
-            httpUtilRsqSync.updateUser(this.suite.getRsqAppName(), this.suite.getRsqAppToken(), team, user);
+            httpUtilRsqSync.updateUser(suite.getRsqAppName(), suite.getRsqAppToken(), team, user);
         } catch (RsqSyncException e) {
             logger.error("push to create rishiqing department error: ", e);
             //TODO 加入队列做重试
@@ -151,7 +133,7 @@ public class RsqStaffServiceImpl implements RsqStaffService {
             if(null == corpStaffVO.getRsqUserId()){
                 throw new RsqUpdateNotExistsException("corpStaffVO.getRsqUserId not exists: corpId: " + corpStaffVO.getCorpId() + ", deptId: " + corpStaffVO.getUserId());
             }
-            httpUtilRsqSync.userLeaveTeam(this.suite.getRsqAppName(), this.suite.getRsqAppToken(), team, user);
+            httpUtilRsqSync.userLeaveTeam(suite.getRsqAppName(), suite.getRsqAppToken(), team, user);
             corpStaffManageService.deleteCorpStaffByCorpIdAndUserId(corpVO.getCorpId(), corpStaffVO.getUserId());
         } catch (RsqSyncException e) {
             logger.error("push to create rishiqing department error: ", e);
@@ -172,7 +154,7 @@ public class RsqStaffServiceImpl implements RsqStaffService {
             if(null == corpStaffVO.getRsqUserId()){
                 throw new RsqUpdateNotExistsException("corpStaffVO.getRsqUserId not exists: corpId: " + corpStaffVO.getCorpId() + ", deptId: " + corpStaffVO.getUserId());
             }
-            httpUtilRsqSync.setUserAdmin(this.suite.getRsqAppName(), this.suite.getRsqAppToken(), team, user);
+            httpUtilRsqSync.setUserAdmin(suite.getRsqAppName(), suite.getRsqAppToken(), team, user);
         } catch (RsqSyncException e) {
             logger.error("push to create rishiqing department error: ", e);
             //TODO 加入队列做重试
@@ -181,20 +163,6 @@ public class RsqStaffServiceImpl implements RsqStaffService {
             //TODO 重新create，然后再做删除
         }
         return corpStaffVO;
-    }
-
-    private List<CorpDeptVO> corpDeptIds2CorpDeptVO(String corpId, String ids){
-        String strIds = ids.replaceAll("\\[", "")
-                .replaceAll("\\]", "");
-        String[] arr = strIds.split("\\,");
-        List<CorpDeptVO> list = new ArrayList<>(arr.length);
-        for(String strId : arr){
-            if(null != strId && !"".equals(strId)){
-                CorpDeptVO corpDeptVO = corpDeptManageService.getCorpDeptByCorpIdAndDeptId(corpId, Long.valueOf(strId));
-                list.add(corpDeptVO);
-            }
-        }
-        return list;
     }
 
     private String generateRsqUsername(String appName){

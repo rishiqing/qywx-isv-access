@@ -3,6 +3,7 @@ package com.rishiqing.qywx.web.controller.demo;
 import com.rishiqing.qywx.service.demo.DemoService;
 import com.rishiqing.qywx.service.common.isv.SuiteManageService;
 import com.rishiqing.qywx.service.event.message.mq.DemoMessage;
+import com.rishiqing.qywx.service.event.service.AsyncService;
 import com.rishiqing.qywx.service.model.isv.SuiteVO;
 import com.rishiqing.qywx.web.util.codec.AesException;
 import com.rishiqing.qywx.web.util.codec.WXBizMsgCrypt;
@@ -35,10 +36,7 @@ public class DemoController {
     @Autowired
     private DemoService demoService;
     @Autowired
-    private JmsTemplate jmsTemplate;
-    @Autowired
-    @Qualifier("demoQueue")
-    private Queue demoQueue;
+    private AsyncService asyncService;
 
     @RequestMapping("/encode")
     @ResponseBody
@@ -100,7 +98,9 @@ public class DemoController {
     @ResponseBody
     public String sendMq(){
         System.out.println("=======begin");
-        jmsTemplate.send(demoQueue,new DemoMessage("xxxxxx", "hello mq message"));
+        for(int i = 0; i < 10; i++ ){
+            asyncService.sendToDemo(new DemoMessage("xxxxxx-" + i, "hello mq message"));
+        }
         System.out.println("=======end");
         return "success";
     }

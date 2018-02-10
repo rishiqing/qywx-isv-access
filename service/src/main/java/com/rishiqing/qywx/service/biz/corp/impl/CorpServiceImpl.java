@@ -11,6 +11,7 @@ import com.rishiqing.qywx.service.common.corp.CorpTokenManageService;
 import com.rishiqing.qywx.service.constant.ServiceConstant;
 import com.rishiqing.qywx.service.event.message.CorpSuiteMessage;
 import com.rishiqing.common.exception.HttpException;
+import com.rishiqing.qywx.service.event.service.AsyncService;
 import com.rishiqing.qywx.service.model.corp.*;
 import com.rishiqing.qywx.service.model.isv.SuiteTokenVO;
 import com.rishiqing.qywx.service.util.http.HttpUtil;
@@ -34,7 +35,7 @@ public class CorpServiceImpl implements CorpService {
     @Autowired
     private HttpUtil httpUtil;
     @Autowired
-    private AsyncEventBus asyncFetchDeptAndStaffEventBus;
+    private AsyncService asyncService;
     @Override
     public CorpVO activeCorp(SuiteTokenVO suiteToken, String authCode) throws UnirestException, HttpException {
         JSONObject json = httpUtil.getPermanentCode(suiteToken, authCode);
@@ -63,10 +64,7 @@ public class CorpServiceImpl implements CorpService {
         }
 
         //5. 使用eventBus异步获取部门及用户信息
-        CorpSuiteMessage message = new CorpSuiteMessage();
-        message.setSuiteKey(suiteKey);
-        message.setCorpId(corpId);
-        asyncFetchDeptAndStaffEventBus.post(message);
+        asyncService.sendToFetchCorpAll(corpVO);
         return corpVO;
     }
 

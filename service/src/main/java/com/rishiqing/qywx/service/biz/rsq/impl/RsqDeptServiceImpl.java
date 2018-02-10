@@ -7,21 +7,16 @@ import com.rishiqing.common.model.RsqTeamVO;
 import com.rishiqing.common.util.http.HttpUtilRsqSync;
 import com.rishiqing.qywx.service.biz.rsq.RsqDeptService;
 import com.rishiqing.qywx.service.common.corp.CorpDeptManageService;
-import com.rishiqing.qywx.service.common.corp.CorpManageService;
-import com.rishiqing.qywx.service.common.isv.SuiteManageService;
+import com.rishiqing.qywx.service.common.isv.GlobalSuite;
 import com.rishiqing.qywx.service.model.corp.CorpDeptVO;
 import com.rishiqing.qywx.service.model.corp.CorpVO;
 import com.rishiqing.qywx.service.model.corp.helper.CorpConverter;
 import com.rishiqing.qywx.service.model.corp.helper.CorpDeptConverter;
-import com.rishiqing.qywx.service.model.isv.SuiteVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.annotation.PostConstruct;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author Wallace Mao
@@ -31,22 +26,11 @@ public class RsqDeptServiceImpl implements RsqDeptService {
     private static final Logger logger = LoggerFactory.getLogger("SERVICE_CORP_PUSH_RSQ_LOGGER");
 
     @Autowired
-    private Map isvGlobal;
-    @Autowired
-    private SuiteManageService suiteManageService;
+    private GlobalSuite suite;
     @Autowired
     private HttpUtilRsqSync httpUtilRsqSync;
     @Autowired
     private CorpDeptManageService corpDeptManageService;
-
-    private SuiteVO suite;
-
-    @PostConstruct
-    private void init(){
-        //  读取套件基本信息
-        String suiteKey = (String)isvGlobal.get("suiteKey");
-        this.suite = suiteManageService.getSuiteInfoByKey(suiteKey);
-    }
 
     /**
      * 找到corpVO中顶层的部门，调用pushAndCreateRecursiveDept方法进行递归创建
@@ -94,7 +78,7 @@ public class RsqDeptServiceImpl implements RsqDeptService {
         RsqDepartmentVO departmentVO = CorpDeptConverter.corpDeptVO2RsqDepartment(corpVO, parentCorpDeptVO, corpDeptVO);
         try {
 //            corpDeptManageService.saveOrUpdateCorpDept(corpDeptVO);
-            departmentVO = httpUtilRsqSync.createDepartment(this.suite.getRsqAppName(), this.suite.getRsqAppToken(), team, departmentVO);
+            departmentVO = httpUtilRsqSync.createDepartment(suite.getRsqAppName(), suite.getRsqAppToken(), team, departmentVO);
             corpDeptVO.setRsqId(String.valueOf(departmentVO.getId()));
             corpDeptManageService.saveOrUpdateCorpDept(corpDeptVO);
         } catch (RsqSyncException e) {
@@ -126,7 +110,7 @@ public class RsqDeptServiceImpl implements RsqDeptService {
                 throw new RsqUpdateNotExistsException("corpDeptVO.getRsqId not exists: corpId: " + corpDeptVO.getCorpId() + ", deptId: " + corpDeptVO.getDeptId());
             }
 //            corpDeptManageService.saveOrUpdateCorpDept(corpDeptVO);
-            httpUtilRsqSync.updateDepartment(this.suite.getRsqAppName(), this.suite.getRsqAppToken(), team, departmentVO);
+            httpUtilRsqSync.updateDepartment(suite.getRsqAppName(), suite.getRsqAppToken(), team, departmentVO);
         } catch (RsqSyncException e) {
             logger.error("push to create rishiqing department error: ", e);
             //TODO 加入队列做重试
@@ -154,7 +138,7 @@ public class RsqDeptServiceImpl implements RsqDeptService {
             if(null == corpDeptVO.getRsqId()){
                 throw new RsqUpdateNotExistsException("corpDeptVO.getRsqId not exists: corpId: " + corpDeptVO.getCorpId() + ", deptId: " + corpDeptVO.getDeptId());
             }
-            httpUtilRsqSync.deleteDepartment(this.suite.getRsqAppName(), this.suite.getRsqAppToken(), team, departmentVO);
+            httpUtilRsqSync.deleteDepartment(suite.getRsqAppName(), suite.getRsqAppToken(), team, departmentVO);
             corpDeptManageService.deleteCorpDeptByCorpIdAndDeptId(corpVO.getCorpId(), corpDeptVO.getDeptId());
         } catch (RsqSyncException e) {
             logger.error("push to create rishiqing department error: ", e);

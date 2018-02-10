@@ -7,6 +7,7 @@ import com.rishiqing.qywx.service.model.corp.CorpDeptVO;
 import com.rishiqing.qywx.service.model.corp.helper.CorpDeptConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CorpDeptManageServiceImpl implements CorpDeptManageService {
@@ -17,6 +18,20 @@ public class CorpDeptManageServiceImpl implements CorpDeptManageService {
     public List<CorpDeptVO> listCorpDeptListByCorpIdAndParentId(String corpId, Long parentId){
         List<CorpDeptDO> doList = corpDeptDao.listCorpDeptByCorpIdAndParentId(corpId, parentId);
         return CorpDeptConverter.corpDeptDOList2CorpDeptVOList(doList);
+    }
+    @Override
+    public List<CorpDeptVO> listCorpDeptListByCorpIdAndDeptIdString(String corpId, String strDeptIds){
+        String strIds = strDeptIds.replaceAll("\\[", "")
+                .replaceAll("\\]", "");
+        String[] arr = strIds.split("\\,");
+        List<CorpDeptVO> list = new ArrayList<>(arr.length);
+        for(String strId : arr){
+            if(null != strId && !"".equals(strId)){
+                CorpDeptVO corpDeptVO = getCorpDeptByCorpIdAndDeptId(corpId, Long.valueOf(strId));
+                list.add(corpDeptVO);
+            }
+        }
+        return list;
     }
 
     @Override

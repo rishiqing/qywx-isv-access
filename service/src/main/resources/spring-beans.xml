@@ -3,6 +3,8 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+    <!--全局缓存的suite-->
+    <bean id="suite" class="com.rishiqing.qywx.service.common.isv.GlobalSuite" init-method="init"/>
     <!--基础service-->
     <bean id="suiteManageService" class="com.rishiqing.qywx.service.common.isv.impl.SuiteManageServiceImpl" />
     <bean id="suiteTicketManageService" class="com.rishiqing.qywx.service.common.isv.impl.SuiteTicketManageServiceImpl" />
@@ -52,25 +54,26 @@
     </bean>
 
     <!--AsyncEventBus-->
-    <bean id="asyncFetchDeptAndStaffExecutorFactory" class="com.rishiqing.qywx.service.event.executor.AsyncFetchDeptAndStaffExecutorFactory" />
-    <bean id="asyncFetchDeptAndStaffExecutor" factory-bean="asyncFetchDeptAndStaffExecutorFactory" factory-method="getFetchDeptAndStaffExecutor" />
-    <bean id="asyncFetchDeptAndStaffEventBus" class="com.google.common.eventbus.AsyncEventBus">
-        <constructor-arg ref="asyncFetchDeptAndStaffExecutor" />
+    <bean id="asyncService" class="com.rishiqing.qywx.service.event.service.impl.AsyncServiceImpl"/>
+    <bean id="asyncFetchCorpAllExecutorFactory" class="com.rishiqing.qywx.service.event.executor.AsyncFetchCorpAllExecutorFactory" />
+    <bean id="asyncFetchCorpAllExecutor" factory-bean="asyncFetchCorpAllExecutorFactory" factory-method="getFetchCorpAllExecutor" />
+    <bean id="asyncFetchCorpAllEventBus" class="com.google.common.eventbus.AsyncEventBus">
+        <constructor-arg ref="asyncFetchCorpAllExecutor" />
     </bean>
-    <bean id="fetchDeptAndStaffListener" class="com.rishiqing.qywx.service.event.listener.FetchDeptAndStaffListener" />
+    <bean id="fetchCorpAllListener" class="com.rishiqing.qywx.service.event.listener.FetchCorpAllListener" />
 
     <!--<bean id="demoExecutorFactory" class="com.rishiqing.qywx.service.demo.event.DemoExecutorFactory" />-->
-    <!--<bean id="demoExecutor" factory-bean="demoExecutorFactory" factory-method="getFetchDeptAndStaffExecutor" />-->
+    <!--<bean id="demoExecutor" factory-bean="demoExecutorFactory" factory-method="getFetchCorpAllExecutor" />-->
     <!--<bean id="demoEventBus" class="com.google.common.eventbus.AsyncEventBus">-->
         <!--<constructor-arg ref="demoExecutor" />-->
     <!--</bean>-->
     <!--<bean id="demoListener" class="com.rishiqing.qywx.service.demo.event.DemoListener" />-->
 
-    <bean id="eventBusInitService" class="com.rishiqing.qywx.service.event.EventBusInitServiceImpl"
+    <bean id="eventBusInitService" class="com.rishiqing.qywx.service.event.service.impl.EventBusInitServiceImpl"
           init-method="register">
         <property name="eventMap">
             <map>
-                <entry key-ref="asyncFetchDeptAndStaffEventBus" value-ref="fetchDeptAndStaffListener" />
+                <entry key-ref="asyncFetchCorpAllEventBus" value-ref="fetchCorpAllListener" />
                 <!--<entry key-ref="demoEventBus" value-ref="demoListener" />-->
             </map>
         </property>

@@ -7,6 +7,7 @@ import org.apache.activemq.command.ActiveMQMessage;
 import javax.jms.MapMessage;
 import javax.jms.Message;
 import javax.jms.MessageListener;
+import java.util.Date;
 
 /**
  * @author Wallace Mao
@@ -17,7 +18,10 @@ public class DemoMqListener implements MessageListener {
     public void onMessage(Message message) {
         try {
             MapMessage mapMessage = (MapMessage)message;
-            System.out.println("--------" + mapMessage.getString("corpId"));
+            String corpId = mapMessage.getString("corpId");
+            System.out.println("== thread start----" + corpId + "----" + new Date());
+            Thread.sleep(3000);
+            System.out.println("== thread end----" + corpId + "----" + new Date());
 //            ActiveMQMapMessage mqMessage = (ActiveMQMapMessage)message;
 //            System.out.println("---------------" + mqMessage.getString);
 //            System.out.println("---------------++++" + demoMessage.getMsg());

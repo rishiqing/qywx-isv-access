@@ -1,4 +1,4 @@
-package com.rishiqing.qywx.service.event;
+package com.rishiqing.qywx.service.event.service;
 
 public interface EventBusInitService {
     /**

@@ -7,16 +7,12 @@ import com.rishiqing.qywx.service.biz.rsq.RsqCorpService;
 import com.rishiqing.qywx.service.biz.rsq.RsqDeptService;
 import com.rishiqing.qywx.service.biz.rsq.RsqStaffService;
 import com.rishiqing.qywx.service.common.corp.CorpManageService;
-import com.rishiqing.qywx.service.common.isv.SuiteManageService;
+import com.rishiqing.qywx.service.common.isv.GlobalSuite;
 import com.rishiqing.qywx.service.model.corp.CorpVO;
 import com.rishiqing.qywx.service.model.corp.helper.CorpConverter;
-import com.rishiqing.qywx.service.model.isv.SuiteVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import javax.annotation.PostConstruct;
-import java.util.Map;
 
 /**
  * @author Wallace Mao
@@ -26,9 +22,7 @@ public class RsqCorpServiceImpl implements RsqCorpService {
     private static final Logger logger = LoggerFactory.getLogger("SERVICE_CORP_PUSH_RSQ_LOGGER");
 
     @Autowired
-    private Map isvGlobal;
-    @Autowired
-    private SuiteManageService suiteManageService;
+    private GlobalSuite suite;
     @Autowired
     private HttpUtilRsqSync httpUtilRsqSync;
     @Autowired
@@ -37,15 +31,6 @@ public class RsqCorpServiceImpl implements RsqCorpService {
     private RsqDeptService rsqDeptService;
     @Autowired
     private RsqStaffService rsqStaffService;
-
-    private SuiteVO suite;
-
-    @PostConstruct
-    private void init(){
-        //  读取套件基本信息
-        String suiteKey = (String)isvGlobal.get("suiteKey");
-        this.suite = suiteManageService.getSuiteInfoByKey(suiteKey);
-    }
 
     /**
      * 将单个企业的基本信息同步到日事清
@@ -60,7 +45,7 @@ public class RsqCorpServiceImpl implements RsqCorpService {
         }
         RsqTeamVO rsqTeamVO = CorpConverter.corpVO2RsqTeamVO(corpVO);
         try {
-            RsqTeamVO team = httpUtilRsqSync.createCorp(this.suite.getRsqAppName(), this.suite.getRsqAppToken(), rsqTeamVO);
+            RsqTeamVO team = httpUtilRsqSync.createCorp(suite.getRsqAppName(), suite.getRsqAppToken(), rsqTeamVO);
             corpVO.setRsqId(String.valueOf(team.getId()));
             corpManageService.saveOrUpdateCorp(corpVO);
         } catch (RsqSyncException e) {
@@ -82,9 +67,7 @@ public class RsqCorpServiceImpl implements RsqCorpService {
         //  2  创建企业部门
         rsqDeptService.pushAndCreateAllCorpDept(corpVO);
 
-        //  3  创建企业部门成员
+        //  3  创建企业部门成员，同时会更新管理员状态
         rsqStaffService.pushAndCreateAllCorpStaff(corpVO);
-
-        //  4  更新管理员状态
     }
 }
