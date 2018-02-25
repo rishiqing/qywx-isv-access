@@ -47,7 +47,7 @@ public class RsqCorpServiceImpl implements RsqCorpService {
         try {
             RsqTeamVO team = httpUtilRsqSync.createCorp(suite.getRsqAppName(), suite.getRsqAppToken(), rsqTeamVO);
             corpVO.setRsqId(String.valueOf(team.getId()));
-            corpManageService.saveOrUpdateCorp(corpVO);
+            corpManageService.updateRsqInfo(corpVO);
         } catch (RsqSyncException e) {
             logger.error("push to create rishiqing team error: ", e);
             //TODO 做重试

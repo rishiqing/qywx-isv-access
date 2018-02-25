@@ -21,17 +21,14 @@ public class PushCorpAllMqListener implements MessageListener {
     private static final Logger logger = LoggerFactory.getLogger("SERVICE_EVENT_LISTENER_LOGGER");
 
     @Autowired
-    private CorpManageService corpManageService;
-    @Autowired
-    private RsqCorpService rsqCorpService;
+    private PushCorpHandler pushCorpHandler;
 
     @Override
     public void onMessage(Message message) {
         try {
             MapMessage mapMessage = (MapMessage)message;
             String corpId = mapMessage.getString("corpId");
-            CorpVO corpVO = corpManageService.getCorpByCorpId(corpId);
-            rsqCorpService.pushAndCreateCorpAll(corpVO);
+            pushCorpHandler.handleCreateCorp(corpId);
         } catch (Exception e){
             logger.error("error in push corpAll: ", e);
         }

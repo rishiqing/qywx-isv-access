@@ -1,6 +1,7 @@
 package com.rishiqing.qywx.web.service.impl;
 
 import com.mashape.unirest.http.exceptions.UnirestException;
+import com.rishiqing.common.exception.NotSupportedException;
 import com.rishiqing.qywx.service.biz.corp.CorpService;
 import com.rishiqing.qywx.service.biz.corp.DeptService;
 import com.rishiqing.qywx.service.biz.corp.StaffService;
@@ -10,10 +11,14 @@ import com.rishiqing.qywx.service.common.isv.GlobalSuite;
 import com.rishiqing.qywx.service.common.isv.SuiteTicketManageService;
 import com.rishiqing.qywx.service.common.isv.SuiteTokenManageService;
 import com.rishiqing.common.exception.HttpException;
+import com.rishiqing.qywx.service.constant.CallbackChangeType;
+import com.rishiqing.qywx.service.constant.CallbackInfoType;
+import com.rishiqing.qywx.service.event.service.AsyncService;
 import com.rishiqing.qywx.service.exception.ObjectNotExistException;
 import com.rishiqing.qywx.service.model.corp.CorpDeptVO;
 import com.rishiqing.qywx.service.model.corp.CorpStaffVO;
 import com.rishiqing.qywx.service.model.corp.CorpSuiteVO;
+import com.rishiqing.qywx.service.model.corp.CorpVO;
 import com.rishiqing.qywx.service.model.isv.SuiteTicketVO;
 import com.rishiqing.qywx.service.model.isv.SuiteTokenVO;
 import com.rishiqing.qywx.service.model.isv.SuiteVO;
@@ -51,6 +56,8 @@ public class CallbackServiceImpl implements CallbackService {
     private DeptService deptService;
     @Autowired
     private StaffService staffService;
+    @Autowired
+    private AsyncService asyncService;
 
     @Override
     public String verifyUrl(String signature, String timestamp, String nonce, String echoString) throws CallbackException {
@@ -92,21 +99,22 @@ public class CallbackServiceImpl implements CallbackService {
             logger.info("----callback message----" + str);
             Map map = XmlUtil.simpleXmlString2Map(str);
             String infoType = (String)map.get("InfoType");
+            CallbackInfoType type = CallbackInfoType.valueOf(infoType);
 
-            switch (infoType) {
-                case "suite_ticket":
+            switch (type) {
+                case SUITE_TICKET:
                     handleSuiteTicket(map);
                     break;
-                case "create_auth":
+                case CREATE_AUTH:
                     handleCreateAuth(map);
                     break;
-                case "change_auth":
+                case CHANGE_AUTH:
                     handleChangeAuth(map);
                     break;
-                case "cancel_auth":
+                case CANCEL_AUTH:
                     handleCancelAuth(map);
                     break;
-                case "change_contact":
+                case CHANGE_CONTACT:
                     //  通讯录变更,包括部门变更/人员变更
                     handleChangeContact(map);
                     break;
@@ -114,7 +122,6 @@ public class CallbackServiceImpl implements CallbackService {
                     //  对于不识别的infoType，直接抛出异常
                     throw new CallbackException("info type not handled: " + infoType);
             }
-
         } catch (AesException | ParserConfigurationException | IOException | SAXException e) {
             throw new CallbackException("decrypt message failed", e);
         } catch (UnirestException | HttpException e) {
@@ -181,29 +188,36 @@ public class CallbackServiceImpl implements CallbackService {
      */
     private void handleChangeContact(Map map) throws CallbackException, ObjectNotExistException {
         String changeType = (String)map.get("ChangeType");
-        switch (changeType) {
-            case "create_party":
+        String corpId = (String)map.get("AuthCorpId");
+        //  发送异步消息
+        CorpVO corpVO = corpManageService.getCorpByCorpId(corpId);
+        CallbackChangeType type = CallbackChangeType.valueOf(changeType);
+        switch (type) {
+            case CREATE_PARTY:
                 handleChangeContactCreateDept(map);
                 break;
-            case "update_party":
+            case UPDATE_PARTY:
                 handleChangeContactUpdateDept(map);
                 break;
-            case "delete_party":
+            case DELETE_PARTY:
                 handleChangeContactDeleteDept(map);
                 break;
-            case "create_user":
+            case CREATE_USER:
                 handleChangeContactCreateUser(map);
                 break;
-            case "update_user":
+            case UPDATE_USER:
                 handleChangeContactUpdateUser(map);
                 break;
-            case "delete_user":
+            case DELETE_USER:
                 handleChangeContactDeleteUser(map);
                 break;
+            case UPDATE_TAG:
+                throw new CallbackException("UPDATE_TAG not supported now" + changeType);
             default:
                 //  对于不识别的infoType，直接抛出异常
                 throw new CallbackException("contact change, changeType not handled: " + changeType);
         }
+        asyncService.sendToPushCorpCallback(corpVO, type, map);
     }
 
     /**

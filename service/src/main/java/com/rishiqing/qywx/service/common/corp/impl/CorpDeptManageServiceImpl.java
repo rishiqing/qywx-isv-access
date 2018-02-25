@@ -1,6 +1,7 @@
 package com.rishiqing.qywx.service.common.corp.impl;
 
 import com.rishiqing.qywx.dao.mapper.corp.CorpDeptDao;
+import com.rishiqing.qywx.dao.mapper.corp.RsqInfoDao;
 import com.rishiqing.qywx.dao.model.corp.CorpDeptDO;
 import com.rishiqing.qywx.service.common.corp.CorpDeptManageService;
 import com.rishiqing.qywx.service.model.corp.CorpDeptVO;
@@ -13,6 +14,8 @@ import java.util.List;
 public class CorpDeptManageServiceImpl implements CorpDeptManageService {
     @Autowired
     private CorpDeptDao corpDeptDao;
+    @Autowired
+    private RsqInfoDao rsqInfoDao;
 
     @Override
     public List<CorpDeptVO> listCorpDeptListByCorpIdAndParentId(String corpId, Long parentId){
@@ -43,6 +46,13 @@ public class CorpDeptManageServiceImpl implements CorpDeptManageService {
     @Override
     public void saveOrUpdateCorpDept(CorpDeptVO corpDeptVO) {
         corpDeptDao.saveOrUpdateCorpDept(
+                CorpDeptConverter.corpDeptVO2CorpDeptDO(corpDeptVO)
+        );
+    }
+
+    @Override
+    public void updateRsqInfo(CorpDeptVO corpDeptVO) {
+        rsqInfoDao.updateCorpDeptRsqInfo(
                 CorpDeptConverter.corpDeptVO2CorpDeptDO(corpDeptVO)
         );
     }

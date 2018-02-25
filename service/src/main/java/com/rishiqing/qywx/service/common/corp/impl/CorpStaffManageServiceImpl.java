@@ -1,6 +1,7 @@
 package com.rishiqing.qywx.service.common.corp.impl;
 
 import com.rishiqing.qywx.dao.mapper.corp.CorpStaffDao;
+import com.rishiqing.qywx.dao.mapper.corp.RsqInfoDao;
 import com.rishiqing.qywx.dao.model.corp.CorpStaffDO;
 import com.rishiqing.qywx.service.common.corp.CorpStaffManageService;
 import com.rishiqing.qywx.service.model.corp.CorpStaffVO;
@@ -12,9 +13,18 @@ import java.util.List;
 public class CorpStaffManageServiceImpl implements CorpStaffManageService {
     @Autowired
     private CorpStaffDao corpStaffDao;
+    @Autowired
+    private RsqInfoDao rsqInfoDao;
     @Override
     public void saveOrUpdateCorpStaff(CorpStaffVO corpStaffVO) {
         corpStaffDao.saveOrUpdateCorpStaff(
+                CorpStaffConverter.corpStaffVO2CorpStaffDO(corpStaffVO)
+        );
+    }
+
+    @Override
+    public void updateRsqInfo(CorpStaffVO corpStaffVO) {
+        rsqInfoDao.updateCorpStaffRsqInfo(
                 CorpStaffConverter.corpStaffVO2CorpStaffDO(corpStaffVO)
         );
     }

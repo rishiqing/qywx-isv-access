@@ -83,7 +83,7 @@ public class RsqStaffServiceImpl implements RsqStaffService {
             corpStaffVO.setRsqUserId(String.valueOf(user.getId()));
             corpStaffVO.setRsqUsername(user.getUsername());
             corpStaffVO.setRsqPassword(user.getPassword());
-            corpStaffManageService.saveOrUpdateCorpStaff(corpStaffVO);
+            corpStaffManageService.updateRsqInfo(corpStaffVO);
         } catch (RsqSyncException e) {
             logger.error("push to create rishiqing department error: ", e);
             //TODO 加入队列做重试

@@ -80,7 +80,7 @@ public class RsqDeptServiceImpl implements RsqDeptService {
 //            corpDeptManageService.saveOrUpdateCorpDept(corpDeptVO);
             departmentVO = httpUtilRsqSync.createDepartment(suite.getRsqAppName(), suite.getRsqAppToken(), team, departmentVO);
             corpDeptVO.setRsqId(String.valueOf(departmentVO.getId()));
-            corpDeptManageService.saveOrUpdateCorpDept(corpDeptVO);
+            corpDeptManageService.updateRsqInfo(corpDeptVO);
         } catch (RsqSyncException e) {
             logger.error("push to create rishiqing department error: ", e);
             //TODO 加入队列做重试

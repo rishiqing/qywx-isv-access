@@ -12,6 +12,12 @@ public interface CorpManageService {
     void saveOrUpdateCorp(CorpVO corpVO);
 
     /**
+     * 只更新日事清相关的字段rsqId
+     * @param corpVO
+     */
+    void updateRsqInfo(CorpVO corpVO);
+
+    /**
      * 标记删除公司
      * @param corpId
      * @param authCanceled

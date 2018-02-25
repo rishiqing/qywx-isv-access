@@ -53,4 +53,6 @@
         <property name="destination" ref="pushCorpCallbackQueue" />
         <property name="messageListener" ref="pushCorpCallbackMqListener" />
     </bean>
+
+    <bean id="pushCallbackHandler" class="com.rishiqing.qywx.service.event.listener.mq.PushCorpHandler" />
 </beans>

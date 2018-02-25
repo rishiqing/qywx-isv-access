@@ -1,6 +1,7 @@
 package com.rishiqing.qywx.service.event.service.impl;
 
 import com.rishiqing.qywx.service.common.corp.CorpManageService;
+import com.rishiqing.qywx.service.constant.CallbackInfoType;
 import com.rishiqing.qywx.service.event.service.AsyncService;
 import com.rishiqing.qywx.service.model.corp.CorpVO;
 import org.junit.Test;
@@ -22,7 +23,7 @@ public class AsyncServiceImplTest {
     @Test
     public void test_sendToPushCorpAll(){
         CorpVO corpVO = corpManageService.getCorpByCorpId("wxec002534a59ea2e7");
-        asyncService.sendToPushCorpAll(corpVO);
+        asyncService.sendToPushCorpAuthCallback(corpVO, CallbackInfoType.CREATE_AUTH, null);
     }
 
 }
