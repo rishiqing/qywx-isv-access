@@ -19,6 +19,7 @@ import java.util.Map;
  * @author Wallace Mao
  * Date: 2018-02-08 12:35
  */
+@SuppressWarnings(value = "unchecked")
 public class DefaultRestHttpClient implements RestHttpClient {
     private static final Logger logger = LoggerFactory.getLogger("DEFAULT_HTTP_REQUEST_LOGGER");
 

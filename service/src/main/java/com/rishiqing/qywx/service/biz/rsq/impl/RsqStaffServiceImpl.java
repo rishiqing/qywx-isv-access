@@ -76,13 +76,14 @@ public class RsqStaffServiceImpl implements RsqStaffService {
         RsqCommonUserVO user = CorpStaffConverter.corpStaffVO2RsqCommonUserVO(corpVO, corpDeptVOList, corpStaffVO);
         try {
             //  自动生成用户名和密码
+            String password = generateRsqPassword(suite.getRsqAppName());
             user.setUsername(generateRsqUsername(suite.getRsqAppName()));
-            user.setPassword(generateRsqPassword(suite.getRsqAppName()));
+            user.setPassword(password);
 
             user = httpUtilRsqSync.createUser(suite.getRsqAppName(), suite.getRsqAppToken(), team, user);
             corpStaffVO.setRsqUserId(String.valueOf(user.getId()));
             corpStaffVO.setRsqUsername(user.getUsername());
-            corpStaffVO.setRsqPassword(user.getPassword());
+            corpStaffVO.setRsqPassword(password);
             corpStaffManageService.updateRsqInfo(corpStaffVO);
         } catch (RsqSyncException e) {
             logger.error("push to create rishiqing department error: ", e);

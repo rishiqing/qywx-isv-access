@@ -26,10 +26,20 @@ public class PushCorpHandlerTest {
     public void test_handleCreateCorp(){
         /**
          * 清理sql
-        update isv_corp ic set ic.rsq_id = NULL where ic.corp_id like 'wxec002534a59ea2e7';
-        update isv_corp_dept icd set icd.rsq_id = NULL where icd.corp_id like 'wxec002534a59ea2e7';
-        update isv_corp_staff ics set ics.rsq_user_id = NULL, ics.rsq_username = NULL, ics.rsq_password = NULL, ics.rsq_login_token = NULL where icd.corp_id like 'wxec002534a59ea2e7';
+set @corpId =  'wxec002534a59ea2e7';
+update isv_corp ic set ic.rsq_id = NULL where ic.corp_id like @corpId;
+update isv_corp_dept icd set icd.rsq_id = NULL where icd.corp_id like @corpId;
+update isv_corp_staff ics set ics.rsq_user_id = NULL, ics.rsq_username = NULL, ics.rsq_password = NULL, ics.rsq_login_token = NULL where ics.corp_id like @corpId;
         */
+        /**
+         * 清理beta日事清后台sql
+set @teamId = 101013;
+set @appName = 'qywxtest';
+update team t set t.outer_id = null where t.id = @teamId and t.from_app like @appName;
+update department d set d.outer_id = null where d.team_id = @teamId and d.from_app like @appName;
+update `user` u set u.outer_id = null where u.team_id = @teamId;
+         */
+
          String corpId = "wxec002534a59ea2e7";
          pushCorpHandler.handleCreateCorp(corpId);
     }

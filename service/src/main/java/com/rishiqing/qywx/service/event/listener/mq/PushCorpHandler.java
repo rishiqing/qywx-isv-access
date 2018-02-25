@@ -1,5 +1,6 @@
 package com.rishiqing.qywx.service.event.listener.mq;
 
+import com.rishiqing.common.exception.RsqSyncException;
 import com.rishiqing.qywx.service.biz.rsq.RsqCorpService;
 import com.rishiqing.qywx.service.biz.rsq.RsqDeptService;
 import com.rishiqing.qywx.service.biz.rsq.RsqStaffService;
@@ -10,6 +11,8 @@ import com.rishiqing.qywx.service.model.corp.CorpDeptVO;
 import com.rishiqing.qywx.service.model.corp.CorpStaffVO;
 import com.rishiqing.qywx.service.model.corp.CorpVO;
 import com.rishiqing.qywx.service.util.http.converter.Xml2BeanConverter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -20,6 +23,8 @@ import java.util.Map;
  * Date: 2018-02-10 17:34
  */
 public class PushCorpHandler {
+    private static final Logger logger = LoggerFactory.getLogger("SERVICE_CORP_PUSH_RSQ_LOGGER");
+
     @Autowired
     private CorpManageService corpManageService;
     @Autowired
@@ -45,7 +50,13 @@ public class PushCorpHandler {
         CorpDeptVO changedDeptVO = Xml2BeanConverter.generateCorpDept(contentMap);
         CorpDeptVO parentDeptVO = corpDeptManageService
                 .getCorpDeptByCorpIdAndDeptId(corpVO.getCorpId(), changedDeptVO.getParentId());
-        rsqDeptService.pushAndCreateDept(corpVO, parentDeptVO, changedDeptVO);
+        try {
+            rsqDeptService.pushAndCreateDept(corpVO, parentDeptVO, changedDeptVO);
+        } catch (RsqSyncException e) {
+            //TODO 进行重试
+
+            logger.error("error in createDept handler", e);
+        }
     }
 
     /**

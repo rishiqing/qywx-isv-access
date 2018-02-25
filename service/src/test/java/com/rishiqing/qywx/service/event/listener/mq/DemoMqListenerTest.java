@@ -25,8 +25,14 @@ public class DemoMqListenerTest {
     @Test
     public void test_sendEvent(){
         System.out.println("=======begin");
-        for(int i = 0; i < 10; i++ ){
+        int max = 1;
+        for(int i = 0; i < max; i++ ){
             asyncService.sendToDemo(new DemoMessage("xxxxxx-" + i, "hello mq message"));
+        }
+        try {
+            Thread.sleep(20000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
         System.out.println("=======end");
     }

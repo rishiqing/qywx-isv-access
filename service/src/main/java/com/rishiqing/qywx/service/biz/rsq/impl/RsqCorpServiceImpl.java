@@ -61,13 +61,18 @@ public class RsqCorpServiceImpl implements RsqCorpService {
      */
     @Override
     public void pushAndCreateCorpAll(CorpVO corpVO){
-        //  1  创建日事清企业
-        pushAndCreateCorp(corpVO);
 
-        //  2  创建企业部门
-        rsqDeptService.pushAndCreateAllCorpDept(corpVO);
+        try {
+            //  1  创建日事清企业
+            pushAndCreateCorp(corpVO);
+            //  2  创建企业部门
+            rsqDeptService.pushAndCreateAllCorpDept(corpVO);
+            //  3  创建企业部门成员，同时会更新管理员状态
+            rsqStaffService.pushAndCreateAllCorpStaff(corpVO);
+        } catch (RsqSyncException e) {
+            //TODO 重试
 
-        //  3  创建企业部门成员，同时会更新管理员状态
-        rsqStaffService.pushAndCreateAllCorpStaff(corpVO);
+            logger.error("error in sync corpAll", e);
+        }
     }
 }

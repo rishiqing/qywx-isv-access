@@ -37,7 +37,7 @@ public class RsqDeptServiceImpl implements RsqDeptService {
      * @param corpVO
      */
     @Override
-    public void pushAndCreateAllCorpDept(CorpVO corpVO){
+    public void pushAndCreateAllCorpDept(CorpVO corpVO) throws RsqSyncException {
         Long rootDeptId = 1L;
         CorpDeptVO rootDept = corpDeptManageService.getCorpDeptByCorpIdAndDeptId(corpVO.getCorpId(), rootDeptId);
         pushAndCreateRecursiveDept(corpVO, null, rootDept);
@@ -48,7 +48,7 @@ public class RsqDeptServiceImpl implements RsqDeptService {
      * @param corpVO
      * @param corpDeptVO
      */
-    private void pushAndCreateRecursiveDept(CorpVO corpVO, CorpDeptVO parentCorpDeptVO, CorpDeptVO corpDeptVO){
+    private void pushAndCreateRecursiveDept(CorpVO corpVO, CorpDeptVO parentCorpDeptVO, CorpDeptVO corpDeptVO) throws RsqSyncException {
 
         pushAndCreateDept(corpVO, parentCorpDeptVO, corpDeptVO);
 
@@ -69,7 +69,7 @@ public class RsqDeptServiceImpl implements RsqDeptService {
      * @return
      */
     @Override
-    public CorpDeptVO pushAndCreateDept(CorpVO corpVO, CorpDeptVO parentCorpDeptVO, CorpDeptVO corpDeptVO){
+    public CorpDeptVO pushAndCreateDept(CorpVO corpVO, CorpDeptVO parentCorpDeptVO, CorpDeptVO corpDeptVO) throws RsqSyncException {
         //  如果rsqId存在，那么将不做任何处理
         if(null != corpDeptVO.getRsqId()){
             return corpDeptVO;
@@ -84,6 +84,7 @@ public class RsqDeptServiceImpl implements RsqDeptService {
         } catch (RsqSyncException e) {
             logger.error("push to create rishiqing department error: ", e);
             //TODO 加入队列做重试
+            throw e;
         }
         return corpDeptVO;
     }
