@@ -76,7 +76,7 @@ public class PushCorpHandler {
         CorpDeptVO parentDeptVO = null;
         if(null != changedDeptVO.getParentId()){
             parentDeptVO = corpDeptManageService
-                    .getCorpDeptByCorpIdAndDeptId(corpId, dbDeptVO.getParentId());
+                    .getCorpDeptByCorpIdAndDeptId(corpId, changedDeptVO.getParentId());
         }
         rsqDeptService.pushAndUpdateDept(corpVO, parentDeptVO, changedDeptVO);
     }

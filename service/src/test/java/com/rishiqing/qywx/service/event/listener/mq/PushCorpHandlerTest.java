@@ -53,10 +53,89 @@ update `user` u set u.outer_id = null where u.team_id = @teamId;
         map.put("InfoType", "change_contact");
         map.put("TimeStamp", new Date().getTime());
         map.put("ChangeType", "create_party");
-        map.put("Id", "222222");
+        map.put("Id", "444");
         map.put("Name", "测试部门");
-        map.put("ParentId", "");
-        map.put("Order", "");
+        map.put("ParentId", "1");
+        map.put("Order", "111");
         pushCorpHandler.handleCreateDept(corpId, map);
+    }
+
+    @Test
+    public void test_handleUpdateDept(){
+        String corpId = "wxec002534a59ea2e7";
+        Map map = new HashMap();
+        map.put("SuiteId", "wxe0de6067085faf0d");
+        map.put("AuthCorpId", "wxec002534a59ea2e7");
+        map.put("InfoType", "change_contact");
+        map.put("TimeStamp", new Date().getTime());
+        map.put("ChangeType", "update_party");
+        map.put("Id", "13");
+        map.put("Name", "临时测试子部门");
+        map.put("ParentId", "12");
+        pushCorpHandler.handleUpdateDept(corpId, map);
+    }
+
+    @Test
+    public void test_handleDeleteDept(){
+        String corpId = "wxec002534a59ea2e7";
+        Map map = new HashMap();
+        map.put("SuiteId", "wxe0de6067085faf0d");
+        map.put("AuthCorpId", "wxec002534a59ea2e7");
+        map.put("InfoType", "change_contact");
+        map.put("TimeStamp", new Date().getTime());
+        map.put("ChangeType", "delete_party");
+        map.put("Id", "13");
+        pushCorpHandler.handleDeleteDept(corpId, map);
+    }
+
+    @Test
+    public void test_handleCreateUser(){
+        String corpId = "wxec002534a59ea2e7";
+        Map map = new HashMap();
+        map.put("SuiteId", "wxe0de6067085faf0d");
+        map.put("AuthCorpId", "wxec002534a59ea2e7");
+        map.put("InfoType", "change_contact");
+        map.put("TimeStamp", new Date().getTime());
+        map.put("ChangeType", "create_user");
+        map.put("UserID", "Wallace");
+        map.put("Name", "毛文强222");
+        map.put("Department", "12");
+        map.put("Gender", "1");
+        map.put("Avatar", "http://wx.qlogo.cn/mmopen/ajNVdqHZLLA3WJ6DSZUfiakYe37PKnQhBIeOQBO4czqrnZDS79FH5Wm5m4X69TBicnHFlhiafvDwklOpZeXYQQ2icg/0");
+        map.put("EnglishName", "Wallace");
+        map.put("ExtAttr", "");
+        pushCorpHandler.handleCreateUser(corpId, map);
+    }
+
+    @Test
+    public void test_handleUpdateUser(){
+        String corpId = "wxec002534a59ea2e7";
+        Map map = new HashMap();
+        map.put("SuiteId", "wxe0de6067085faf0d");
+        map.put("AuthCorpId", "wxec002534a59ea2e7");
+        map.put("InfoType", "change_contact");
+        map.put("TimeStamp", new Date().getTime());
+        map.put("ChangeType", "update_user");
+        map.put("UserID", "Wallace");
+        map.put("Name", "毛文强222333");
+        map.put("Department", "12");
+        map.put("Gender", "1");
+        map.put("Avatar", "http://wx.qlogo.cn/mmopen/ajNVdqHZLLA3WJ6DSZUfiakYe37PKnQhBIeOQBO4czqrnZDS79FH5Wm5m4X69TBicnHFlhiafvDwklOpZeXYQQ2icg/0");
+        map.put("EnglishName", "Wallace");
+        map.put("ExtAttr", "");
+        pushCorpHandler.handleUpdateUser(corpId, map);
+    }
+
+    @Test
+    public void test_handleDeleteUser(){
+        String corpId = "wxec002534a59ea2e7";
+        Map map = new HashMap();
+        map.put("SuiteId", "wxe0de6067085faf0d");
+        map.put("AuthCorpId", "wxec002534a59ea2e7");
+        map.put("InfoType", "change_contact");
+        map.put("TimeStamp", new Date().getTime());
+        map.put("ChangeType", "delete_user");
+        map.put("UserID", "Wallace");
+        pushCorpHandler.handleDeleteUser(corpId, map);
     }
 }
