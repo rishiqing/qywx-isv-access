@@ -32,6 +32,10 @@ ALTER TABLE `isv_corp_staff`
 ALTER TABLE `isv_corp_staff`
     ADD COLUMN `union_id` varchar(255) NULL COMMENT '与网站扫码登录共享的union_id';
 
+# 由于一个suiteKey仅对应一个app_id，那么去掉isv_corp_app
+ALTER TABLE isv_corp_app DROP INDEX u_corp_app;
+ALTER TABLE isv_corp_app ADD UNIQUE u_corp_app(`suite_key`,`corp_id`);
+
 # 用户开通应用时失败
 CREATE TABLE `isv_corp_suite_fail` (
   `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '主键',

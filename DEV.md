@@ -135,3 +135,9 @@ CorpStaff的isLeaderInDepts这个字段目前有问题!
 企业微信目前返回值中只有一个1或0,而不能标识出这个staff在多个部门中是否为leader
 - 在开通后获取部门成员时,这个值会被反复覆盖
 - 在通讯录变更时,无法得知用户在哪个部门是leader
+
+### 日事清后台department字段orderNum int字段overflow问题
+日事清后台的department的orderNum为int类型，而企业微信有可能超出int的最大长度
+
+### 企业微信的newUserId问题
+企业微信的corp staff的userId可以修改……官方说法是由系统自动生成的userId可以由用户修改一次

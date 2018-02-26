@@ -3,6 +3,7 @@ package com.rishiqing.qywx.service.biz.corp.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.rishiqing.qywx.service.biz.corp.StaffService;
+import com.rishiqing.qywx.service.common.corp.CorpDeptManageService;
 import com.rishiqing.qywx.service.common.corp.CorpStaffManageService;
 import com.rishiqing.common.exception.HttpException;
 import com.rishiqing.qywx.service.exception.ObjectNotExistException;
@@ -26,9 +27,13 @@ public class StaffServiceImpl implements StaffService {
     @Autowired
     private CorpStaffManageService corpStaffManageService;
 
+    /**
+     * 获取并保存一个公司的所有员工到本地
+     * @param corpTokenVO
+     */
     @Override
     public void fetchAndSaveStaffList(CorpTokenVO corpTokenVO, @Nullable CorpDeptVO corpDeptVO) throws HttpException, UnirestException {
-        JSONObject json = httpUtilCorp.getDepartmentStaffList(corpTokenVO, corpDeptVO);
+        JSONObject json = httpUtilCorp.getDepartmentStaffList(corpTokenVO, corpDeptVO, true);
         String corpId = corpTokenVO.getCorpId();
         List<CorpStaffVO> staffList =
                 Json2BeanConverter.generateStaffList(corpId, json);

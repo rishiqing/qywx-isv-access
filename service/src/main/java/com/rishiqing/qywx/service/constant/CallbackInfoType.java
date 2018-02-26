@@ -25,4 +25,14 @@ public enum CallbackInfoType {
     public String getKey() {
         return key;
     }
+
+    public static CallbackInfoType getCallbackInfoType(String key){
+        CallbackInfoType[] arr = CallbackInfoType.values();
+        for(CallbackInfoType type : arr){
+            if(type.getKey().equalsIgnoreCase(key)){
+                return type;
+            }
+        }
+        return null;
+    }
 }

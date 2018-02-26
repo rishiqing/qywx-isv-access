@@ -68,7 +68,7 @@
             english_name,
             `status`,
             extattr,
-            rsq_user_id, rsq_username, rsq_password, rsq_login_token
+            rsq_user_id, rsq_username, rsq_password, rsq_login_token, admin_type
         ) VALUES (
             now(),
             now(),
@@ -90,7 +90,8 @@
             #{rsqUserId},
             #{rsqUsername},
             #{rsqPassword},
-            #{rsqLoginToken}
+            #{rsqLoginToken},
+            #{adminType}
         ) ON DUPLICATE KEY UPDATE
             last_updated = now(),
             `name` = #{name},
@@ -109,7 +110,8 @@
             rsq_user_id = #{rsqUserId},
             rsq_username = #{rsqUsername},
             rsq_password = #{rsqPassword},
-            rsq_login_token = #{rsqLoginToken}
+            rsq_login_token = #{rsqLoginToken},
+            admin_type = #{adminType}
     </insert>
 
     <delete id="removeCorpStaffByCorpIdAndUserId">

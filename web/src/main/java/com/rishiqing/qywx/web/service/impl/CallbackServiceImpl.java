@@ -99,7 +99,12 @@ public class CallbackServiceImpl implements CallbackService {
             logger.info("----callback message----" + str);
             Map map = XmlUtil.simpleXmlString2Map(str);
             String infoType = (String)map.get("InfoType");
-            CallbackInfoType type = CallbackInfoType.valueOf(infoType);
+            CallbackInfoType type = CallbackInfoType.getCallbackInfoType(infoType);
+
+            //  如果type没在枚举列表中，那么报出错误
+            if(null == type){
+                throw new CallbackException("type not recognized: " + infoType);
+            }
 
             switch (type) {
                 case SUITE_TICKET:

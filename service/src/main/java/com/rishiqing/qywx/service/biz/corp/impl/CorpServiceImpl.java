@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Date;
 import java.util.List;
 
 public class CorpServiceImpl implements CorpService {
@@ -38,6 +39,7 @@ public class CorpServiceImpl implements CorpService {
     private AsyncService asyncService;
     @Override
     public CorpVO activeCorp(SuiteTokenVO suiteToken, String authCode) throws UnirestException, HttpException {
+        logger.info("----begin to active corp----" + new Date());
         JSONObject json = httpUtil.getPermanentCode(suiteToken, authCode);
         String suiteKey = suiteToken.getSuiteKey();
         //1. 保存corp信息
@@ -54,6 +56,8 @@ public class CorpServiceImpl implements CorpService {
         corpTokenManageService.saveCorpToken(corpTokenVO);
 
         //4. 保存corpApp信息
+        //4.1  corpApp信息的问题
+        //TODO 如果用户在选择可见范围时，没有选择全公司可见，那么需要提示用户
         List<CorpAppVO> list = Json2BeanConverter.generateCorpAppList(suiteKey, corpId, json);
         if(list.size() > ServiceConstant.CORP_APP_MAX_LIMIT){
             //  报出警告，如果list数量过大，需要修改成批量插入
@@ -63,8 +67,10 @@ public class CorpServiceImpl implements CorpService {
             corpAppManageService.saveCorpApp(corpAppVO);
         }
 
+        //TODO 这里应该改成异步获取可见范围内的部门和用户信息
         //5. 使用eventBus异步获取部门及用户信息
         asyncService.sendToFetchCorpAll(corpVO);
+        logger.info("----end active corp----" + new Date());
         return corpVO;
     }
 

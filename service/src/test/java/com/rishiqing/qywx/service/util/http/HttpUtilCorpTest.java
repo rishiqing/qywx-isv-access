@@ -51,7 +51,7 @@ public class HttpUtilCorpTest {
         String suiteKey = "tj146dbe5cecf74725";
         CorpTokenVO corpTokenVO = corpTokenManageService.getCorpToken(suiteKey, corpId);
         try {
-            JSONObject json = httpUtilCorp.getDepartmentStaffList(corpTokenVO, null);
+            JSONObject json = httpUtilCorp.getDepartmentStaffList(corpTokenVO, null, true);
             System.out.println(json);
             assertTrue(json.containsKey("userlist"));
         } catch (UnirestException | HttpException e) {

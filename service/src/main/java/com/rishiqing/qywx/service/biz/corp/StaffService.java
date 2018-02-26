@@ -12,6 +12,7 @@ import com.rishiqing.qywx.service.model.isv.SuiteTokenVO;
 import javax.annotation.Nullable;
 
 public interface StaffService {
+
     /**
      * 从远程获取用户列表
      * @param corpTokenVO

@@ -162,7 +162,7 @@ public class CorpStaffConverter {
             target.setRsqPassword(old.getRsqPassword());
         if(null != old.getRsqLoginToken())
             target.setRsqLoginToken(old.getRsqLoginToken());
-        if(null != old.getAdminType())
+        if(null != old.getAdminType() && !old.getAdminType().equals(target.getAdminType()))
             target.setAdminType(old.getAdminType());
     }
 }

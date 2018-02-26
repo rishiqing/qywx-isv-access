@@ -50,13 +50,18 @@ public class HttpUtilCorp {
         );
     }
 
-    public JSONObject getDepartmentStaffList(CorpTokenVO corpTokenVO, @Nullable CorpDeptVO corpDeptVO) throws HttpException, UnirestException {
+    public JSONObject getDepartmentStaffList(CorpTokenVO corpTokenVO, @Nullable CorpDeptVO corpDeptVO, Boolean fetchChild) throws HttpException, UnirestException {
         Map<String, Object> options = new HashMap<>();
         options.put("corpId", corpTokenVO.getCorpId());
         Map<String, Object> queryMap = new HashMap<>();
         queryMap.put("access_token", corpTokenVO.getCorpToken());
 //        默认不使用递归调用
 //        queryMap.put("fetch_child", "1");  //递归获取
+        if(null != fetchChild && fetchChild){
+            queryMap.put("fetch_child", "1");
+        }else{
+            queryMap.put("fetch_child", "0");
+        }
         Long deptId = 1L;
         if(corpDeptVO != null){
             deptId = corpDeptVO.getDeptId();
