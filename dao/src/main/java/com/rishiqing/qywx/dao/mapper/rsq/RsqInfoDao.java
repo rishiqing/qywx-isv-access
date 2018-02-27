@@ -1,4 +1,4 @@
-package com.rishiqing.qywx.dao.mapper.corp;
+package com.rishiqing.qywx.dao.mapper.rsq;
 
 import com.rishiqing.qywx.dao.model.corp.CorpDO;
 import com.rishiqing.qywx.dao.model.corp.CorpDeptDO;

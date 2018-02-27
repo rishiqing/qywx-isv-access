@@ -8,6 +8,7 @@ import com.rishiqing.qywx.service.biz.rsq.RsqDeptService;
 import com.rishiqing.qywx.service.biz.rsq.RsqStaffService;
 import com.rishiqing.qywx.service.common.corp.CorpManageService;
 import com.rishiqing.qywx.service.common.isv.GlobalSuite;
+import com.rishiqing.qywx.service.common.rsq.RsqInfoManageService;
 import com.rishiqing.qywx.service.model.corp.CorpVO;
 import com.rishiqing.qywx.service.model.corp.helper.CorpConverter;
 import org.slf4j.Logger;
@@ -28,6 +29,8 @@ public class RsqCorpServiceImpl implements RsqCorpService {
     @Autowired
     private CorpManageService corpManageService;
     @Autowired
+    private RsqInfoManageService rsqInfoManageService;
+    @Autowired
     private RsqDeptService rsqDeptService;
     @Autowired
     private RsqStaffService rsqStaffService;
@@ -47,7 +50,7 @@ public class RsqCorpServiceImpl implements RsqCorpService {
         try {
             RsqTeamVO team = httpUtilRsqSync.createCorp(suite.getRsqAppName(), suite.getRsqAppToken(), rsqTeamVO);
             corpVO.setRsqId(String.valueOf(team.getId()));
-            corpManageService.updateRsqInfo(corpVO);
+            rsqInfoManageService.updateCorpRsqInfo(corpVO);
         } catch (RsqSyncException e) {
             logger.error("push to create rishiqing team error: ", e);
             //TODO 做重试

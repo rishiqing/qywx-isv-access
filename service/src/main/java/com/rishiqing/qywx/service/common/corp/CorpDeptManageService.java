@@ -27,11 +27,6 @@ public interface CorpDeptManageService {
     void saveOrUpdateCorpDept(CorpDeptVO corpDeptVO);
 
     /**
-     * 更新日事清相关的字段rsqId
-     * @param corpDeptVO
-     */
-    void updateRsqInfo(CorpDeptVO corpDeptVO);
-    /**
      * 根据corpId和deptId删除CorpDept
      * @param corpId
      * @param deptId

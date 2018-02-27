@@ -19,11 +19,6 @@ public interface CorpStaffManageService {
      */
     void saveOrUpdateCorpStaff(CorpStaffVO corpStaffVO);
 
-    /**
-     * 更新日事清相关的字段，rsqUserId/rsqUsername/RsqPassword/RsqLoginToken
-     * @param corpStaffVO
-     */
-    void updateRsqInfo(CorpStaffVO corpStaffVO);
 
     List<CorpStaffVO> listCorpStaffByCorpId(String corpId);
 

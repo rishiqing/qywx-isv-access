@@ -8,6 +8,7 @@ import com.rishiqing.common.util.http.HttpUtilRsqSync;
 import com.rishiqing.qywx.service.biz.rsq.RsqDeptService;
 import com.rishiqing.qywx.service.common.corp.CorpDeptManageService;
 import com.rishiqing.qywx.service.common.isv.GlobalSuite;
+import com.rishiqing.qywx.service.common.rsq.RsqInfoManageService;
 import com.rishiqing.qywx.service.model.corp.CorpDeptVO;
 import com.rishiqing.qywx.service.model.corp.CorpVO;
 import com.rishiqing.qywx.service.model.corp.helper.CorpConverter;
@@ -31,6 +32,8 @@ public class RsqDeptServiceImpl implements RsqDeptService {
     private HttpUtilRsqSync httpUtilRsqSync;
     @Autowired
     private CorpDeptManageService corpDeptManageService;
+    @Autowired
+    private RsqInfoManageService rsqInfoManageService;
 
     /**
      * 找到corpVO中顶层的部门，调用pushAndCreateRecursiveDept方法进行递归创建
@@ -80,7 +83,7 @@ public class RsqDeptServiceImpl implements RsqDeptService {
 //            corpDeptManageService.saveOrUpdateCorpDept(corpDeptVO);
             departmentVO = httpUtilRsqSync.createDepartment(suite.getRsqAppName(), suite.getRsqAppToken(), team, departmentVO);
             corpDeptVO.setRsqId(String.valueOf(departmentVO.getId()));
-            corpDeptManageService.updateRsqInfo(corpDeptVO);
+            rsqInfoManageService.updateCorpDeptRsqInfo(corpDeptVO);
         } catch (RsqSyncException e) {
             logger.error("push to create rishiqing department error: ", e);
             //TODO 加入队列做重试

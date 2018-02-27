@@ -9,6 +9,7 @@ import com.rishiqing.qywx.service.biz.rsq.RsqStaffService;
 import com.rishiqing.qywx.service.common.corp.CorpDeptManageService;
 import com.rishiqing.qywx.service.common.corp.CorpStaffManageService;
 import com.rishiqing.qywx.service.common.isv.GlobalSuite;
+import com.rishiqing.qywx.service.common.rsq.RsqInfoManageService;
 import com.rishiqing.qywx.service.model.corp.CorpDeptVO;
 import com.rishiqing.qywx.service.model.corp.CorpStaffVO;
 import com.rishiqing.qywx.service.model.corp.CorpVO;
@@ -36,6 +37,8 @@ public class RsqStaffServiceImpl implements RsqStaffService {
     private CorpStaffManageService corpStaffManageService;
     @Autowired
     private CorpDeptManageService corpDeptManageService;
+    @Autowired
+    private RsqInfoManageService rsqInfoManageService;
 
     @Override
     public void pushAndCreateAllCorpStaff(CorpVO corpVO){
@@ -84,7 +87,7 @@ public class RsqStaffServiceImpl implements RsqStaffService {
             corpStaffVO.setRsqUserId(String.valueOf(user.getId()));
             corpStaffVO.setRsqUsername(user.getUsername());
             corpStaffVO.setRsqPassword(password);
-            corpStaffManageService.updateRsqInfo(corpStaffVO);
+            rsqInfoManageService.updateCorpStaffRsqInfo(corpStaffVO);
         } catch (RsqSyncException e) {
             logger.error("push to create rishiqing department error: ", e);
             //TODO 加入队列做重试
