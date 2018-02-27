@@ -67,6 +67,11 @@ public class StaffServiceImpl implements StaffService {
     }
 
     @Override
+    public CorpStaffVO getStaff(CorpStaffVO corpStaffVO){
+        return corpStaffManageService.getCorpStaffByCorpIdAndUserId(corpStaffVO.getCorpId(), corpStaffVO.getUserId());
+    }
+
+    @Override
     public void createStaff(CorpStaffVO corpStaffVO) {
         corpStaffManageService.saveOrUpdateCorpStaff(corpStaffVO);
     }

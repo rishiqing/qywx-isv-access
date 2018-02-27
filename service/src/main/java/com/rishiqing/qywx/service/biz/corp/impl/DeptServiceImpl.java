@@ -56,6 +56,11 @@ public class DeptServiceImpl implements DeptService {
     }
 
     @Override
+    public CorpDeptVO getDept(CorpDeptVO corpDeptVO){
+        return corpDeptManageService.getCorpDeptByCorpIdAndDeptId(corpDeptVO.getCorpId(), corpDeptVO.getDeptId());
+    }
+
+    @Override
     public void createDept(CorpDeptVO corpDeptVO){
         corpDeptManageService.saveOrUpdateCorpDept(corpDeptVO);
     }

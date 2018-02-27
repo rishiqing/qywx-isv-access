@@ -56,7 +56,7 @@ public class DefaultRestHttpClient implements RestHttpClient {
             throw new HttpException("http request exception: ", e);
         }
         if(resp.getStatus() > 200){
-            throw new HttpException("http post request getSuiteToken status error: " + resp.getStatus() + ", " + resp.getBody());
+            throw new HttpException("http post request status error: " + resp.getStatus() + ", " + resp.getBody());
         }
         JSONObject jsonResponse = JSON.parseObject(resp.getBody());
         return jsonResponse;
@@ -84,7 +84,7 @@ public class DefaultRestHttpClient implements RestHttpClient {
             throw new HttpException("http request exception: ", e);
         }
         if(resp.getStatus() > 200){
-            throw new HttpException("http get request getSuiteToken status error: " + resp.getStatus() + ", " + resp.getBody());
+            throw new HttpException("http get request status error: " + resp.getStatus() + ", " + resp.getBody());
         }
         JSONObject jsonResponse = JSON.parseObject(resp.getBody());
         logger.info("{} post response: {}", path, jsonResponse);

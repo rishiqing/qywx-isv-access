@@ -23,6 +23,13 @@ public interface StaffService {
     void fetchAndSaveAdminList(SuiteTokenVO suiteTokenVO, CorpAppVO corpAppVO) throws HttpException, UnirestException;
 
     /**
+     * 获取用户，corpStaffVO中至少需要提供corpId和userId
+     * @param corpStaffVO
+     * @return
+     */
+    CorpStaffVO getStaff(CorpStaffVO corpStaffVO);
+
+    /**
      * 保存staff到本地
      * @param corpStaffVO
      */

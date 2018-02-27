@@ -72,7 +72,11 @@ public class PushCorpHandler {
         CorpDeptVO changedDeptVO = Xml2BeanConverter.generateCorpDept(contentMap);
         CorpDeptVO dbDeptVO = corpDeptManageService
                 .getCorpDeptByCorpIdAndDeptId(corpId, changedDeptVO.getDeptId());
-        changedDeptVO.setRsqId(dbDeptVO.getRsqId());
+        String rsqId = dbDeptVO.getRsqId();
+        if(null == rsqId){
+            return;
+        }
+        changedDeptVO.setRsqId(rsqId);
         CorpDeptVO parentDeptVO = null;
         if(null != changedDeptVO.getParentId()){
             parentDeptVO = corpDeptManageService
@@ -83,7 +87,7 @@ public class PushCorpHandler {
 
     /**
      * 1  获取需要删除的部门的deptId
-     * 2  根据deptId去数据库查rsqId
+     * 2  从contentMap中获取到rsqId
      * 3  push删除
      * @param corpId
      * @param contentMap
@@ -91,9 +95,12 @@ public class PushCorpHandler {
     public void handleDeleteDept(String corpId, Map contentMap){
         CorpVO corpVO = corpManageService.getCorpByCorpId(corpId);
         CorpDeptVO changedDeptVO = Xml2BeanConverter.generateCorpDept(contentMap);
-        CorpDeptVO dbDeptVO = corpDeptManageService
-                .getCorpDeptByCorpIdAndDeptId(corpVO.getCorpId(), changedDeptVO.getDeptId());
-        changedDeptVO.setRsqId(dbDeptVO.getRsqId());
+        //  查找rsqId
+        String rsqId = (String)contentMap.get("rsqId");
+        if(null == rsqId){
+            return;
+        }
+        changedDeptVO.setRsqId(rsqId);
         rsqDeptService.pushAndDeleteDept(corpVO, changedDeptVO);
     }
 
@@ -125,7 +132,12 @@ public class PushCorpHandler {
         CorpStaffVO changedStaffVO = Xml2BeanConverter.generateCorpStaff(contentMap);
         CorpStaffVO dbStaffVO = corpStaffManageService
                 .getCorpStaffByCorpIdAndUserId(corpVO.getCorpId(), changedStaffVO.getUserId());
-        changedStaffVO.setRsqUserId(dbStaffVO.getRsqUserId());
+        //  查找rsqId
+        String rsqUserId = dbStaffVO.getRsqUserId();
+        if(null == rsqUserId){
+            return;
+        }
+        changedStaffVO.setRsqUserId(rsqUserId);
         List<CorpDeptVO> corpDeptVOList = null;
         if(null != changedStaffVO.getDepartment()){
             corpDeptVOList = corpDeptManageService
@@ -136,7 +148,7 @@ public class PushCorpHandler {
 
     /**
      * 1  获取将要删除的用户userId
-     * 2  查询数据库获取该用户的rsqId
+     * 2  contentMap中读取到rsqUserId
      * 3  根据rsqId push删除
      * @param corpId
      * @param contentMap
@@ -144,9 +156,12 @@ public class PushCorpHandler {
     public void handleDeleteUser(String corpId, Map contentMap){
         CorpVO corpVO = corpManageService.getCorpByCorpId(corpId);
         CorpStaffVO changedStaffVO = Xml2BeanConverter.generateCorpStaff(contentMap);
-        CorpStaffVO dbStaffVO = corpStaffManageService
-                .getCorpStaffByCorpIdAndUserId(corpVO.getCorpId(), changedStaffVO.getUserId());
-        changedStaffVO.setRsqUserId(dbStaffVO.getRsqUserId());
+        //  查找rsqId
+        String rsqUserId = (String)contentMap.get("rsqUserId");
+        if(null == rsqUserId){
+            return;
+        }
+        changedStaffVO.setRsqUserId(rsqUserId);
         rsqStaffService.pushAndDeleteStaffFromTeam(corpVO, changedStaffVO);
     }
 

@@ -13,6 +13,13 @@ public interface DeptService {
     void fetchAndSaveDeptInfo(CorpTokenVO corpTokenVO, CorpDeptVO corpDeptVO) throws HttpException, UnirestException;
 
     /**
+     * 获取部门，corpDeptVO中至少需要提供corpId和deptId
+     * @param corpDeptVO
+     * @return
+     */
+    CorpDeptVO getDept(CorpDeptVO corpDeptVO);
+
+    /**
      * 保存department到本地
      * @param corpDeptVO
      */

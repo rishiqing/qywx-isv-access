@@ -89,7 +89,7 @@ public class RsqStaffServiceImpl implements RsqStaffService {
             corpStaffVO.setRsqPassword(password);
             rsqInfoManageService.updateCorpStaffRsqInfo(corpStaffVO);
         } catch (RsqSyncException e) {
-            logger.error("push to create rishiqing department error: ", e);
+            logger.error("push to create rishiqing staff error: ", e);
             //TODO 加入队列做重试
         }
         return corpStaffVO;
@@ -116,7 +116,6 @@ public class RsqStaffServiceImpl implements RsqStaffService {
             if(null == corpStaffVO.getRsqUserId()){
                 throw new RsqUpdateNotExistsException("corpStaffVO.getRsqUserId not exists: corpId: " + corpStaffVO.getCorpId() + ", deptId: " + corpStaffVO.getUserId());
             }
-//            corpDeptManageService.saveOrUpdateCorpDept(corpDeptVO);
             httpUtilRsqSync.updateUser(suite.getRsqAppName(), suite.getRsqAppToken(), team, user);
         } catch (RsqSyncException e) {
             logger.error("push to create rishiqing department error: ", e);
@@ -128,6 +127,14 @@ public class RsqStaffServiceImpl implements RsqStaffService {
         return corpStaffVO;
     }
 
+    /**
+     * 删除部门的逻辑顺序
+     * 1. 删除本地日事清部门（由上层方法完成）,删除后仍然需要传入corpStaffVO对象，该对象包含rsqUserId
+     * 2. push提交删除到日事清（本方法完成，如果失败则会重试）
+     * @param corpVO
+     * @param corpStaffVO
+     * @return
+     */
     @Override
     public CorpStaffVO pushAndDeleteStaffFromTeam(CorpVO corpVO, CorpStaffVO corpStaffVO) {
         RsqTeamVO team = CorpConverter.corpVO2RsqTeamVO(corpVO);
@@ -138,7 +145,7 @@ public class RsqStaffServiceImpl implements RsqStaffService {
                 throw new RsqUpdateNotExistsException("corpStaffVO.getRsqUserId not exists: corpId: " + corpStaffVO.getCorpId() + ", deptId: " + corpStaffVO.getUserId());
             }
             httpUtilRsqSync.userLeaveTeam(suite.getRsqAppName(), suite.getRsqAppToken(), team, user);
-            corpStaffManageService.deleteCorpStaffByCorpIdAndUserId(corpVO.getCorpId(), corpStaffVO.getUserId());
+//            corpStaffManageService.deleteCorpStaffByCorpIdAndUserId(corpVO.getCorpId(), corpStaffVO.getUserId());
         } catch (RsqSyncException e) {
             logger.error("push to create rishiqing department error: ", e);
             //TODO 加入队列做重试

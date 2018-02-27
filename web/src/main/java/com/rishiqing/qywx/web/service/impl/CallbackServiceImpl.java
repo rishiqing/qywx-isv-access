@@ -255,7 +255,9 @@ public class CallbackServiceImpl implements CallbackService {
      */
     private void handleChangeContactDeleteDept(Map map) throws ObjectNotExistException {
         CorpDeptVO deptVO = Xml2BeanConverter.generateCorpDept(map);
-        deptService.deleteDept(deptVO);
+        CorpDeptVO dbDeptVO = deptService.getDept(deptVO);
+        map.put("rsqId", dbDeptVO.getRsqId());
+        deptService.deleteDept(dbDeptVO);
     }
 
     /**
@@ -282,6 +284,8 @@ public class CallbackServiceImpl implements CallbackService {
      */
     private void handleChangeContactDeleteUser(Map map) throws ObjectNotExistException {
         CorpStaffVO staffVO = Xml2BeanConverter.generateCorpStaff(map);
-        staffService.deleteStaff(staffVO);
+        CorpStaffVO dbStaffVO = staffService.getStaff(staffVO);
+        map.put("rsqUserId", dbStaffVO.getRsqUserId());
+        staffService.deleteStaff(dbStaffVO);
     }
 }
