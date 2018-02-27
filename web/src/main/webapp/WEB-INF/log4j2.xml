@@ -2,7 +2,7 @@
 <Configuration status="WARN" monitorInterval="60">
     <Properties>
         <Property name="baseDir">$${sys:user.home}/qywx/logs/</Property>
-        <Property name="globalLevel">info</Property>
+        <Property name="globalLevel">debug</Property>
     </Properties>
     <Appenders>
         <!--不使用输出到控制台-->

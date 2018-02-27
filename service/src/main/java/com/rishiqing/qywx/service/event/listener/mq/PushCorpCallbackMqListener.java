@@ -37,8 +37,13 @@ public class PushCorpCallbackMqListener implements MessageListener {
         MapMessage mapMessage = (MapMessage)message;
         try {
             String corpId = mapMessage.getString("corpId");
-            CallbackChangeType type = CallbackChangeType.valueOf(mapMessage.getString("type"));
+            CallbackChangeType type = CallbackChangeType.getCallbackChangeType(mapMessage.getString("type"));
             Map contentMap = (Map)mapMessage.getObject("content");
+
+            //  如果type没在枚举列表中，那么报出错误
+            if(null == type){
+                throw new RuntimeException("type not recognized: " + mapMessage.getString("type"));
+            }
 
             switch (type){
                 case CREATE_PARTY:

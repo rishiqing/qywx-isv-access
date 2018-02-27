@@ -22,6 +22,7 @@ public class DemoMqListener implements MessageListener {
             System.out.println("== thread start----" + corpId + "----" + new Date());
             Thread.sleep(3000);
             System.out.println("== thread end----" + corpId + "----" + new Date());
+            throw new RuntimeException("------test--------");
 //            ActiveMQMapMessage mqMessage = (ActiveMQMapMessage)message;
 //            System.out.println("---------------" + mqMessage.getString);
 //            System.out.println("---------------++++" + demoMessage.getMsg());

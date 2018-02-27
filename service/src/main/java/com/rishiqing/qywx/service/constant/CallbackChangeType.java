@@ -29,4 +29,14 @@ public enum CallbackChangeType {
     public String getKey() {
         return key;
     }
+
+    public static CallbackChangeType getCallbackChangeType(String key){
+        CallbackChangeType[] arr = CallbackChangeType.values();
+        for(CallbackChangeType type : arr){
+            if(type.getKey().equalsIgnoreCase(key)){
+                return type;
+            }
+        }
+        return null;
+    }
 }

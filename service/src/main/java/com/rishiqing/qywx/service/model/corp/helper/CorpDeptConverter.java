@@ -58,15 +58,20 @@ public class CorpDeptConverter {
         rsqDepartmentVO.setDeptId(String.valueOf(corpDeptVO.getDeptId()));
 
         //  properties optional (can be null)
-        rsqDepartmentVO.setName(corpDeptVO.getName());
-
-        //TODO  由于日事清后台order字段为int类型，企业微信为long类型，为防止溢出，暂时这么做，等日事清后台更新了之后需要改过来
-        //TODO  By Wallace Mao
-        long orderNum = corpDeptVO.getOrder();
-        if( orderNum > Integer.MAX_VALUE){
-            orderNum = Integer.MAX_VALUE;
+        if(null != corpDeptVO.getName()){
+            rsqDepartmentVO.setName(corpDeptVO.getName());
         }
-        rsqDepartmentVO.setOrderNum(orderNum);
+
+        if(null != corpDeptVO.getOrder()){
+            //TODO  由于日事清后台order字段为int类型，企业微信为long类型，为防止溢出，暂时这么做，等日事清后台更新了之后需要改过来
+            //TODO  By Wallace Mao
+            long orderNum = corpDeptVO.getOrder();
+            if( orderNum > Integer.MAX_VALUE){
+                orderNum = Integer.MAX_VALUE;
+            }
+            rsqDepartmentVO.setOrderNum(orderNum);
+        }
+
 
         rsqDepartmentVO.setTeamId(corpVO.getRsqId());
         if(null != corpDeptVO.getRsqId()){

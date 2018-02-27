@@ -196,7 +196,13 @@ public class CallbackServiceImpl implements CallbackService {
         String corpId = (String)map.get("AuthCorpId");
         //  发送异步消息
         CorpVO corpVO = corpManageService.getCorpByCorpId(corpId);
-        CallbackChangeType type = CallbackChangeType.valueOf(changeType);
+        CallbackChangeType type = CallbackChangeType.getCallbackChangeType(changeType);
+
+        //  如果type没在枚举列表中，那么报出错误
+        if(null == type){
+            throw new CallbackException("type not recognized: " + changeType);
+        }
+
         switch (type) {
             case CREATE_PARTY:
                 handleChangeContactCreateDept(map);

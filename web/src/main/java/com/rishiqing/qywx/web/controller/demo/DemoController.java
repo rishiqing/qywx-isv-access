@@ -98,7 +98,7 @@ public class DemoController {
     @ResponseBody
     public String sendMq(){
         System.out.println("=======begin");
-        for(int i = 0; i < 10; i++ ){
+        for(int i = 0; i < 1; i++ ){
             asyncService.sendToDemo(new DemoMessage("xxxxxx-" + i, "hello mq message"));
         }
         System.out.println("=======end");
