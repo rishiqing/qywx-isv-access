@@ -13,6 +13,7 @@ import com.rishiqing.qywx.service.common.isv.SuiteTokenManageService;
 import com.rishiqing.common.exception.HttpException;
 import com.rishiqing.qywx.service.constant.CallbackChangeType;
 import com.rishiqing.qywx.service.constant.CallbackInfoType;
+import com.rishiqing.qywx.service.event.listener.FetchCallbackHandler;
 import com.rishiqing.qywx.service.event.service.AsyncService;
 import com.rishiqing.qywx.service.exception.ObjectNotExistException;
 import com.rishiqing.qywx.service.model.corp.CorpDeptVO;
@@ -58,6 +59,8 @@ public class CallbackServiceImpl implements CallbackService {
     private StaffService staffService;
     @Autowired
     private AsyncService asyncService;
+    @Autowired
+    private FetchCallbackHandler fetchCallbackHandler;
 
     @Override
     public String verifyUrl(String signature, String timestamp, String nonce, String echoString) throws CallbackException {
@@ -157,9 +160,8 @@ public class CallbackServiceImpl implements CallbackService {
     private void handleCreateAuth(Map params) throws UnirestException, HttpException {
         String authCode = (String)params.get("AuthCode");
         assert authCode != null;
-        SuiteTokenVO suiteTokenVO = suiteTokenManageService.getSuiteToken(suite.getSuiteKey());
-        //TODO 修改成异步开通
-        corpService.activeCorp(suiteTokenVO, authCode);
+        //   activeCorp方法内需要马上返回，耗时操作异步执行
+        corpService.activeCorp(authCode);
     }
 
     /**
@@ -174,7 +176,7 @@ public class CallbackServiceImpl implements CallbackService {
         String suiteKey = suite.getSuiteKey();
         SuiteTokenVO suiteTokenVO = suiteTokenManageService.getSuiteToken(suiteKey);
         CorpSuiteVO corpSuiteVO = corpSuiteManageService.getCorpSuite(suiteKey, corpId);
-        corpService.fetchAndSaveCorpInfo(suiteTokenVO, corpSuiteVO);
+        corpService.fetchAndChangeCorpInfo(suiteTokenVO, corpSuiteVO);
     }
 
     /**
@@ -205,22 +207,22 @@ public class CallbackServiceImpl implements CallbackService {
 
         switch (type) {
             case CREATE_PARTY:
-                handleChangeContactCreateDept(map);
+                fetchCallbackHandler.handleChangeContactCreateDept(map);
                 break;
             case UPDATE_PARTY:
-                handleChangeContactUpdateDept(map);
+                fetchCallbackHandler.handleChangeContactUpdateDept(map);
                 break;
             case DELETE_PARTY:
-                handleChangeContactDeleteDept(map);
+                fetchCallbackHandler.handleChangeContactDeleteDept(map);
                 break;
             case CREATE_USER:
-                handleChangeContactCreateUser(map);
+                fetchCallbackHandler.handleChangeContactCreateUser(map);
                 break;
             case UPDATE_USER:
-                handleChangeContactUpdateUser(map);
+                fetchCallbackHandler.handleChangeContactUpdateUser(map);
                 break;
             case DELETE_USER:
-                handleChangeContactDeleteUser(map);
+                fetchCallbackHandler.handleChangeContactDeleteUser(map);
                 break;
             case UPDATE_TAG:
                 throw new CallbackException("UPDATE_TAG not supported now" + changeType);
@@ -229,63 +231,5 @@ public class CallbackServiceImpl implements CallbackService {
                 throw new CallbackException("contact change, changeType not handled: " + changeType);
         }
         asyncService.sendToPushCorpCallback(corpVO, type, map);
-    }
-
-    /**
-     * 通讯录变更之创建部门
-     * @param map
-     */
-    private void handleChangeContactCreateDept(Map map){
-        CorpDeptVO deptVO = Xml2BeanConverter.generateCorpDept(map);
-        deptService.createDept(deptVO);
-    }
-
-    /**
-     * 通讯录变更之更新部门
-     * @param map
-     */
-    private void handleChangeContactUpdateDept(Map map) throws ObjectNotExistException {
-        CorpDeptVO deptVO = Xml2BeanConverter.generateCorpDept(map);
-        deptService.updateDept(deptVO);
-    }
-
-    /**
-     * 通讯录变更之删除部门
-     * @param map
-     */
-    private void handleChangeContactDeleteDept(Map map) throws ObjectNotExistException {
-        CorpDeptVO deptVO = Xml2BeanConverter.generateCorpDept(map);
-        CorpDeptVO dbDeptVO = deptService.getDept(deptVO);
-        map.put("rsqId", dbDeptVO.getRsqId());
-        deptService.deleteDept(dbDeptVO);
-    }
-
-    /**
-     * 通讯录变更之添加成员
-     * @param map
-     */
-    private void handleChangeContactCreateUser(Map map){
-        CorpStaffVO staffVO = Xml2BeanConverter.generateCorpStaff(map);
-        staffService.createStaff(staffVO);
-    }
-
-    /**
-     * 通讯录变更之更新成员
-     * @param map
-     */
-    private void handleChangeContactUpdateUser(Map map) throws ObjectNotExistException {
-        CorpStaffVO staffVO = Xml2BeanConverter.generateCorpStaff(map);
-        staffService.updateStaff(staffVO);
-    }
-
-    /**
-     * 通讯录变更之删除成员
-     * @param map
-     */
-    private void handleChangeContactDeleteUser(Map map) throws ObjectNotExistException {
-        CorpStaffVO staffVO = Xml2BeanConverter.generateCorpStaff(map);
-        CorpStaffVO dbStaffVO = staffService.getStaff(staffVO);
-        map.put("rsqUserId", dbStaffVO.getRsqUserId());
-        staffService.deleteStaff(dbStaffVO);
     }
 }

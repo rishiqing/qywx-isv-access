@@ -1,5 +1,6 @@
 package com.rishiqing.qywx.service.biz.rsq.impl;
 
+import com.rishiqing.common.exception.HttpException;
 import com.rishiqing.common.exception.RsqSyncException;
 import com.rishiqing.common.exception.RsqUpdateNotExistsException;
 import com.rishiqing.common.model.RsqCommonUserVO;
@@ -41,7 +42,7 @@ public class RsqStaffServiceImpl implements RsqStaffService {
     private RsqInfoManageService rsqInfoManageService;
 
     @Override
-    public void pushAndCreateAllCorpStaff(CorpVO corpVO){
+    public void pushAndCreateAllCorpStaff(CorpVO corpVO) throws RsqSyncException, HttpException, RsqUpdateNotExistsException {
         List<CorpStaffVO> list = corpStaffManageService.listCorpStaffByCorpId(corpVO.getCorpId());
         List<CorpStaffVO> adminList = new ArrayList<>();
 
@@ -70,28 +71,23 @@ public class RsqStaffServiceImpl implements RsqStaffService {
      * @return
      */
     @Override
-    public CorpStaffVO pushAndCreateStaff(CorpVO corpVO, List<CorpDeptVO> corpDeptVOList, CorpStaffVO corpStaffVO) {
+    public CorpStaffVO pushAndCreateStaff(CorpVO corpVO, List<CorpDeptVO> corpDeptVOList, CorpStaffVO corpStaffVO) throws RsqSyncException {
         //  如果rsqId存在，那么将不做任何处理
         if(null != corpStaffVO.getRsqUserId()){
             return corpStaffVO;
         }
         RsqTeamVO team = CorpConverter.corpVO2RsqTeamVO(corpVO);
         RsqCommonUserVO user = CorpStaffConverter.corpStaffVO2RsqCommonUserVO(corpVO, corpDeptVOList, corpStaffVO);
-        try {
-            //  自动生成用户名和密码
-            String password = generateRsqPassword(suite.getRsqAppName());
-            user.setUsername(generateRsqUsername(suite.getRsqAppName()));
-            user.setPassword(password);
+        //  自动生成用户名和密码
+        String password = generateRsqPassword(suite.getRsqAppName());
+        user.setUsername(generateRsqUsername(suite.getRsqAppName()));
+        user.setPassword(password);
 
-            user = httpUtilRsqSync.createUser(suite.getRsqAppName(), suite.getRsqAppToken(), team, user);
-            corpStaffVO.setRsqUserId(String.valueOf(user.getId()));
-            corpStaffVO.setRsqUsername(user.getUsername());
-            corpStaffVO.setRsqPassword(password);
-            rsqInfoManageService.updateCorpStaffRsqInfo(corpStaffVO);
-        } catch (RsqSyncException e) {
-            logger.error("push to create rishiqing staff error: ", e);
-            //TODO 加入队列做重试
-        }
+        user = httpUtilRsqSync.createUser(suite.getRsqAppName(), suite.getRsqAppToken(), team, user);
+        corpStaffVO.setRsqUserId(String.valueOf(user.getId()));
+        corpStaffVO.setRsqUsername(user.getUsername());
+        corpStaffVO.setRsqPassword(password);
+        rsqInfoManageService.updateCorpStaffRsqInfo(corpStaffVO);
         return corpStaffVO;
     }
 
@@ -108,22 +104,14 @@ public class RsqStaffServiceImpl implements RsqStaffService {
      * @return
      */
     @Override
-    public CorpStaffVO pushAndUpdateStaff(CorpVO corpVO, List<CorpDeptVO> corpDeptVOList, CorpStaffVO corpStaffVO) {
+    public CorpStaffVO pushAndUpdateStaff(CorpVO corpVO, List<CorpDeptVO> corpDeptVOList, CorpStaffVO corpStaffVO) throws RsqUpdateNotExistsException, RsqSyncException {
         RsqTeamVO team = CorpConverter.corpVO2RsqTeamVO(corpVO);
         RsqCommonUserVO user = CorpStaffConverter.corpStaffVO2RsqCommonUserVO(corpVO, corpDeptVOList, corpStaffVO);
-        try {
-            //  如果rsqId不存在，那么抛出异常，下次进行重试
-            if(null == corpStaffVO.getRsqUserId()){
-                throw new RsqUpdateNotExistsException("corpStaffVO.getRsqUserId not exists: corpId: " + corpStaffVO.getCorpId() + ", deptId: " + corpStaffVO.getUserId());
-            }
-            httpUtilRsqSync.updateUser(suite.getRsqAppName(), suite.getRsqAppToken(), team, user);
-        } catch (RsqSyncException e) {
-            logger.error("push to create rishiqing department error: ", e);
-            //TODO 加入队列做重试
-        } catch (RsqUpdateNotExistsException e) {
-            logger.error("update commonUser, but id not exists. ", e);
-            //TODO 重新create，然后再做更新
+        //  如果rsqId不存在，那么抛出异常，下次进行重试
+        if(null == corpStaffVO.getRsqUserId()){
+            throw new RsqUpdateNotExistsException("corpStaffVO.getRsqUserId not exists: corpId: " + corpStaffVO.getCorpId() + ", deptId: " + corpStaffVO.getUserId());
         }
+        httpUtilRsqSync.updateUser(suite.getRsqAppName(), suite.getRsqAppToken(), team, user);
         return corpStaffVO;
     }
 
@@ -136,43 +124,26 @@ public class RsqStaffServiceImpl implements RsqStaffService {
      * @return
      */
     @Override
-    public CorpStaffVO pushAndDeleteStaffFromTeam(CorpVO corpVO, CorpStaffVO corpStaffVO) {
+    public CorpStaffVO pushAndDeleteStaffFromTeam(CorpVO corpVO, CorpStaffVO corpStaffVO) throws RsqUpdateNotExistsException, RsqSyncException {
         RsqTeamVO team = CorpConverter.corpVO2RsqTeamVO(corpVO);
         RsqCommonUserVO user = CorpStaffConverter.corpStaffVO2RsqCommonUserVO(corpVO, null, corpStaffVO);
-        try {
-            //  如果rsqId不存在，那么抛出异常，下次进行重试
-            if(null == corpStaffVO.getRsqUserId()){
-                throw new RsqUpdateNotExistsException("corpStaffVO.getRsqUserId not exists: corpId: " + corpStaffVO.getCorpId() + ", deptId: " + corpStaffVO.getUserId());
-            }
-            httpUtilRsqSync.userLeaveTeam(suite.getRsqAppName(), suite.getRsqAppToken(), team, user);
-//            corpStaffManageService.deleteCorpStaffByCorpIdAndUserId(corpVO.getCorpId(), corpStaffVO.getUserId());
-        } catch (RsqSyncException e) {
-            logger.error("push to create rishiqing department error: ", e);
-            //TODO 加入队列做重试
-        } catch (RsqUpdateNotExistsException e) {
-            logger.error("delete commonUser, but id not exists. ", e);
-            //TODO 重新create，然后再做删除
+        //  如果rsqId不存在，那么抛出异常，下次进行重试
+        if(null == corpStaffVO.getRsqUserId()){
+            throw new RsqUpdateNotExistsException("corpStaffVO.getRsqUserId not exists: corpId: " + corpStaffVO.getCorpId() + ", deptId: " + corpStaffVO.getUserId());
         }
+        httpUtilRsqSync.userLeaveTeam(suite.getRsqAppName(), suite.getRsqAppToken(), team, user);
         return corpStaffVO;
     }
 
     @Override
-    public CorpStaffVO pushAndSetStaffAdmin(CorpVO corpVO, CorpStaffVO corpStaffVO){
+    public CorpStaffVO pushAndSetStaffAdmin(CorpVO corpVO, CorpStaffVO corpStaffVO) throws RsqUpdateNotExistsException, HttpException, RsqSyncException {
         RsqTeamVO team = CorpConverter.corpVO2RsqTeamVO(corpVO);
         RsqCommonUserVO user = CorpStaffConverter.corpStaffVO2RsqCommonUserVO(corpVO, null, corpStaffVO);
-        try {
-            //  如果rsqId不存在，那么抛出异常，下次进行重试
-            if(null == corpStaffVO.getRsqUserId()){
-                throw new RsqUpdateNotExistsException("corpStaffVO.getRsqUserId not exists: corpId: " + corpStaffVO.getCorpId() + ", deptId: " + corpStaffVO.getUserId());
-            }
-            httpUtilRsqSync.setUserAdmin(suite.getRsqAppName(), suite.getRsqAppToken(), team, user);
-        } catch (RsqSyncException e) {
-            logger.error("push to create rishiqing department error: ", e);
-            //TODO 加入队列做重试
-        } catch (RsqUpdateNotExistsException e) {
-            logger.error("delete commonUser, but id not exists. ", e);
-            //TODO 重新create，然后再做删除
+        //  如果rsqId不存在，那么抛出异常，下次进行重试
+        if(null == corpStaffVO.getRsqUserId()){
+            throw new RsqUpdateNotExistsException("corpStaffVO.getRsqUserId not exists: corpId: " + corpStaffVO.getCorpId() + ", deptId: " + corpStaffVO.getUserId());
         }
+        httpUtilRsqSync.setUserAdmin(suite.getRsqAppName(), suite.getRsqAppToken(), team, user);
         return corpStaffVO;
     }
 

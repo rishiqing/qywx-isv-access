@@ -79,16 +79,9 @@ public class RsqDeptServiceImpl implements RsqDeptService {
         }
         RsqTeamVO team = CorpConverter.corpVO2RsqTeamVO(corpVO);
         RsqDepartmentVO departmentVO = CorpDeptConverter.corpDeptVO2RsqDepartment(corpVO, parentCorpDeptVO, corpDeptVO);
-        try {
-//            corpDeptManageService.saveOrUpdateCorpDept(corpDeptVO);
-            departmentVO = httpUtilRsqSync.createDepartment(suite.getRsqAppName(), suite.getRsqAppToken(), team, departmentVO);
-            corpDeptVO.setRsqId(String.valueOf(departmentVO.getId()));
-            rsqInfoManageService.updateCorpDeptRsqInfo(corpDeptVO);
-        } catch (RsqSyncException e) {
-            logger.error("push to create rishiqing department error: ", e);
-            //TODO 加入队列做重试
-            throw e;
-        }
+        departmentVO = httpUtilRsqSync.createDepartment(suite.getRsqAppName(), suite.getRsqAppToken(), team, departmentVO);
+        corpDeptVO.setRsqId(String.valueOf(departmentVO.getId()));
+        rsqInfoManageService.updateCorpDeptRsqInfo(corpDeptVO);
         return corpDeptVO;
     }
 
@@ -105,22 +98,14 @@ public class RsqDeptServiceImpl implements RsqDeptService {
      * @return
      */
     @Override
-    public CorpDeptVO pushAndUpdateDept(CorpVO corpVO, CorpDeptVO parentCorpDeptVO, CorpDeptVO corpDeptVO){
+    public CorpDeptVO pushAndUpdateDept(CorpVO corpVO, CorpDeptVO parentCorpDeptVO, CorpDeptVO corpDeptVO) throws RsqSyncException, RsqUpdateNotExistsException {
         RsqTeamVO team = CorpConverter.corpVO2RsqTeamVO(corpVO);
         RsqDepartmentVO departmentVO = CorpDeptConverter.corpDeptVO2RsqDepartment(corpVO, parentCorpDeptVO, corpDeptVO);
-        try {
-            //  如果rsqId不存在，那么抛出异常，下次进行重试
-            if(null == corpDeptVO.getRsqId()){
-                throw new RsqUpdateNotExistsException("corpDeptVO.getRsqId not exists: corpId: " + corpDeptVO.getCorpId() + ", deptId: " + corpDeptVO.getDeptId());
-            }
-            httpUtilRsqSync.updateDepartment(suite.getRsqAppName(), suite.getRsqAppToken(), team, departmentVO);
-        } catch (RsqSyncException e) {
-            logger.error("push to create rishiqing department error: ", e);
-            //TODO 加入队列做重试
-        } catch (RsqUpdateNotExistsException e) {
-            logger.error("update department, but id not exists. ", e);
-            //TODO 重新create，然后再做更新
+        //  如果rsqId不存在，那么抛出异常，下次进行重试
+        if(null == corpDeptVO.getRsqId()){
+            throw new RsqUpdateNotExistsException("corpDeptVO.getRsqId not exists: corpId: " + corpDeptVO.getCorpId() + ", deptId: " + corpDeptVO.getDeptId());
         }
+        httpUtilRsqSync.updateDepartment(suite.getRsqAppName(), suite.getRsqAppToken(), team, departmentVO);
         return corpDeptVO;
     }
 
@@ -133,23 +118,14 @@ public class RsqDeptServiceImpl implements RsqDeptService {
      * @return
      */
     @Override
-    public CorpDeptVO pushAndDeleteDept(CorpVO corpVO, CorpDeptVO corpDeptVO) {
+    public CorpDeptVO pushAndDeleteDept(CorpVO corpVO, CorpDeptVO corpDeptVO) throws RsqSyncException, RsqUpdateNotExistsException {
         RsqTeamVO team = CorpConverter.corpVO2RsqTeamVO(corpVO);
         RsqDepartmentVO departmentVO = CorpDeptConverter.corpDeptVO2RsqDepartment(corpVO, null, corpDeptVO);
-        try {
-            //  如果rsqId不存在，那么抛出异常，下次进行重试
-            if(null == corpDeptVO.getRsqId()){
-                throw new RsqUpdateNotExistsException("corpDeptVO.getRsqId not exists: corpId: " + corpDeptVO.getCorpId() + ", deptId: " + corpDeptVO.getDeptId());
-            }
-            httpUtilRsqSync.deleteDepartment(suite.getRsqAppName(), suite.getRsqAppToken(), team, departmentVO);
-//            corpDeptManageService.deleteCorpDeptByCorpIdAndDeptId(corpVO.getCorpId(), corpDeptVO.getDeptId());
-        } catch (RsqSyncException e) {
-            logger.error("push to create rishiqing department error: ", e);
-            //TODO 加入队列做重试
-        } catch (RsqUpdateNotExistsException e) {
-            logger.error("delete department, but id not exists. ", e);
-            //TODO 重新create，然后再做删除
+        //  如果rsqId不存在，那么抛出异常，下次进行重试
+        if(null == corpDeptVO.getRsqId()){
+            throw new RsqUpdateNotExistsException("corpDeptVO.getRsqId not exists: corpId: " + corpDeptVO.getCorpId() + ", deptId: " + corpDeptVO.getDeptId());
         }
+        httpUtilRsqSync.deleteDepartment(suite.getRsqAppName(), suite.getRsqAppToken(), team, departmentVO);
         return corpDeptVO;
     }
 }

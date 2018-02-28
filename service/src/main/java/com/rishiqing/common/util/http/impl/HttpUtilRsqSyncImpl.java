@@ -159,7 +159,6 @@ public class HttpUtilRsqSyncImpl implements HttpUtilRsqSync {
         Map queryMap = new HashMap<String, String>();
         queryMap.put("token", appToken);
         JSONObject params = new JSONObject();
-//        params.put("appName", appName);
         params.put("username", rsqCommonUserVO.getUsername());
         params.put("password", rsqCommonUserVO.getPassword());
         params.put("realName", rsqCommonUserVO.getRealName());
@@ -227,7 +226,7 @@ public class HttpUtilRsqSyncImpl implements HttpUtilRsqSync {
     }
 
     @Override
-    public RsqCommonUserVO setUserAdmin(String appName, String appToken, RsqTeamVO rsqTeamVO, RsqCommonUserVO rsqCommonUserVO) throws RsqSyncException {
+    public RsqCommonUserVO setUserAdmin(String appName, String appToken, RsqTeamVO rsqTeamVO, RsqCommonUserVO rsqCommonUserVO) throws RsqSyncException, HttpException {
         String url = this.rootDomain + URL_SET_USER_ADMIN;
         Map queryMap = new HashMap<String, String>();
         queryMap.put("token", appToken);
@@ -236,12 +235,8 @@ public class HttpUtilRsqSyncImpl implements HttpUtilRsqSync {
         params.put("isAdmin", rsqCommonUserVO.getAdmin());
 
         JSONObject jsonObject = null;
-        try {
-            jsonObject = restHttpClient.post(url, queryMap, null, JSONObject.toJSONString(params), null);
-            checkResponse(jsonObject);
-        } catch (HttpException e) {
-            throw new RsqSyncException("http request error", e);
-        }
+        jsonObject = restHttpClient.post(url, queryMap, null, JSONObject.toJSONString(params), null);
+        checkResponse(jsonObject);
 
         return RsqResponseConverter.Json2RsqCommonUserVO(jsonObject);
     }

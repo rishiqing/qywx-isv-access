@@ -1,6 +1,8 @@
 package com.rishiqing.qywx.service.biz.rsq.impl;
 
+import com.rishiqing.common.exception.HttpException;
 import com.rishiqing.common.exception.RsqSyncException;
+import com.rishiqing.common.exception.RsqUpdateNotExistsException;
 import com.rishiqing.common.model.RsqTeamVO;
 import com.rishiqing.common.util.http.HttpUtilRsqSync;
 import com.rishiqing.qywx.service.biz.rsq.RsqCorpService;
@@ -41,20 +43,15 @@ public class RsqCorpServiceImpl implements RsqCorpService {
      * @return
      */
     @Override
-    public CorpVO pushAndCreateCorp(CorpVO corpVO){
+    public CorpVO pushAndCreateCorp(CorpVO corpVO) throws RsqSyncException {
         //  如果rsqId存在，那么将不做任何处理
         if(null != corpVO.getRsqId()){
             return corpVO;
         }
         RsqTeamVO rsqTeamVO = CorpConverter.corpVO2RsqTeamVO(corpVO);
-        try {
-            RsqTeamVO team = httpUtilRsqSync.createCorp(suite.getRsqAppName(), suite.getRsqAppToken(), rsqTeamVO);
-            corpVO.setRsqId(String.valueOf(team.getId()));
-            rsqInfoManageService.updateCorpRsqInfo(corpVO);
-        } catch (RsqSyncException e) {
-            logger.error("push to create rishiqing team error: ", e);
-            //TODO 做重试
-        }
+        RsqTeamVO team = httpUtilRsqSync.createCorp(suite.getRsqAppName(), suite.getRsqAppToken(), rsqTeamVO);
+        corpVO.setRsqId(String.valueOf(team.getId()));
+        rsqInfoManageService.updateCorpRsqInfo(corpVO);
         return corpVO;
     }
 
@@ -63,19 +60,13 @@ public class RsqCorpServiceImpl implements RsqCorpService {
      * @param corpVO
      */
     @Override
-    public void pushAndCreateCorpAll(CorpVO corpVO){
+    public void pushAndCreateCorpAll(CorpVO corpVO) throws RsqSyncException, HttpException, RsqUpdateNotExistsException {
 
-        try {
-            //  1  创建日事清企业
-            pushAndCreateCorp(corpVO);
-            //  2  创建企业部门
-            rsqDeptService.pushAndCreateAllCorpDept(corpVO);
-            //  3  创建企业部门成员，同时会更新管理员状态
-            rsqStaffService.pushAndCreateAllCorpStaff(corpVO);
-        } catch (RsqSyncException e) {
-            //TODO 重试
-
-            logger.error("error in sync corpAll", e);
-        }
+        //  1  创建日事清企业
+        pushAndCreateCorp(corpVO);
+        //  2  创建企业部门
+        rsqDeptService.pushAndCreateAllCorpDept(corpVO);
+        //  3  创建企业部门成员，同时会更新管理员状态
+        rsqStaffService.pushAndCreateAllCorpStaff(corpVO);
     }
 }

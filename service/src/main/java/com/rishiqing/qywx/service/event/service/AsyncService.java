@@ -14,7 +14,7 @@ import java.util.Map;
 public interface AsyncService {
     void sendToDemo(DemoMessage message);
 
-    void sendToFetchCorpAll(CorpVO corpVO);
+    void sendToFetchCorpAll(String permanentCode);
 
     void sendToPushCorpAuthCallback(CorpVO corpVO, CallbackInfoType type, Map callbackMap);
 

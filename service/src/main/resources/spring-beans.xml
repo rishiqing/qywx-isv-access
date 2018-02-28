@@ -30,6 +30,9 @@
     <bean id="rsqDeptService" class="com.rishiqing.qywx.service.biz.rsq.impl.RsqDeptServiceImpl" />
     <bean id="rsqStaffService" class="com.rishiqing.qywx.service.biz.rsq.impl.RsqStaffServiceImpl" />
 
+    <!--记录异步过程中发生的错误-->
+    <bean id="callbackFailService" class="com.rishiqing.qywx.service.common.fail.impl.CallbackFailServiceImpl" />
+
     <!--工具类-->
     <!--默认的httpClient-->
     <bean id="defaultRestHttpClient" class="com.rishiqing.common.util.http.client.impl.DefaultRestHttpClient" />
@@ -52,31 +55,5 @@
     <bean id="httpUtilRsqSync" class="com.rishiqing.common.util.http.impl.HttpUtilRsqSyncImpl">
         <constructor-arg index="0" value="${isv.rsq.url.root}"/>
         <constructor-arg index="1" ref="defaultRestHttpClient"/>
-    </bean>
-
-    <!--AsyncEventBus-->
-    <bean id="asyncService" class="com.rishiqing.qywx.service.event.service.impl.AsyncServiceImpl"/>
-    <bean id="asyncFetchCorpAllExecutorFactory" class="com.rishiqing.qywx.service.event.executor.AsyncFetchCorpAllExecutorFactory" />
-    <bean id="asyncFetchCorpAllExecutor" factory-bean="asyncFetchCorpAllExecutorFactory" factory-method="getFetchCorpAllExecutor" />
-    <bean id="asyncFetchCorpAllEventBus" class="com.google.common.eventbus.AsyncEventBus">
-        <constructor-arg ref="asyncFetchCorpAllExecutor" />
-    </bean>
-    <bean id="fetchCorpAllListener" class="com.rishiqing.qywx.service.event.listener.FetchCorpAllListener" />
-
-    <!--<bean id="demoExecutorFactory" class="com.rishiqing.qywx.service.demo.event.DemoExecutorFactory" />-->
-    <!--<bean id="demoExecutor" factory-bean="demoExecutorFactory" factory-method="getFetchCorpAllExecutor" />-->
-    <!--<bean id="demoEventBus" class="com.google.common.eventbus.AsyncEventBus">-->
-        <!--<constructor-arg ref="demoExecutor" />-->
-    <!--</bean>-->
-    <!--<bean id="demoListener" class="com.rishiqing.qywx.service.demo.event.DemoListener" />-->
-
-    <bean id="eventBusInitService" class="com.rishiqing.qywx.service.event.service.impl.EventBusInitServiceImpl"
-          init-method="register">
-        <property name="eventMap">
-            <map>
-                <entry key-ref="asyncFetchCorpAllEventBus" value-ref="fetchCorpAllListener" />
-                <!--<entry key-ref="demoEventBus" value-ref="demoListener" />-->
-            </map>
-        </property>
     </bean>
 </beans>

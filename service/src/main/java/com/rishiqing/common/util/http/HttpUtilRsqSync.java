@@ -1,5 +1,6 @@
 package com.rishiqing.common.util.http;
 
+import com.rishiqing.common.exception.HttpException;
 import com.rishiqing.common.exception.RsqSyncException;
 import com.rishiqing.common.model.RsqCommonUserVO;
 import com.rishiqing.common.model.RsqDepartmentVO;
@@ -98,5 +99,5 @@ public interface HttpUtilRsqSync {
      * @return
      * @throws RsqSyncException
      */
-    public RsqCommonUserVO setUserAdmin(String appName, String appToken, RsqTeamVO rsqTeamVO, RsqCommonUserVO rsqCommonUserVO) throws RsqSyncException;
+    public RsqCommonUserVO setUserAdmin(String appName, String appToken, RsqTeamVO rsqTeamVO, RsqCommonUserVO rsqCommonUserVO) throws RsqSyncException, HttpException;
 }

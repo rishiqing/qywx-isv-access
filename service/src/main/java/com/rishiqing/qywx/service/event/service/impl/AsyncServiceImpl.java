@@ -46,12 +46,8 @@ public class AsyncServiceImpl implements AsyncService {
     private Queue pushCorpCallbackQueue;
 
     @Override
-    public void sendToFetchCorpAll(CorpVO corpVO) {
-        String suiteKey = suite.getSuiteKey();
-        CorpSuiteMessage message = new CorpSuiteMessage();
-        message.setSuiteKey(suiteKey);
-        message.setCorpId(corpVO.getCorpId());
-        asyncFetchDeptAndStaffEventBus.post(message);
+    public void sendToFetchCorpAll(String permanentCode) {
+        asyncFetchDeptAndStaffEventBus.post(permanentCode);
     }
 
     @Override
@@ -61,15 +57,18 @@ public class AsyncServiceImpl implements AsyncService {
 
     @Override
     public void sendToPushCorpAuthCallback(final CorpVO corpVO, final CallbackInfoType type, final Map callbackMap){
-        switch (type){
-            case CREATE_AUTH:
-                sendToPushCorpAll(corpVO);
-                break;
-            case CHANGE_AUTH:
-            case CANCEL_AUTH:
-            default:
-                break;
-        }
+        final String corpId = corpVO.getCorpId();
+        final String typeKey = type.getKey();
+        jmsTemplate.send(pushCorpAllQueue, new MessageCreator() {
+            @Override
+            public Message createMessage(Session session) throws JMSException {
+                MapMessage mapMessage = session.createMapMessage();
+                mapMessage.setString("corpId", corpId);
+                mapMessage.setString("infoType", typeKey);
+                mapMessage.setObject("content", callbackMap);
+                return mapMessage;
+            }
+        });
     }
 
     @Override
@@ -81,22 +80,10 @@ public class AsyncServiceImpl implements AsyncService {
             public Message createMessage(Session session) throws JMSException {
                 MapMessage mapMessage = session.createMapMessage();
                 mapMessage.setString("corpId", corpId);
-                mapMessage.setString("type", typeKey);
+                mapMessage.setString("changeType", typeKey);
                 mapMessage.setObject("content", callbackMap);
                 return mapMessage;
             }
         });
     }
-
-    private void sendToPushCorpAll(final CorpVO corpVO){
-        jmsTemplate.send(pushCorpAllQueue, new MessageCreator() {
-            @Override
-            public Message createMessage(Session session) throws JMSException {
-                MapMessage mapMessage = session.createMapMessage();
-                mapMessage.setString("corpId", corpVO.getCorpId());
-                return mapMessage;
-            }
-        });
-    }
-
 }

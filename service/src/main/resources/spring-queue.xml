@@ -7,6 +7,34 @@
        http://activemq.apache.org/schema/core
        http://activemq.apache.org/schema/core/activemq-core.xsd">
 
+    <!--==========================eventBus相关==============================-->
+    <!--AsyncEventBus-->
+    <bean id="asyncService" class="com.rishiqing.qywx.service.event.service.impl.AsyncServiceImpl"/>
+    <bean id="asyncFetchCorpAllExecutorFactory" class="com.rishiqing.qywx.service.event.executor.AsyncFetchCorpAllExecutorFactory" />
+    <bean id="asyncFetchCorpAllExecutor" factory-bean="asyncFetchCorpAllExecutorFactory" factory-method="getFetchCorpAllExecutor" />
+    <bean id="asyncFetchCorpAllEventBus" class="com.google.common.eventbus.AsyncEventBus">
+        <constructor-arg ref="asyncFetchCorpAllExecutor" />
+    </bean>
+    <bean id="fetchCorpAllListener" class="com.rishiqing.qywx.service.event.listener.FetchCorpAllListener" />
+
+    <!--<bean id="demoExecutorFactory" class="com.rishiqing.qywx.service.demo.event.DemoExecutorFactory" />-->
+    <!--<bean id="demoExecutor" factory-bean="demoExecutorFactory" factory-method="getFetchCorpAllExecutor" />-->
+    <!--<bean id="demoEventBus" class="com.google.common.eventbus.AsyncEventBus">-->
+    <!--<constructor-arg ref="demoExecutor" />-->
+    <!--</bean>-->
+    <!--<bean id="demoListener" class="com.rishiqing.qywx.service.demo.event.DemoListener" />-->
+
+    <bean id="eventBusInitService" class="com.rishiqing.qywx.service.event.service.impl.EventBusInitServiceImpl"
+          init-method="register">
+        <property name="eventMap">
+            <map>
+                <entry key-ref="asyncFetchCorpAllEventBus" value-ref="fetchCorpAllListener" />
+                <!--<entry key-ref="demoEventBus" value-ref="demoListener" />-->
+            </map>
+        </property>
+    </bean>
+
+    <!--==========================activemq相关==============================-->
     <!--activemq-->
     <amq:connectionFactory id="amqConnectionFactory"
                            brokerURL="failover:(tcp://${amq.broker.url1},tcp://${amq.broker.url2})?randomize=false&amp;jms.useAsyncSend=true"
@@ -54,5 +82,6 @@
         <property name="messageListener" ref="pushCorpCallbackMqListener" />
     </bean>
 
-    <bean id="pushCallbackHandler" class="com.rishiqing.qywx.service.event.listener.mq.PushCorpHandler" />
+    <bean id="pushCallbackHandler" class="com.rishiqing.qywx.service.event.listener.mq.PushCallbackHandler" />
+    <bean id="fetchCallbackHandler" class="com.rishiqing.qywx.service.event.listener.FetchCallbackHandler" />
 </beans>

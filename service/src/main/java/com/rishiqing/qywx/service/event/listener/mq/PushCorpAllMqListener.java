@@ -1,8 +1,6 @@
 package com.rishiqing.qywx.service.event.listener.mq;
 
-import com.rishiqing.qywx.service.biz.rsq.RsqCorpService;
-import com.rishiqing.qywx.service.common.corp.CorpManageService;
-import com.rishiqing.qywx.service.model.corp.CorpVO;
+import com.rishiqing.qywx.service.constant.CallbackInfoType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.jms.MapMessage;
 import javax.jms.Message;
 import javax.jms.MessageListener;
-import java.util.Date;
 
 /**
  * 将corp相关的信息推送到日事清的listener
@@ -21,14 +18,30 @@ public class PushCorpAllMqListener implements MessageListener {
     private static final Logger logger = LoggerFactory.getLogger("SERVICE_EVENT_LISTENER_LOGGER");
 
     @Autowired
-    private PushCorpHandler pushCorpHandler;
+    private PushCallbackHandler pushCallbackHandler;
 
     @Override
     public void onMessage(Message message) {
         try {
             MapMessage mapMessage = (MapMessage)message;
+            String typeString = mapMessage.getString("infoType");
             String corpId = mapMessage.getString("corpId");
-            pushCorpHandler.handleCreateCorp(corpId);
+            CallbackInfoType type = CallbackInfoType.getCallbackInfoType(typeString);
+
+            //  如果type没在枚举列表中，那么报出错误
+            if(null == type){
+                throw new RuntimeException("type not recognized: " + typeString);
+            }
+
+            switch (type){
+                case CREATE_AUTH:
+                    pushCallbackHandler.handleCreateCorp(corpId);
+                    break;
+                case CHANGE_AUTH:
+                case CANCEL_AUTH:
+                default:
+                    break;
+            }
         } catch (Exception e){
             logger.error("error in push corpAll: ", e);
         }

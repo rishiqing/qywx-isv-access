@@ -36,5 +36,8 @@
         <Logger name="SYS_LIMIT_WARN_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
             <AppenderRef ref="Console"/>
         </Logger>
+        <Logger name="SERVICE_ACTIVE_CORP_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
+            <AppenderRef ref="Console"/>
+        </Logger>
     </Loggers>
 </Configuration>

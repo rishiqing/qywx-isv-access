@@ -3,7 +3,6 @@ package com.rishiqing.qywx.dao.mapper.rsq;
 import com.rishiqing.qywx.dao.model.corp.CorpDO;
 import com.rishiqing.qywx.dao.model.corp.CorpDeptDO;
 import com.rishiqing.qywx.dao.model.corp.CorpStaffDO;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository("rsqInfoDao")

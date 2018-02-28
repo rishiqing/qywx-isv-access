@@ -8,6 +8,9 @@ import com.rishiqing.qywx.service.common.corp.CorpAppManageService;
 import com.rishiqing.qywx.service.common.corp.CorpManageService;
 import com.rishiqing.qywx.service.common.corp.CorpSuiteManageService;
 import com.rishiqing.qywx.service.common.corp.CorpTokenManageService;
+import com.rishiqing.qywx.service.common.fail.CallbackFailService;
+import com.rishiqing.qywx.service.common.isv.GlobalSuite;
+import com.rishiqing.qywx.service.common.isv.SuiteTokenManageService;
 import com.rishiqing.qywx.service.constant.ServiceConstant;
 import com.rishiqing.qywx.service.event.message.CorpSuiteMessage;
 import com.rishiqing.common.exception.HttpException;
@@ -25,6 +28,9 @@ import java.util.List;
 
 public class CorpServiceImpl implements CorpService {
     private static final Logger logger = LoggerFactory.getLogger("SERVICE_CORP_TRANSFER_LOGGER");
+    private static final Logger activeCorpLogger = LoggerFactory.getLogger("SERVICE_ACTIVE_CORP_LOGGER");
+    @Autowired
+    private SuiteTokenManageService suiteTokenManageService;
     @Autowired
     private CorpSuiteManageService corpSuiteManageService;
     @Autowired
@@ -37,10 +43,33 @@ public class CorpServiceImpl implements CorpService {
     private HttpUtil httpUtil;
     @Autowired
     private AsyncService asyncService;
+    @Autowired
+    private CallbackFailService callbackFailService;
+    @Autowired
+    private GlobalSuite suite;
+
     @Override
-    public CorpVO activeCorp(SuiteTokenVO suiteToken, String authCode) throws UnirestException, HttpException {
-        logger.info("----begin to active corp----" + new Date());
-        JSONObject json = httpUtil.getPermanentCode(suiteToken, authCode);
+    public void activeCorp(String authCode) throws UnirestException, HttpException {
+        try {
+            logger.info("----begin to active corp----" + new Date());
+            String suiteKey = suite.getSuiteKey();
+            SuiteTokenVO suiteToken = suiteTokenManageService.getSuiteToken(suiteKey);
+            JSONObject json = httpUtil.getPermanentCode(suiteToken, authCode);
+            CorpSuiteVO corpSuiteVO = Json2BeanConverter.generateCorpSuite(suiteKey, null, json);
+            //  异步获取企业的组织架构
+            asyncService.sendToFetchCorpAll(corpSuiteVO.getPermanentCode());
+            logger.info("----end active corp----" + new Date());
+        } catch (Exception e) {
+            //  致命错误，将导致无法获知用户已经开通应用
+            activeCorpLogger.error("!!!!active corp error!!!! ", e);
+            throw e;
+        }
+    }
+
+    @Override
+    public CorpVO fetchAndSaveCorpInfo(SuiteTokenVO suiteToken, CorpSuiteVO corpSuite) throws HttpException, UnirestException {
+        JSONObject json = httpUtil.getCorpAuthInfo(suiteToken, corpSuite);
+
         String suiteKey = suiteToken.getSuiteKey();
         //1. 保存corp信息
         CorpVO corpVO = Json2BeanConverter.generateCorp(json);
@@ -66,16 +95,11 @@ public class CorpServiceImpl implements CorpService {
         for(CorpAppVO corpAppVO : list){
             corpAppManageService.saveCorpApp(corpAppVO);
         }
-
-        //TODO 这里应该改成异步获取可见范围内的部门和用户信息
-        //5. 使用eventBus异步获取部门及用户信息
-        asyncService.sendToFetchCorpAll(corpVO);
-        logger.info("----end active corp----" + new Date());
         return corpVO;
     }
 
     @Override
-    public CorpVO fetchAndSaveCorpInfo(SuiteTokenVO suiteToken, CorpSuiteVO corpSuite) throws UnirestException, HttpException {
+    public CorpVO fetchAndChangeCorpInfo(SuiteTokenVO suiteToken, CorpSuiteVO corpSuite) throws UnirestException, HttpException {
         JSONObject json = httpUtil.getCorpAuthInfo(suiteToken, corpSuite);
         String suiteKey = suiteToken.getSuiteKey();
         //1. 保存corp信息

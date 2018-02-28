@@ -52,14 +52,14 @@ public class DefaultRestHttpClient implements RestHttpClient {
         HttpResponse<String> resp = null;
         try {
             resp = request.asString();
+            logger.debug("http request status: {}, response body: {}", resp.getStatus(), resp.getBody());
         } catch (UnirestException e) {
             throw new HttpException("http request exception: ", e);
         }
         if(resp.getStatus() > 200){
             throw new HttpException("http post request status error: " + resp.getStatus() + ", " + resp.getBody());
         }
-        JSONObject jsonResponse = JSON.parseObject(resp.getBody());
-        return jsonResponse;
+        return JSON.parseObject(resp.getBody());
     }
 
     @Override
@@ -80,14 +80,13 @@ public class DefaultRestHttpClient implements RestHttpClient {
         HttpResponse<String> resp = null;
         try {
             resp = request.asString();
+            logger.debug("http request status: {}, response body: {}", resp.getStatus(), resp.getBody());
         } catch (UnirestException e) {
             throw new HttpException("http request exception: ", e);
         }
         if(resp.getStatus() > 200){
             throw new HttpException("http get request status error: " + resp.getStatus() + ", " + resp.getBody());
         }
-        JSONObject jsonResponse = JSON.parseObject(resp.getBody());
-        logger.info("{} post response: {}", path, jsonResponse);
-        return jsonResponse;
+        return JSON.parseObject(resp.getBody());
     }
 }
