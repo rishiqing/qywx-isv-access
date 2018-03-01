@@ -30,6 +30,14 @@
     <bean id="rsqDeptService" class="com.rishiqing.qywx.service.biz.rsq.impl.RsqDeptServiceImpl" />
     <bean id="rsqStaffService" class="com.rishiqing.qywx.service.biz.rsq.impl.RsqStaffServiceImpl" />
 
+    <!--callback相关顶层server handler-->
+    <bean id="pushCallbackHandler" class="com.rishiqing.qywx.service.callback.impl.PushCallbackHandlerImpl" />
+    <bean id="fetchCallbackHandler" class="com.rishiqing.qywx.service.callback.impl.FetchCallbackHandlerImpl" />
+    <bean id="logFailFetchCallbackHandler" class="com.rishiqing.qywx.service.callback.impl.LogFailFetchCallbackHandlerImpl" />
+    <bean id="logFailPushCallbackHandler" class="com.rishiqing.qywx.service.callback.impl.LogFailPushCallbackHandlerImpl" />
+    <bean id="redoFailFetchCallbackHandler" class="com.rishiqing.qywx.service.callback.impl.RedoFailFetchCallbackHandlerImpl" />
+    <bean id="redoFailPushCallbackHandler" class="com.rishiqing.qywx.service.callback.impl.RedoFailPushCallbackHandlerImpl" />
+
     <!--记录异步过程中发生的错误-->
     <bean id="callbackFailService" class="com.rishiqing.qywx.service.common.fail.impl.CallbackFailServiceImpl" />
 

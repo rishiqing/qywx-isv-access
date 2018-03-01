@@ -71,6 +71,11 @@
             <groupId>org.quartz-scheduler</groupId>
             <artifactId>quartz-jobs</artifactId>
         </dependency>
+        <!--quartz需要使用其中的XmlWebApplicationContext-->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>com.google.guava</groupId>

@@ -2,10 +2,10 @@ package com.rishiqing.qywx.web.service.impl;
 
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.rishiqing.common.exception.ActiveCorpException;
-import com.rishiqing.common.exception.NotSupportedException;
 import com.rishiqing.qywx.service.biz.corp.CorpService;
 import com.rishiqing.qywx.service.biz.corp.DeptService;
 import com.rishiqing.qywx.service.biz.corp.StaffService;
+import com.rishiqing.qywx.service.callback.FetchCallbackHandler;
 import com.rishiqing.qywx.service.common.corp.CorpManageService;
 import com.rishiqing.qywx.service.common.corp.CorpSuiteManageService;
 import com.rishiqing.qywx.service.common.isv.GlobalSuite;
@@ -14,18 +14,12 @@ import com.rishiqing.qywx.service.common.isv.SuiteTokenManageService;
 import com.rishiqing.common.exception.HttpException;
 import com.rishiqing.qywx.service.constant.CallbackChangeType;
 import com.rishiqing.qywx.service.constant.CallbackInfoType;
-import com.rishiqing.qywx.service.event.listener.FetchCallbackHandler;
 import com.rishiqing.qywx.service.event.service.AsyncService;
-import com.rishiqing.qywx.service.exception.ObjectNotExistException;
-import com.rishiqing.qywx.service.model.corp.CorpDeptVO;
-import com.rishiqing.qywx.service.model.corp.CorpStaffVO;
 import com.rishiqing.qywx.service.model.corp.CorpSuiteVO;
 import com.rishiqing.qywx.service.model.corp.CorpVO;
 import com.rishiqing.qywx.service.model.isv.SuiteTicketVO;
 import com.rishiqing.qywx.service.model.isv.SuiteTokenVO;
-import com.rishiqing.qywx.service.model.isv.SuiteVO;
-import com.rishiqing.qywx.service.util.http.converter.Xml2BeanConverter;
-import com.rishiqing.qywx.web.exception.CallbackException;
+import com.rishiqing.qywx.service.exception.CallbackException;
 import com.rishiqing.qywx.web.service.CallbackService;
 import com.rishiqing.qywx.web.util.codec.AesException;
 import com.rishiqing.qywx.web.util.codec.WXBizMsgCrypt;
@@ -61,7 +55,7 @@ public class CallbackServiceImpl implements CallbackService {
     @Autowired
     private AsyncService asyncService;
     @Autowired
-    private FetchCallbackHandler fetchCallbackHandler;
+    private FetchCallbackHandler logFailFetchCallbackHandler;
 
     @Override
     public String verifyUrl(String signature, String timestamp, String nonce, String echoString) {
@@ -204,22 +198,22 @@ public class CallbackServiceImpl implements CallbackService {
 
         switch (type) {
             case CREATE_PARTY:
-                fetchCallbackHandler.handleChangeContactCreateDept(map);
+                logFailFetchCallbackHandler.handleChangeContactCreateDept(map);
                 break;
             case UPDATE_PARTY:
-                fetchCallbackHandler.handleChangeContactUpdateDept(map);
+                logFailFetchCallbackHandler.handleChangeContactUpdateDept(map);
                 break;
             case DELETE_PARTY:
-                fetchCallbackHandler.handleChangeContactDeleteDept(map);
+                logFailFetchCallbackHandler.handleChangeContactDeleteDept(map);
                 break;
             case CREATE_USER:
-                fetchCallbackHandler.handleChangeContactCreateUser(map);
+                logFailFetchCallbackHandler.handleChangeContactCreateUser(map);
                 break;
             case UPDATE_USER:
-                fetchCallbackHandler.handleChangeContactUpdateUser(map);
+                logFailFetchCallbackHandler.handleChangeContactUpdateUser(map);
                 break;
             case DELETE_USER:
-                fetchCallbackHandler.handleChangeContactDeleteUser(map);
+                logFailFetchCallbackHandler.handleChangeContactDeleteUser(map);
                 break;
             case UPDATE_TAG:
                 throw new CallbackException("UPDATE_TAG not supported now" + changeType);

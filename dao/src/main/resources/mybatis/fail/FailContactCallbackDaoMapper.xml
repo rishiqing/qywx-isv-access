@@ -13,6 +13,15 @@
         <result property="eventMsg" column="event_msg" />
     </resultMap>
 
+    <sql id="selectAllFields">
+        id, date_created, last_updated, suite_key, corp_id, fail_type, change_type, fail_note, event_msg
+    </sql>
+
+    <select id="listFailContactCallbackWithLimit" resultMap="failContactCallbackMap">
+        SELECT <include refid="selectAllFields" /> FROM isv_fail_contact_callback
+        ORDER BY id ASC LIMIT #{limit}
+    </select>
+
     <insert id="saveOrUpdateFailContactCallback" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO isv_fail_contact_callback (
             date_created,

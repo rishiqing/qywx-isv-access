@@ -12,6 +12,15 @@
         <result property="failNote" column="fail_note" />
     </resultMap>
 
+    <sql id="selectAllFields">
+        id, date_created, last_updated, suite_key, corp_id, fail_type, info_type, fail_note
+    </sql>
+
+    <select id="listFailAuthCallbackWithLimit" resultMap="failAuthCallbackMap">
+        SELECT <include refid="selectAllFields" /> FROM isv_fail_auth_callback
+        ORDER BY id ASC LIMIT #{limit}
+    </select>
+
     <insert id="saveOrUpdateFailAuthCallback" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO isv_fail_auth_callback (
             date_created,

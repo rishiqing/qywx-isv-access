@@ -1,5 +1,6 @@
 package com.rishiqing.qywx.service.event.listener.mq;
 
+import com.rishiqing.qywx.service.callback.impl.PushCallbackHandlerImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +17,9 @@ import java.util.Map;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:service-test-spring-context.xml")
-public class PushCallbackHandlerTest {
+public class PushCallbackHandlerImplTest {
     @Autowired
-    private PushCallbackHandler pushCallbackHandler;
+    private PushCallbackHandlerImpl pushCallbackHandlerImpl;
 
     @Test
     public void test_handleCreateCorp(){
@@ -39,7 +40,7 @@ update `user` u set u.outer_id = null where u.team_id = @teamId;
          */
 
          String corpId = "wxec002534a59ea2e7";
-         pushCallbackHandler.handleCreateCorp(corpId);
+         pushCallbackHandlerImpl.handleCreateCorp(corpId);
     }
 
     @Test
@@ -55,7 +56,7 @@ update `user` u set u.outer_id = null where u.team_id = @teamId;
         map.put("Name", "测试部门");
         map.put("ParentId", "1");
         map.put("Order", "111");
-        pushCallbackHandler.handleCreateDept(corpId, map);
+        pushCallbackHandlerImpl.handleCreateDept(corpId, map);
     }
 
     @Test
@@ -70,7 +71,7 @@ update `user` u set u.outer_id = null where u.team_id = @teamId;
         map.put("Id", "13");
         map.put("Name", "临时测试子部门");
         map.put("ParentId", "12");
-        pushCallbackHandler.handleUpdateDept(corpId, map);
+        pushCallbackHandlerImpl.handleUpdateDept(corpId, map);
     }
 
     @Test
@@ -83,7 +84,7 @@ update `user` u set u.outer_id = null where u.team_id = @teamId;
         map.put("TimeStamp", new Date().getTime());
         map.put("ChangeType", "delete_party");
         map.put("Id", "13");
-        pushCallbackHandler.handleDeleteDept(corpId, map);
+        pushCallbackHandlerImpl.handleDeleteDept(corpId, map);
     }
 
     @Test
@@ -102,7 +103,7 @@ update `user` u set u.outer_id = null where u.team_id = @teamId;
         map.put("Avatar", "http://wx.qlogo.cn/mmopen/ajNVdqHZLLA3WJ6DSZUfiakYe37PKnQhBIeOQBO4czqrnZDS79FH5Wm5m4X69TBicnHFlhiafvDwklOpZeXYQQ2icg/0");
         map.put("EnglishName", "Wallace");
         map.put("ExtAttr", "");
-        pushCallbackHandler.handleCreateUser(corpId, map);
+        pushCallbackHandlerImpl.handleCreateUser(corpId, map);
     }
 
     @Test
@@ -121,7 +122,7 @@ update `user` u set u.outer_id = null where u.team_id = @teamId;
         map.put("Avatar", "http://wx.qlogo.cn/mmopen/ajNVdqHZLLA3WJ6DSZUfiakYe37PKnQhBIeOQBO4czqrnZDS79FH5Wm5m4X69TBicnHFlhiafvDwklOpZeXYQQ2icg/0");
         map.put("EnglishName", "Wallace");
         map.put("ExtAttr", "");
-        pushCallbackHandler.handleUpdateUser(corpId, map);
+        pushCallbackHandlerImpl.handleUpdateUser(corpId, map);
     }
 
     @Test
@@ -134,6 +135,6 @@ update `user` u set u.outer_id = null where u.team_id = @teamId;
         map.put("TimeStamp", new Date().getTime());
         map.put("ChangeType", "delete_user");
         map.put("UserID", "Wallace");
-        pushCallbackHandler.handleDeleteUser(corpId, map);
+        pushCallbackHandlerImpl.handleDeleteUser(corpId, map);
     }
 }

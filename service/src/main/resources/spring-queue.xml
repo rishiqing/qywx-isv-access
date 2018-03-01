@@ -81,7 +81,4 @@
         <property name="destination" ref="pushCorpCallbackQueue" />
         <property name="messageListener" ref="pushCorpCallbackMqListener" />
     </bean>
-
-    <bean id="pushCallbackHandler" class="com.rishiqing.qywx.service.event.listener.mq.PushCallbackHandler" />
-    <bean id="fetchCallbackHandler" class="com.rishiqing.qywx.service.event.listener.FetchCallbackHandler" />
 </beans>

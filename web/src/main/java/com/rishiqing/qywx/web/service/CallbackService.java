@@ -1,9 +1,7 @@
 package com.rishiqing.qywx.web.service;
 
 import com.rishiqing.common.exception.ActiveCorpException;
-import com.rishiqing.qywx.web.exception.CallbackException;
-
-import java.util.Map;
+import com.rishiqing.qywx.service.exception.CallbackException;
 
 /**
  * 回调方法中需要使用的方法

@@ -163,6 +163,28 @@
                 <SizeBasedTriggeringPolicy size="50 MB"/>
             </Policies>
         </RollingFile>
+        <!--redo auth相关的callback时的日志，例如重新激活-->
+        <RollingFile name="SERVICE_JOB_AUTH_CALLBACK_APPENDER" fileName="${baseDir}/service_job_auth.log"
+                     filePattern="${baseDir}/$${date:yyyy-MM}/service_job_auth-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout charset="UTF-8">
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p %C{1.}.%M:%L - %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="6" modulate="true" />
+                <SizeBasedTriggeringPolicy size="50 MB"/>
+            </Policies>
+        </RollingFile>
+        <!--redo auth相关的callback时的日志，例如重新激活-->
+        <RollingFile name="SERVICE_JOB_CONTACT_CALLBACK_APPENDER" fileName="${baseDir}/service_job_contact.log"
+                     filePattern="${baseDir}/$${date:yyyy-MM}/service_job_contact-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout charset="UTF-8">
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p %C{1.}.%M:%L - %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="6" modulate="true" />
+                <SizeBasedTriggeringPolicy size="50 MB"/>
+            </Policies>
+        </RollingFile>
     </Appenders>
     <Loggers>
         <Root level="error">
@@ -206,6 +228,12 @@
         </Logger>
         <Logger name="SERVICE_ACTIVE_CORP_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
             <AppenderRef ref="SERVICE_ACTIVE_CORP_APPENDER"/>
+        </Logger>
+        <Logger name="SERVICE_JOB_AUTH_CALLBACK_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
+            <AppenderRef ref="SERVICE_JOB_AUTH_CALLBACK_APPENDER"/>
+        </Logger>
+        <Logger name="SERVICE_JOB_CONTACT_CALLBACK_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
+            <AppenderRef ref="SERVICE_JOB_CONTACT_CALLBACK_APPENDER"/>
         </Logger>
     </Loggers>
 </Configuration>

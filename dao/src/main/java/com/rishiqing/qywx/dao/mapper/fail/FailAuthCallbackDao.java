@@ -4,6 +4,8 @@ import com.rishiqing.qywx.dao.model.fail.FailAuthCallbackDO;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * @author Wallace Mao
  * Date: 2018-02-28 15:45
@@ -20,4 +22,11 @@ public interface FailAuthCallbackDao {
      * @param id
      */
     void removeFailAuthCallbackById(@Param("id") Long id);
+
+    /**
+     * 查找指定数量的记录
+     * @param limit
+     * @return
+     */
+    List<FailAuthCallbackDO> listFailAuthCallbackWithLimit(@Param("limit") Long limit);
 }

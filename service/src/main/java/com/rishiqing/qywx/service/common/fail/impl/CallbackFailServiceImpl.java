@@ -9,7 +9,13 @@ import com.rishiqing.qywx.service.common.isv.GlobalSuite;
 import com.rishiqing.qywx.service.constant.CallbackChangeType;
 import com.rishiqing.qywx.service.constant.CallbackFailType;
 import com.rishiqing.qywx.service.constant.CallbackInfoType;
+import com.rishiqing.qywx.service.constant.ServiceConstant;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author Wallace Mao
@@ -51,5 +57,25 @@ public class CallbackFailServiceImpl implements CallbackFailService {
             default:
                 break;
         }
+    }
+
+    @Override
+    public void deleteFailAuthCallback(Long id) {
+        failAuthCallbackDao.removeFailAuthCallbackById(id);
+    }
+
+    @Override
+    public void deleteFailContactCallback(Long id) {
+        failContactCallbackDao.removeFailContactCallbackById(id);
+    }
+
+    @Override
+    public List<FailAuthCallbackDO> listFailAuthCallback() {
+        return failAuthCallbackDao.listFailAuthCallbackWithLimit(ServiceConstant.FAIL_AUTH_CALLBACK_LIST_LIMIT);
+    }
+
+    @Override
+    public List<FailContactCallbackDO> listFailContactCallback() {
+        return failContactCallbackDao.listFailContactCallbackWithLimit(ServiceConstant.FAIL_CONTACT_CALLBACK_LIST_LIMIT);
     }
 }

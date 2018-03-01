@@ -1,6 +1,8 @@
 package com.rishiqing.qywx.service.event.listener.mq;
 
 import com.rishiqing.common.exception.NotSupportedException;
+import com.rishiqing.qywx.service.callback.PushCallbackHandler;
+import com.rishiqing.qywx.service.callback.impl.PushCallbackHandlerImpl;
 import com.rishiqing.qywx.service.constant.CallbackChangeType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +22,7 @@ public class PushCorpCallbackMqListener implements MessageListener {
     private static final Logger logger = LoggerFactory.getLogger("SERVICE_EVENT_LISTENER_LOGGER");
 
     @Autowired
-    private PushCallbackHandler pushCallbackHandler;
+    private PushCallbackHandler logFailPushCallbackHandler;
 
     @Override
     public void onMessage(Message message) {
@@ -37,22 +39,22 @@ public class PushCorpCallbackMqListener implements MessageListener {
 
             switch (type){
                 case CREATE_PARTY:
-                    pushCallbackHandler.handleCreateDept(corpId, contentMap);
+                    logFailPushCallbackHandler.handleCreateDept(corpId, contentMap);
                     break;
                 case UPDATE_PARTY:
-                    pushCallbackHandler.handleUpdateDept(corpId, contentMap);
+                    logFailPushCallbackHandler.handleUpdateDept(corpId, contentMap);
                     break;
                 case DELETE_PARTY:
-                    pushCallbackHandler.handleDeleteDept(corpId, contentMap);
+                    logFailPushCallbackHandler.handleDeleteDept(corpId, contentMap);
                     break;
                 case CREATE_USER:
-                    pushCallbackHandler.handleCreateUser(corpId, contentMap);
+                    logFailPushCallbackHandler.handleCreateUser(corpId, contentMap);
                     break;
                 case UPDATE_USER:
-                    pushCallbackHandler.handleUpdateUser(corpId, contentMap);
+                    logFailPushCallbackHandler.handleUpdateUser(corpId, contentMap);
                     break;
                 case DELETE_USER:
-                    pushCallbackHandler.handleDeleteUser(corpId, contentMap);
+                    logFailPushCallbackHandler.handleDeleteUser(corpId, contentMap);
                     break;
                 case UPDATE_TAG:
                     throw new NotSupportedException("change type UPDATE_TAG not supported now");

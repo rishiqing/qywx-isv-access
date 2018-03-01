@@ -1,5 +1,7 @@
 package com.rishiqing.qywx.service.event.listener.mq;
 
+import com.rishiqing.qywx.service.callback.PushCallbackHandler;
+import com.rishiqing.qywx.service.callback.impl.PushCallbackHandlerImpl;
 import com.rishiqing.qywx.service.constant.CallbackInfoType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +20,7 @@ public class PushCorpAllMqListener implements MessageListener {
     private static final Logger logger = LoggerFactory.getLogger("SERVICE_EVENT_LISTENER_LOGGER");
 
     @Autowired
-    private PushCallbackHandler pushCallbackHandler;
+    private PushCallbackHandler logFailPushCallbackHandler;
 
     @Override
     public void onMessage(Message message) {
@@ -35,7 +37,7 @@ public class PushCorpAllMqListener implements MessageListener {
 
             switch (type){
                 case CREATE_AUTH:
-                    pushCallbackHandler.handleCreateCorp(corpId);
+                    logFailPushCallbackHandler.handleCreateCorp(corpId);
                     break;
                 case CHANGE_AUTH:
                 case CANCEL_AUTH:
