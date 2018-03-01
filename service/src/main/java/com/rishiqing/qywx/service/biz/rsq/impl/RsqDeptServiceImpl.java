@@ -40,7 +40,7 @@ public class RsqDeptServiceImpl implements RsqDeptService {
      * @param corpVO
      */
     @Override
-    public void pushAndCreateAllCorpDept(CorpVO corpVO) throws RsqSyncException {
+    public void pushAndCreateAllCorpDept(CorpVO corpVO) {
         Long rootDeptId = 1L;
         CorpDeptVO rootDept = corpDeptManageService.getCorpDeptByCorpIdAndDeptId(corpVO.getCorpId(), rootDeptId);
         pushAndCreateRecursiveDept(corpVO, null, rootDept);
@@ -51,7 +51,7 @@ public class RsqDeptServiceImpl implements RsqDeptService {
      * @param corpVO
      * @param corpDeptVO
      */
-    private void pushAndCreateRecursiveDept(CorpVO corpVO, CorpDeptVO parentCorpDeptVO, CorpDeptVO corpDeptVO) throws RsqSyncException {
+    private void pushAndCreateRecursiveDept(CorpVO corpVO, CorpDeptVO parentCorpDeptVO, CorpDeptVO corpDeptVO) {
 
         pushAndCreateDept(corpVO, parentCorpDeptVO, corpDeptVO);
 
@@ -72,7 +72,7 @@ public class RsqDeptServiceImpl implements RsqDeptService {
      * @return
      */
     @Override
-    public CorpDeptVO pushAndCreateDept(CorpVO corpVO, CorpDeptVO parentCorpDeptVO, CorpDeptVO corpDeptVO) throws RsqSyncException {
+    public CorpDeptVO pushAndCreateDept(CorpVO corpVO, CorpDeptVO parentCorpDeptVO, CorpDeptVO corpDeptVO) {
         //  如果rsqId存在，那么将不做任何处理
         if(null != corpDeptVO.getRsqId()){
             return corpDeptVO;
@@ -98,7 +98,7 @@ public class RsqDeptServiceImpl implements RsqDeptService {
      * @return
      */
     @Override
-    public CorpDeptVO pushAndUpdateDept(CorpVO corpVO, CorpDeptVO parentCorpDeptVO, CorpDeptVO corpDeptVO) throws RsqSyncException, RsqUpdateNotExistsException {
+    public CorpDeptVO pushAndUpdateDept(CorpVO corpVO, CorpDeptVO parentCorpDeptVO, CorpDeptVO corpDeptVO) {
         RsqTeamVO team = CorpConverter.corpVO2RsqTeamVO(corpVO);
         RsqDepartmentVO departmentVO = CorpDeptConverter.corpDeptVO2RsqDepartment(corpVO, parentCorpDeptVO, corpDeptVO);
         //  如果rsqId不存在，那么抛出异常，下次进行重试
@@ -118,7 +118,7 @@ public class RsqDeptServiceImpl implements RsqDeptService {
      * @return
      */
     @Override
-    public CorpDeptVO pushAndDeleteDept(CorpVO corpVO, CorpDeptVO corpDeptVO) throws RsqSyncException, RsqUpdateNotExistsException {
+    public CorpDeptVO pushAndDeleteDept(CorpVO corpVO, CorpDeptVO corpDeptVO) {
         RsqTeamVO team = CorpConverter.corpVO2RsqTeamVO(corpVO);
         RsqDepartmentVO departmentVO = CorpDeptConverter.corpDeptVO2RsqDepartment(corpVO, null, corpDeptVO);
         //  如果rsqId不存在，那么抛出异常，下次进行重试

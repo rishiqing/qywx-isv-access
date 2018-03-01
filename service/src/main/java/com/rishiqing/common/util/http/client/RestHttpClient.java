@@ -18,7 +18,7 @@ public interface RestHttpClient {
      * @throws UnirestException
      * @throws HttpException
      */
-    JSONObject post(String path, Map<String, Object> queryMap, Map<String, Object> fieldMap, String body, Map<String, Object> options) throws HttpException;
+    JSONObject post(String path, Map<String, Object> queryMap, Map<String, Object> fieldMap, String body, Map<String, Object> options);
 
     /**
      * get方法
@@ -29,5 +29,5 @@ public interface RestHttpClient {
      * @throws UnirestException
      * @throws HttpException
      */
-    JSONObject get(String path, Map<String, Object> queryMap, Map<String, Object> options) throws HttpException;
+    JSONObject get(String path, Map<String, Object> queryMap, Map<String, Object> options);
 }

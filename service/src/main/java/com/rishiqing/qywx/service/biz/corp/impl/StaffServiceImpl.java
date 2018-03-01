@@ -32,7 +32,7 @@ public class StaffServiceImpl implements StaffService {
      * @param corpTokenVO
      */
     @Override
-    public void fetchAndSaveStaffList(CorpTokenVO corpTokenVO, @Nullable CorpDeptVO corpDeptVO) throws HttpException, UnirestException {
+    public void fetchAndSaveStaffList(CorpTokenVO corpTokenVO, @Nullable CorpDeptVO corpDeptVO) {
         JSONObject json = httpUtilCorp.getDepartmentStaffList(corpTokenVO, corpDeptVO, true);
         String corpId = corpTokenVO.getCorpId();
         List<CorpStaffVO> staffList =
@@ -48,7 +48,7 @@ public class StaffServiceImpl implements StaffService {
     }
 
     @Override
-    public void fetchAndSaveAdminList(SuiteTokenVO suiteTokenVO, CorpAppVO corpAppVO) throws HttpException, UnirestException {
+    public void fetchAndSaveAdminList(SuiteTokenVO suiteTokenVO, CorpAppVO corpAppVO) {
         JSONObject json = httpUtilCorp.getAppAdminList(suiteTokenVO, corpAppVO);
 
         String corpId = corpAppVO.getCorpId();
@@ -67,7 +67,7 @@ public class StaffServiceImpl implements StaffService {
     }
 
     @Override
-    public CorpStaffVO getStaff(CorpStaffVO corpStaffVO){
+    public CorpStaffVO getStaff(CorpStaffVO corpStaffVO) {
         return corpStaffManageService.getCorpStaffByCorpIdAndUserId(corpStaffVO.getCorpId(), corpStaffVO.getUserId());
     }
 
@@ -77,7 +77,7 @@ public class StaffServiceImpl implements StaffService {
     }
 
     @Override
-    public void updateStaff(CorpStaffVO corpStaffVO) throws ObjectNotExistException {
+    public void updateStaff(CorpStaffVO corpStaffVO) {
         CorpStaffVO existsCorpStaff = corpStaffManageService.getCorpStaffByCorpIdAndUserId(
                 corpStaffVO.getCorpId(),
                 corpStaffVO.getUserId());
@@ -90,7 +90,7 @@ public class StaffServiceImpl implements StaffService {
     }
 
     @Override
-    public void deleteStaff(CorpStaffVO corpStaffVO) throws ObjectNotExistException {
+    public void deleteStaff(CorpStaffVO corpStaffVO) {
         CorpStaffVO existsCorpStaff = corpStaffManageService.getCorpStaffByCorpIdAndUserId(
                 corpStaffVO.getCorpId(),
                 corpStaffVO.getUserId());

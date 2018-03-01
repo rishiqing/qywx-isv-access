@@ -1,6 +1,6 @@
 package com.rishiqing.common.exception;
 
-public class NotSupportedException extends Exception {
+public class NotSupportedException extends RuntimeException {
 
     private long errcode;
     private String errmsg;

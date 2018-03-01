@@ -54,7 +54,7 @@ public class PushCallbackHandler {
      * @param corpId
      * @param contentMap
      */
-    public void handleCreateDept(String corpId, Map contentMap) throws RsqSyncException {
+    public void handleCreateDept(String corpId, Map contentMap) {
         try {
             CorpVO corpVO = corpManageService.getCorpByCorpId(corpId);
             CorpDeptVO changedDeptVO = Xml2BeanConverter.generateCorpDept(contentMap);
@@ -80,7 +80,7 @@ public class PushCallbackHandler {
      * @param corpId
      * @param contentMap
      */
-    public void handleUpdateDept(String corpId, Map contentMap) throws RsqUpdateNotExistsException, RsqSyncException {
+    public void handleUpdateDept(String corpId, Map contentMap) {
         try {
             CorpVO corpVO = corpManageService.getCorpByCorpId(corpId);
             CorpDeptVO changedDeptVO = Xml2BeanConverter.generateCorpDept(contentMap);
@@ -115,7 +115,7 @@ public class PushCallbackHandler {
      * @param corpId
      * @param contentMap
      */
-    public void handleDeleteDept(String corpId, Map contentMap) throws RsqUpdateNotExistsException, RsqSyncException {
+    public void handleDeleteDept(String corpId, Map contentMap) {
         try {
             CorpVO corpVO = corpManageService.getCorpByCorpId(corpId);
             CorpDeptVO changedDeptVO = Xml2BeanConverter.generateCorpDept(contentMap);
@@ -144,7 +144,7 @@ public class PushCallbackHandler {
      * @param corpId
      * @param contentMap
      */
-    public void handleCreateUser(String corpId, Map contentMap) throws RsqSyncException {
+    public void handleCreateUser(String corpId, Map contentMap) {
         try {
             CorpVO corpVO = corpManageService.getCorpByCorpId(corpId);
             CorpStaffVO changedStaffVO = Xml2BeanConverter.generateCorpStaff(contentMap);
@@ -170,7 +170,7 @@ public class PushCallbackHandler {
      * @param corpId
      * @param contentMap
      */
-    public void handleUpdateUser(String corpId, Map contentMap) throws RsqSyncException, RsqUpdateNotExistsException {
+    public void handleUpdateUser(String corpId, Map contentMap) {
         try {
             CorpVO corpVO = corpManageService.getCorpByCorpId(corpId);
             CorpStaffVO changedStaffVO = Xml2BeanConverter.generateCorpStaff(contentMap);
@@ -206,7 +206,7 @@ public class PushCallbackHandler {
      * @param corpId
      * @param contentMap
      */
-    public void handleDeleteUser(String corpId, Map contentMap) throws RsqSyncException, RsqUpdateNotExistsException {
+    public void handleDeleteUser(String corpId, Map contentMap) {
         try {
             CorpVO corpVO = corpManageService.getCorpByCorpId(corpId);
             CorpStaffVO changedStaffVO = Xml2BeanConverter.generateCorpStaff(contentMap);
@@ -233,7 +233,7 @@ public class PushCallbackHandler {
      * 2  同步所有的corp、dept、staff
      * @param corpId
      */
-    public void handleCreateCorp(String corpId) throws RsqSyncException, HttpException, RsqUpdateNotExistsException {
+    public void handleCreateCorp(String corpId) {
         try {
             CorpVO corpVO = corpManageService.getCorpByCorpId(corpId);
             rsqCorpService.pushAndCreateCorpAll(corpVO);

@@ -25,7 +25,7 @@ public class HttpUtilAuth {
      * @throws HttpException
      * @throws UnirestException
      */
-    public JSONObject getLoginUser(CorpTokenVO corpTokenVO, String code) throws HttpException, UnirestException {
+    public JSONObject getLoginUser(CorpTokenVO corpTokenVO, String code) {
         Map<String, Object> options = new HashMap<>();
         options.put("corpId", corpTokenVO.getCorpId());
         Map<String, Object> queryMap = new HashMap<>();

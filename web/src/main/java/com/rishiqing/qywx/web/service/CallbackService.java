@@ -1,5 +1,6 @@
 package com.rishiqing.qywx.web.service;
 
+import com.rishiqing.common.exception.ActiveCorpException;
 import com.rishiqing.qywx.web.exception.CallbackException;
 
 import java.util.Map;
@@ -15,7 +16,7 @@ public interface CallbackService {
      * @param nonce
      * @return
      */
-    String verifyUrl(String signature, String timestamp, String nonce, String echoString) throws CallbackException;
+    String verifyUrl(String signature, String timestamp, String nonce, String echoString);
 
     /**
      * 接收普通消息
@@ -26,5 +27,5 @@ public interface CallbackService {
      * @return
      * @throws CallbackException
      */
-    String receiveMessage(String signature, String timestamp, String nonce, String body) throws CallbackException;
+    String receiveMessage(String signature, String timestamp, String nonce, String body) throws ActiveCorpException;
 }

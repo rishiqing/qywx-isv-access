@@ -77,7 +77,7 @@ public class SuiteCheckRestHttpClient implements RestHttpClient {
      * @throws HttpException
      */
     @Override
-    public JSONObject post(String path, Map<String, Object> queryMap, Map<String, Object> fieldMap, String body, Map<String, Object> options) throws HttpException {
+    public JSONObject post(String path, Map<String, Object> queryMap, Map<String, Object> fieldMap, String body, Map<String, Object> options) {
         HttpRequestWithBody request = Unirest.post(path);
         if(queryMap != null && !queryMap.isEmpty()){
             request.queryString(queryMap);
@@ -130,7 +130,7 @@ public class SuiteCheckRestHttpClient implements RestHttpClient {
      * @throws HttpException
      */
     @Override
-    public JSONObject get(String path, Map<String, Object> queryMap, Map<String, Object> options) throws HttpException {
+    public JSONObject get(String path, Map<String, Object> queryMap, Map<String, Object> options) {
         GetRequest request = Unirest.get(path);
         if(queryMap != null && !queryMap.isEmpty()){
             request.queryString(queryMap);
@@ -173,7 +173,7 @@ public class SuiteCheckRestHttpClient implements RestHttpClient {
      * @throws HttpException
      * @return sutieAccessToken
      */
-    private String fetchAndSaveSuiteAccessToken() throws HttpException {
+    private String fetchAndSaveSuiteAccessToken() {
         String suiteKey = (String)isvGlobal.get("suiteKey");
         SuiteVO suite = suiteManageService.getSuiteInfoByKey(suiteKey);
         SuiteTicketVO ticket = suiteTicketManageService.getSuiteTicket(suiteKey);
@@ -207,7 +207,7 @@ public class SuiteCheckRestHttpClient implements RestHttpClient {
      * @param corpId
      * @throws HttpException
      */
-    private String fetchAndSaveCorpAccessToken(String corpId) throws HttpException {
+    private String fetchAndSaveCorpAccessToken(String corpId) {
         String suiteKey = (String)isvGlobal.get("suiteKey");
         CorpSuiteVO corpSuiteDO = corpSuiteManageService.getCorpSuite(suiteKey, corpId);
         SuiteTokenVO suiteTokenDO = suiteTokenManageService.getSuiteToken(suiteKey);

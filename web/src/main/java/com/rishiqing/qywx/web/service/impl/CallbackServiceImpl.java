@@ -1,6 +1,7 @@
 package com.rishiqing.qywx.web.service.impl;
 
 import com.mashape.unirest.http.exceptions.UnirestException;
+import com.rishiqing.common.exception.ActiveCorpException;
 import com.rishiqing.common.exception.NotSupportedException;
 import com.rishiqing.qywx.service.biz.corp.CorpService;
 import com.rishiqing.qywx.service.biz.corp.DeptService;
@@ -63,7 +64,7 @@ public class CallbackServiceImpl implements CallbackService {
     private FetchCallbackHandler fetchCallbackHandler;
 
     @Override
-    public String verifyUrl(String signature, String timestamp, String nonce, String echoString) throws CallbackException {
+    public String verifyUrl(String signature, String timestamp, String nonce, String echoString) {
 
         String token = suite.getToken();
         String suiteKey = suite.getSuiteKey();
@@ -79,7 +80,7 @@ public class CallbackServiceImpl implements CallbackService {
     }
 
     @Override
-    public String receiveMessage(String signature, String timestamp, String nonce, String body) throws CallbackException {
+    public String receiveMessage(String signature, String timestamp, String nonce, String body) throws ActiveCorpException {
         String token = suite.getToken();
         String suiteKey = suite.getSuiteKey();
         String encodingAesKey = suite.getEncodingAesKey();
@@ -132,10 +133,6 @@ public class CallbackServiceImpl implements CallbackService {
             }
         } catch (AesException | ParserConfigurationException | IOException | SAXException e) {
             throw new CallbackException("decrypt message failed", e);
-        } catch (UnirestException | HttpException e) {
-            throw new CallbackException("http request failed", e);
-        } catch (ObjectNotExistException e) {
-            throw new CallbackException("database error", e);
         }
         return "success";
     }
@@ -157,7 +154,7 @@ public class CallbackServiceImpl implements CallbackService {
      * 授权成功的回调，获取返回值中包括临时授权码
      * @param params
      */
-    private void handleCreateAuth(Map params) throws UnirestException, HttpException {
+    private void handleCreateAuth(Map params) throws ActiveCorpException {
         String authCode = (String)params.get("AuthCode");
         assert authCode != null;
         //   activeCorp方法内需要马上返回，耗时操作异步执行
@@ -170,7 +167,7 @@ public class CallbackServiceImpl implements CallbackService {
      * @throws UnirestException
      * @throws HttpException
      */
-    private void handleChangeAuth(Map params) throws UnirestException, HttpException {
+    private void handleChangeAuth(Map params) {
         String corpId = (String)params.get("AuthCorpId");
         assert corpId != null;
         String suiteKey = suite.getSuiteKey();
@@ -183,7 +180,7 @@ public class CallbackServiceImpl implements CallbackService {
      * 取消授权，对corp做标记
      * @param params
      */
-    private void handleCancelAuth(Map params){
+    private void handleCancelAuth(Map params) {
         String corpId = (String)params.get("AuthCorpId");
         assert corpId != null;
         corpManageService.markRemoveCorp(corpId, true);
@@ -193,7 +190,7 @@ public class CallbackServiceImpl implements CallbackService {
      * 通讯录变更,包括了部门变更/成员变更等
      * @param map
      */
-    private void handleChangeContact(Map map) throws CallbackException, ObjectNotExistException {
+    private void handleChangeContact(Map map) {
         String changeType = (String)map.get("ChangeType");
         String corpId = (String)map.get("AuthCorpId");
         //  发送异步消息

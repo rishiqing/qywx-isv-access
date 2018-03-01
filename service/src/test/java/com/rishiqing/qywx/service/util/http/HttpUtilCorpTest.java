@@ -40,7 +40,7 @@ public class HttpUtilCorpTest {
             JSONObject json = httpUtilCorp.getDepartmentList(corpTokenVO, null);
             System.out.println(json);
             assertTrue(json.containsKey("department"));
-        } catch (UnirestException | HttpException e) {
+        } catch (HttpException e) {
             e.printStackTrace();
         }
     }
@@ -54,7 +54,7 @@ public class HttpUtilCorpTest {
             JSONObject json = httpUtilCorp.getDepartmentStaffList(corpTokenVO, null, true);
             System.out.println(json);
             assertTrue(json.containsKey("userlist"));
-        } catch (UnirestException | HttpException e) {
+        } catch (HttpException e) {
             e.printStackTrace();
         }
     }
@@ -68,7 +68,7 @@ public class HttpUtilCorpTest {
             JSONObject json = httpUtilCorp.getJsapiTicket(corpTokenVO);
             System.out.println(json);
             assertTrue(json.containsKey("ticket"));
-        } catch (UnirestException | HttpException e) {
+        } catch (HttpException e) {
             e.printStackTrace();
         }
     }

@@ -1,6 +1,6 @@
 package com.rishiqing.common.exception;
 
-public class RsqUpdateNotExistsException extends Exception {
+public class RsqUpdateNotExistsException extends RuntimeException {
 
     private long errcode;
     private String errmsg;

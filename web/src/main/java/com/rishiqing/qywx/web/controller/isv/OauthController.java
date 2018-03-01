@@ -57,7 +57,7 @@ public class OauthController {
             cookie.setMaxAge(60 * 60 * 24 * 365);
             response.addCookie(cookie);
             return "redirect:" + mainPage;
-        } catch (HttpException | UnirestException e) {
+        } catch (HttpException e) {
             logger.error("/oauth/after http exception: ", e);
             return "redirect:/error.html";
         } catch (Exception e) {

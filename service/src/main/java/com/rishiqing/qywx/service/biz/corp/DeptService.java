@@ -10,7 +10,7 @@ public interface DeptService {
     /**
      * 获取department list列表
      */
-    void fetchAndSaveDeptInfo(CorpTokenVO corpTokenVO, CorpDeptVO corpDeptVO) throws HttpException, UnirestException;
+    void fetchAndSaveDeptInfo(CorpTokenVO corpTokenVO, CorpDeptVO corpDeptVO);
 
     /**
      * 获取部门，corpDeptVO中至少需要提供corpId和deptId
@@ -30,10 +30,10 @@ public interface DeptService {
      * 注意:corpDeptVO传入的参数可能不全,可能只包括修改过的属性
      * @param corpDeptVO
      */
-    void updateDept(CorpDeptVO corpDeptVO) throws ObjectNotExistException;
+    void updateDept(CorpDeptVO corpDeptVO);
 
     /**
      * @param corpDeptVO
      */
-    void deleteDept(CorpDeptVO corpDeptVO) throws ObjectNotExistException;
+    void deleteDept(CorpDeptVO corpDeptVO);
 }

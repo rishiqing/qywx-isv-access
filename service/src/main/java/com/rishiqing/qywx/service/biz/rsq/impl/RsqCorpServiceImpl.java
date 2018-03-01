@@ -43,7 +43,7 @@ public class RsqCorpServiceImpl implements RsqCorpService {
      * @return
      */
     @Override
-    public CorpVO pushAndCreateCorp(CorpVO corpVO) throws RsqSyncException {
+    public CorpVO pushAndCreateCorp(CorpVO corpVO) {
         //  如果rsqId存在，那么将不做任何处理
         if(null != corpVO.getRsqId()){
             return corpVO;
@@ -60,7 +60,7 @@ public class RsqCorpServiceImpl implements RsqCorpService {
      * @param corpVO
      */
     @Override
-    public void pushAndCreateCorpAll(CorpVO corpVO) throws RsqSyncException, HttpException, RsqUpdateNotExistsException {
+    public void pushAndCreateCorpAll(CorpVO corpVO) {
 
         //  1  创建日事清企业
         pushAndCreateCorp(corpVO);

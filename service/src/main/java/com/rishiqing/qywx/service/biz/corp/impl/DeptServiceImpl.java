@@ -38,7 +38,7 @@ public class DeptServiceImpl implements DeptService {
      * @throws UnirestException
      */
     @Override
-    public void fetchAndSaveDeptInfo(CorpTokenVO corpTokenVO, @Nullable CorpDeptVO corpDeptVO) throws HttpException, UnirestException {
+    public void fetchAndSaveDeptInfo(CorpTokenVO corpTokenVO, @Nullable CorpDeptVO corpDeptVO) {
         logger.info("====fetchAndSaveDeptInfo====");
         JSONObject json = httpUtilCorp.getDepartmentList(corpTokenVO, corpDeptVO);
         logger.info("------json----" + json);
@@ -56,7 +56,7 @@ public class DeptServiceImpl implements DeptService {
     }
 
     @Override
-    public CorpDeptVO getDept(CorpDeptVO corpDeptVO){
+    public CorpDeptVO getDept(CorpDeptVO corpDeptVO) {
         return corpDeptManageService.getCorpDeptByCorpIdAndDeptId(corpDeptVO.getCorpId(), corpDeptVO.getDeptId());
     }
 
@@ -66,7 +66,7 @@ public class DeptServiceImpl implements DeptService {
     }
 
     @Override
-    public void updateDept(CorpDeptVO corpDeptVO) throws ObjectNotExistException {
+    public void updateDept(CorpDeptVO corpDeptVO) {
         CorpDeptVO existsCorpDept = corpDeptManageService.getCorpDeptByCorpIdAndDeptId(
                 corpDeptVO.getCorpId(),
                 corpDeptVO.getDeptId());
@@ -79,7 +79,7 @@ public class DeptServiceImpl implements DeptService {
     }
 
     @Override
-    public void deleteDept(CorpDeptVO corpDeptVO) throws ObjectNotExistException {
+    public void deleteDept(CorpDeptVO corpDeptVO) {
         CorpDeptVO existsCorpDept = corpDeptManageService.getCorpDeptByCorpIdAndDeptId(
                 corpDeptVO.getCorpId(),
                 corpDeptVO.getDeptId());

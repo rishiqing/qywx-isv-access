@@ -30,6 +30,10 @@ public class FetchCorpAllListener implements EventListener {
     @Subscribe
     @AllowConcurrentEvents  //  event并行执行
     public void listenFetchDeptAndStaff(String permanentCode){
-        fetchCallbackHandler.handleFetchCorp(permanentCode);
+        try {
+            fetchCallbackHandler.handleFetchCorp(permanentCode);
+        } catch (Exception e) {
+            logger.error("fetchCorpAllError", e);
+        }
     }
 }

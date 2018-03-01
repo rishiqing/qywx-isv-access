@@ -11,13 +11,13 @@ import java.util.List;
 
 public interface RsqStaffService {
 
-    void pushAndCreateAllCorpStaff(CorpVO corpVO) throws RsqSyncException, HttpException, RsqUpdateNotExistsException;
+    void pushAndCreateAllCorpStaff(CorpVO corpVO);
 
-    CorpStaffVO pushAndCreateStaff(CorpVO corpVO, List<CorpDeptVO> corpDeptVOList, CorpStaffVO corpStaffVO) throws RsqSyncException;
+    CorpStaffVO pushAndCreateStaff(CorpVO corpVO, List<CorpDeptVO> corpDeptVOList, CorpStaffVO corpStaffVO);
 
-    CorpStaffVO pushAndUpdateStaff(CorpVO corpVO, List<CorpDeptVO> corpDeptVOList, CorpStaffVO corpStaffVO) throws RsqUpdateNotExistsException, RsqSyncException;
+    CorpStaffVO pushAndUpdateStaff(CorpVO corpVO, List<CorpDeptVO> corpDeptVOList, CorpStaffVO corpStaffVO);
 
-    CorpStaffVO pushAndDeleteStaffFromTeam(CorpVO corpVO, CorpStaffVO corpStaffVO) throws RsqUpdateNotExistsException, RsqSyncException;
+    CorpStaffVO pushAndDeleteStaffFromTeam(CorpVO corpVO, CorpStaffVO corpStaffVO);
 
-    CorpStaffVO pushAndSetStaffAdmin(CorpVO corpVO, CorpStaffVO corpStaffVO) throws RsqUpdateNotExistsException, HttpException, RsqSyncException;
+    CorpStaffVO pushAndSetStaffAdmin(CorpVO corpVO, CorpStaffVO corpStaffVO);
 }

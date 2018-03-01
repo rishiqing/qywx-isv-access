@@ -31,7 +31,7 @@ public class JsConfigServiceImpl implements JsConfigService {
     @Autowired
     private HttpUtilCorp httpUtilCorp;
     @Override
-    public Map<String, Object> getJsapiSignature(String url, String corpId) throws JsConfigException {
+    public Map<String, Object> getJsapiSignature(String url, String corpId) {
         String suiteKey = (String)isvGlobal.get("suiteKey");
         CorpJsapiTicketVO jsTicket = corpJsapiTicketManageService.getCorpJsapiTicket(suiteKey, corpId);
         String sig = "";
@@ -56,13 +56,13 @@ public class JsConfigServiceImpl implements JsConfigService {
     }
 
     @Override
-    public void refreshJsapiTicket(String corpId) throws JsConfigException {
+    public void refreshJsapiTicket(String corpId) {
         String suiteKey = (String)isvGlobal.get("suiteKey");
         CorpTokenVO corpTokenVO = corpTokenManageService.getCorpToken(suiteKey, corpId);
         JSONObject json = null;
         try {
             json = httpUtilCorp.getJsapiTicket(corpTokenVO);
-        } catch (HttpException | UnirestException e) {
+        } catch (HttpException e) {
             throw new JsConfigException("js config exception", e);
         }
         CorpJsapiTicketVO jsapiTicketVO = Json2BeanConverter.generateCorpJsapiTicket(suiteKey, corpId, json);

@@ -21,14 +21,14 @@ public class HttpUtil {
         this.restHttpClient = restHttpClient;
     }
 
-    public JSONObject getSuiteToken(SuiteVO suiteVO, SuiteTicketVO suiteTicketVO) throws UnirestException, HttpException {
+    public JSONObject getSuiteToken(SuiteVO suiteVO, SuiteTicketVO suiteTicketVO){
         JSONObject params = Bean2JsonConverter.prepareSuiteTicket(suiteVO, suiteTicketVO);
         return restHttpClient.post(
                 RequestUrl.SUITE_ACCESS_TOKEN, null, null, params.toString(), null
         );
     }
 
-    public JSONObject getPermanentCode(SuiteTokenVO suiteTokenVO, String authCode) throws UnirestException, HttpException {
+    public JSONObject getPermanentCode(SuiteTokenVO suiteTokenVO, String authCode) {
         JSONObject params = Bean2JsonConverter.prepareAuthCode(suiteTokenVO, authCode);
         Map<String ,Object> options = new HashMap<>();
         options.put("suiteKey", suiteTokenVO.getSuiteKey());
@@ -39,7 +39,7 @@ public class HttpUtil {
         );
     }
 
-    public JSONObject getCorpAuthInfo(SuiteTokenVO suiteTokenVO, CorpSuiteVO corpSuiteVO) throws UnirestException, HttpException {
+    public JSONObject getCorpAuthInfo(SuiteTokenVO suiteTokenVO, CorpSuiteVO corpSuiteVO){
         JSONObject params = Bean2JsonConverter.preparePermanentCode(suiteTokenVO, corpSuiteVO);
         Map<String ,Object> options = new HashMap<>();
         options.put("suiteKey", suiteTokenVO.getSuiteKey());
@@ -50,7 +50,7 @@ public class HttpUtil {
         );
     }
 
-    public JSONObject getCorpAccessToken(SuiteTokenVO suiteTokenVO, CorpSuiteVO corpSuiteVO) throws UnirestException, HttpException {
+    public JSONObject getCorpAccessToken(SuiteTokenVO suiteTokenVO, CorpSuiteVO corpSuiteVO) {
         JSONObject params = Bean2JsonConverter.preparePermanentCode(suiteTokenVO, corpSuiteVO);
         Map<String ,Object> options = new HashMap<>();
         options.put("suiteKey", suiteTokenVO.getSuiteKey());

@@ -42,7 +42,7 @@ public class RsqStaffServiceImpl implements RsqStaffService {
     private RsqInfoManageService rsqInfoManageService;
 
     @Override
-    public void pushAndCreateAllCorpStaff(CorpVO corpVO) throws RsqSyncException, HttpException, RsqUpdateNotExistsException {
+    public void pushAndCreateAllCorpStaff(CorpVO corpVO) {
         List<CorpStaffVO> list = corpStaffManageService.listCorpStaffByCorpId(corpVO.getCorpId());
         List<CorpStaffVO> adminList = new ArrayList<>();
 
@@ -71,7 +71,7 @@ public class RsqStaffServiceImpl implements RsqStaffService {
      * @return
      */
     @Override
-    public CorpStaffVO pushAndCreateStaff(CorpVO corpVO, List<CorpDeptVO> corpDeptVOList, CorpStaffVO corpStaffVO) throws RsqSyncException {
+    public CorpStaffVO pushAndCreateStaff(CorpVO corpVO, List<CorpDeptVO> corpDeptVOList, CorpStaffVO corpStaffVO) {
         //  如果rsqId存在，那么将不做任何处理
         if(null != corpStaffVO.getRsqUserId()){
             return corpStaffVO;
@@ -104,7 +104,7 @@ public class RsqStaffServiceImpl implements RsqStaffService {
      * @return
      */
     @Override
-    public CorpStaffVO pushAndUpdateStaff(CorpVO corpVO, List<CorpDeptVO> corpDeptVOList, CorpStaffVO corpStaffVO) throws RsqUpdateNotExistsException, RsqSyncException {
+    public CorpStaffVO pushAndUpdateStaff(CorpVO corpVO, List<CorpDeptVO> corpDeptVOList, CorpStaffVO corpStaffVO) {
         RsqTeamVO team = CorpConverter.corpVO2RsqTeamVO(corpVO);
         RsqCommonUserVO user = CorpStaffConverter.corpStaffVO2RsqCommonUserVO(corpVO, corpDeptVOList, corpStaffVO);
         //  如果rsqId不存在，那么抛出异常，下次进行重试
@@ -124,7 +124,7 @@ public class RsqStaffServiceImpl implements RsqStaffService {
      * @return
      */
     @Override
-    public CorpStaffVO pushAndDeleteStaffFromTeam(CorpVO corpVO, CorpStaffVO corpStaffVO) throws RsqUpdateNotExistsException, RsqSyncException {
+    public CorpStaffVO pushAndDeleteStaffFromTeam(CorpVO corpVO, CorpStaffVO corpStaffVO) {
         RsqTeamVO team = CorpConverter.corpVO2RsqTeamVO(corpVO);
         RsqCommonUserVO user = CorpStaffConverter.corpStaffVO2RsqCommonUserVO(corpVO, null, corpStaffVO);
         //  如果rsqId不存在，那么抛出异常，下次进行重试
@@ -136,7 +136,7 @@ public class RsqStaffServiceImpl implements RsqStaffService {
     }
 
     @Override
-    public CorpStaffVO pushAndSetStaffAdmin(CorpVO corpVO, CorpStaffVO corpStaffVO) throws RsqUpdateNotExistsException, HttpException, RsqSyncException {
+    public CorpStaffVO pushAndSetStaffAdmin(CorpVO corpVO, CorpStaffVO corpStaffVO) {
         RsqTeamVO team = CorpConverter.corpVO2RsqTeamVO(corpVO);
         RsqCommonUserVO user = CorpStaffConverter.corpStaffVO2RsqCommonUserVO(corpVO, null, corpStaffVO);
         //  如果rsqId不存在，那么抛出异常，下次进行重试

@@ -1,6 +1,6 @@
 package com.rishiqing.qywx.web.exception;
 
-public class JsConfigException extends Exception {
+public class JsConfigException extends RuntimeException {
     public JsConfigException() {
     }
 

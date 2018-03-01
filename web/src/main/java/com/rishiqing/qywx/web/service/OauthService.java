@@ -13,5 +13,5 @@ public interface OauthService {
      * @param code
      * @return
      */
-    LoginUserVO getLoginUserByCode(String corpId, String code) throws HttpException, UnirestException;
+    LoginUserVO getLoginUserByCode(String corpId, String code);
 }

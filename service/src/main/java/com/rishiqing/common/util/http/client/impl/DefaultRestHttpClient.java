@@ -29,7 +29,7 @@ public class DefaultRestHttpClient implements RestHttpClient {
     }
 
     @Override
-    public JSONObject post(String path, Map<String, Object> queryMap, Map<String, Object> fieldMap, String body, Map<String, Object> options) throws HttpException {
+    public JSONObject post(String path, Map<String, Object> queryMap, Map<String, Object> fieldMap, String body, Map<String, Object> options) {
         logger.debug("http post, path: {}, query: {}, field: {}, body: {}, option: {}",
                 path, queryMap, fieldMap, body, options);
         HttpRequestWithBody request = Unirest.post(path);
@@ -63,7 +63,7 @@ public class DefaultRestHttpClient implements RestHttpClient {
     }
 
     @Override
-    public JSONObject get(String path, Map<String, Object> queryMap, Map<String, Object> options) throws HttpException {
+    public JSONObject get(String path, Map<String, Object> queryMap, Map<String, Object> options) {
         logger.debug("http post, path: {}, query: {}, field: {}, body: {}, option: {}",
                 path, queryMap, options);
         GetRequest request = Unirest.get(path);

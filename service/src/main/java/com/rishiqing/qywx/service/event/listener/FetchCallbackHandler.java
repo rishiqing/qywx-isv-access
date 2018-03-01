@@ -73,14 +73,14 @@ public class FetchCallbackHandler {
             staffService.fetchAndSaveAdminList(suiteTokenVO, corpAppVO);
             //  成功后通知同步日事清
             asyncService.sendToPushCorpAuthCallback(corpVO, CallbackInfoType.CREATE_AUTH, null);
-        } catch (Exception e ) {
-            logger.error("fetch corp error", e);
+        } catch (Exception e) {
             //  加入重试
             callbackFailService.save(corpId,
                     CallbackFailType.AUTH_CALLBACK_FAIL_SAVE_NEW_CORP,
                     CallbackInfoType.CREATE_AUTH,
                     null,
                     permanentCode);
+            throw e;
         }
     }
 
@@ -108,7 +108,7 @@ public class FetchCallbackHandler {
      * 通讯录变更之更新部门
      * @param map
      */
-    public void handleChangeContactUpdateDept(Map map) throws ObjectNotExistException {
+    public void handleChangeContactUpdateDept(Map map) {
         CorpDeptVO deptVO = null;
         try {
             deptVO = Xml2BeanConverter.generateCorpDept(map);
@@ -128,7 +128,7 @@ public class FetchCallbackHandler {
      * 通讯录变更之删除部门
      * @param map
      */
-    public void handleChangeContactDeleteDept(Map map) throws ObjectNotExistException {
+    public void handleChangeContactDeleteDept(Map map) {
         CorpDeptVO deptVO = null;
         try {
             deptVO = Xml2BeanConverter.generateCorpDept(map);
@@ -170,7 +170,7 @@ public class FetchCallbackHandler {
      * 通讯录变更之更新成员
      * @param map
      */
-    public void handleChangeContactUpdateUser(Map map) throws ObjectNotExistException {
+    public void handleChangeContactUpdateUser(Map map) {
         CorpStaffVO staffVO = null;
         try {
             staffVO = Xml2BeanConverter.generateCorpStaff(map);
@@ -190,7 +190,7 @@ public class FetchCallbackHandler {
      * 通讯录变更之删除成员
      * @param map
      */
-    public void handleChangeContactDeleteUser(Map map) throws ObjectNotExistException {
+    public void handleChangeContactDeleteUser(Map map) {
         CorpStaffVO staffVO = null;
         try {
             staffVO = Xml2BeanConverter.generateCorpStaff(map);

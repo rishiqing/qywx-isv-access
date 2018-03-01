@@ -47,9 +47,7 @@ public class HttpUtilTest {
             long expired = json.getLong("expires_in");
             assertNotNull(token);
             assertEquals(TICKET_EXPIRE, expired);
-        } catch (UnirestException e) {
-            e.printStackTrace();
-        } catch (HttpException e) {
+        }catch (HttpException e) {
             e.printStackTrace();
         }
     }

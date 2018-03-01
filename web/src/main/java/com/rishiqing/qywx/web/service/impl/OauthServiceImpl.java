@@ -21,7 +21,7 @@ public class OauthServiceImpl implements OauthService {
     @Autowired
     private Map isvGlobal;
     @Override
-    public LoginUserVO getLoginUserByCode(String corpId, String code) throws HttpException, UnirestException {
+    public LoginUserVO getLoginUserByCode(String corpId, String code) {
         String suiteKey = (String)isvGlobal.get("suiteKey");
         CorpTokenVO corpTokenVO = corpTokenManageService.getCorpToken(suiteKey, corpId);
         JSONObject json = httpUtilAuth.getLoginUser(corpTokenVO, code);

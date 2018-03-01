@@ -23,7 +23,7 @@ public class HttpUtilCorp {
         this.restHttpClient = restHttpClient;
     }
 
-    public JSONObject getJsapiTicket(CorpTokenVO corpTokenVO) throws HttpException, UnirestException {
+    public JSONObject getJsapiTicket(CorpTokenVO corpTokenVO) {
         Map<String, Object> options = new HashMap<>();
         options.put("corpId", corpTokenVO.getCorpId());
         Map<String, Object> queryMap = new HashMap<>();
@@ -35,7 +35,7 @@ public class HttpUtilCorp {
         );
     }
 
-    public JSONObject getDepartmentList(CorpTokenVO corpTokenVO, CorpDeptVO corpDeptVO) throws UnirestException, HttpException {
+    public JSONObject getDepartmentList(CorpTokenVO corpTokenVO, CorpDeptVO corpDeptVO) {
         Map<String, Object> options = new HashMap<>();
         options.put("corpId", corpTokenVO.getCorpId());
         Map<String, Object> queryMap = new HashMap<>();
@@ -50,7 +50,7 @@ public class HttpUtilCorp {
         );
     }
 
-    public JSONObject getDepartmentStaffList(CorpTokenVO corpTokenVO, @Nullable CorpDeptVO corpDeptVO, Boolean fetchChild) throws HttpException, UnirestException {
+    public JSONObject getDepartmentStaffList(CorpTokenVO corpTokenVO, @Nullable CorpDeptVO corpDeptVO, Boolean fetchChild) {
         Map<String, Object> options = new HashMap<>();
         options.put("corpId", corpTokenVO.getCorpId());
         Map<String, Object> queryMap = new HashMap<>();
@@ -75,7 +75,7 @@ public class HttpUtilCorp {
         );
     }
 
-    public JSONObject getAppAdminList(SuiteTokenVO suiteTokenVO, CorpAppVO corpAppVO) throws HttpException, UnirestException {
+    public JSONObject getAppAdminList(SuiteTokenVO suiteTokenVO, CorpAppVO corpAppVO) {
         JSONObject params = Bean2JsonConverter.prepareGetAdminList(suiteTokenVO, corpAppVO);
         Map<String, Object> queryMap = new HashMap<>();
         queryMap.put("suite_access_token", suiteTokenVO.getSuiteToken());

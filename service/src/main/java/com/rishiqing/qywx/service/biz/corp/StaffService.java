@@ -18,9 +18,9 @@ public interface StaffService {
      * @param corpTokenVO
      * @param corpDeptVO
      */
-    void fetchAndSaveStaffList(CorpTokenVO corpTokenVO, @Nullable CorpDeptVO corpDeptVO) throws HttpException, UnirestException;
+    void fetchAndSaveStaffList(CorpTokenVO corpTokenVO, @Nullable CorpDeptVO corpDeptVO);
 
-    void fetchAndSaveAdminList(SuiteTokenVO suiteTokenVO, CorpAppVO corpAppVO) throws HttpException, UnirestException;
+    void fetchAndSaveAdminList(SuiteTokenVO suiteTokenVO, CorpAppVO corpAppVO);
 
     /**
      * 获取用户，corpStaffVO中至少需要提供corpId和userId
@@ -40,10 +40,10 @@ public interface StaffService {
      * 注意:corpStaffVO传入的参数可能不全,可能只包括修改过的属性
      * @param corpStaffVO
      */
-    void updateStaff(CorpStaffVO corpStaffVO) throws ObjectNotExistException;
+    void updateStaff(CorpStaffVO corpStaffVO);
 
     /**
      * @param corpStaffVO
      */
-    void deleteStaff(CorpStaffVO corpStaffVO) throws ObjectNotExistException;
+    void deleteStaff(CorpStaffVO corpStaffVO);
 }

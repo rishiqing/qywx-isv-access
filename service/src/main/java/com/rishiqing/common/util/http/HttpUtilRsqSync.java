@@ -22,7 +22,7 @@ public interface HttpUtilRsqSync {
      * @return
      * @throws RsqSyncException
      */
-    public RsqTeamVO createCorp(String appName, String appToken, RsqTeamVO rsqTeamVO) throws RsqSyncException;
+    public RsqTeamVO createCorp(String appName, String appToken, RsqTeamVO rsqTeamVO);
 
     /**
      * 创建部门
@@ -33,7 +33,7 @@ public interface HttpUtilRsqSync {
      * @return
      * @throws RsqSyncException
      */
-    public RsqDepartmentVO createDepartment(String appName, String appToken, RsqTeamVO rsqTeamVO, RsqDepartmentVO rsqDepartmentVO) throws RsqSyncException;
+    public RsqDepartmentVO createDepartment(String appName, String appToken, RsqTeamVO rsqTeamVO, RsqDepartmentVO rsqDepartmentVO);
 
     /**
      * 更新部门
@@ -44,7 +44,7 @@ public interface HttpUtilRsqSync {
      * @return
      * @throws RsqSyncException
      */
-    public RsqDepartmentVO updateDepartment(String appName, String appToken, RsqTeamVO rsqTeamVO, RsqDepartmentVO rsqDepartmentVO) throws RsqSyncException;
+    public RsqDepartmentVO updateDepartment(String appName, String appToken, RsqTeamVO rsqTeamVO, RsqDepartmentVO rsqDepartmentVO);
 
     /**
      * 删除部门
@@ -55,7 +55,7 @@ public interface HttpUtilRsqSync {
      * @return
      * @throws RsqSyncException
      */
-    public RsqDepartmentVO deleteDepartment(String appName, String appToken, RsqTeamVO rsqTeamVO, RsqDepartmentVO rsqDepartmentVO) throws RsqSyncException;
+    public RsqDepartmentVO deleteDepartment(String appName, String appToken, RsqTeamVO rsqTeamVO, RsqDepartmentVO rsqDepartmentVO);
 
     /**
      * 创建用户
@@ -66,7 +66,7 @@ public interface HttpUtilRsqSync {
      * @return
      * @throws RsqSyncException
      */
-    public RsqCommonUserVO createUser(String appName, String appToken, RsqTeamVO rsqTeamVO, RsqCommonUserVO rsqCommonUserVO) throws RsqSyncException;
+    public RsqCommonUserVO createUser(String appName, String appToken, RsqTeamVO rsqTeamVO, RsqCommonUserVO rsqCommonUserVO);
 
     /**
      * 更新用户
@@ -77,7 +77,7 @@ public interface HttpUtilRsqSync {
      * @return
      * @throws RsqSyncException
      */
-    public RsqCommonUserVO updateUser(String appName, String appToken, RsqTeamVO rsqTeamVO, RsqCommonUserVO rsqCommonUserVO) throws RsqSyncException;
+    public RsqCommonUserVO updateUser(String appName, String appToken, RsqTeamVO rsqTeamVO, RsqCommonUserVO rsqCommonUserVO);
 
     /**
      * 从团队中移除用户
@@ -88,7 +88,7 @@ public interface HttpUtilRsqSync {
      * @return
      * @throws RsqSyncException
      */
-    public RsqCommonUserVO userLeaveTeam(String appName, String appToken, RsqTeamVO rsqTeamVO, RsqCommonUserVO rsqCommonUserVO) throws RsqSyncException;
+    public RsqCommonUserVO userLeaveTeam(String appName, String appToken, RsqTeamVO rsqTeamVO, RsqCommonUserVO rsqCommonUserVO);
 
     /**
      * 更新用户的管理员状态
@@ -99,5 +99,5 @@ public interface HttpUtilRsqSync {
      * @return
      * @throws RsqSyncException
      */
-    public RsqCommonUserVO setUserAdmin(String appName, String appToken, RsqTeamVO rsqTeamVO, RsqCommonUserVO rsqCommonUserVO) throws RsqSyncException, HttpException;
+    public RsqCommonUserVO setUserAdmin(String appName, String appToken, RsqTeamVO rsqTeamVO, RsqCommonUserVO rsqCommonUserVO);
 }

@@ -1,6 +1,6 @@
 package com.rishiqing.qywx.service.exception;
 
-public class ObjectNotExistException extends Exception {
+public class ObjectNotExistException extends RuntimeException {
     public ObjectNotExistException() {
         super();
     }

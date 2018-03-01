@@ -28,9 +28,7 @@ public class StaffServiceTest {
             staffService.fetchAndSaveStaffList(corpTokenVO, null);
         } catch (HttpException e) {
             e.printStackTrace();
-        } catch (UnirestException e) {
-            e.printStackTrace();
-        } catch (Exception e){
+        }catch (Exception e){
             e.printStackTrace();
         }
     }

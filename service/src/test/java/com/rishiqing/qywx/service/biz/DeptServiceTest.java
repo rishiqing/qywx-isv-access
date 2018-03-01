@@ -28,8 +28,6 @@ public class DeptServiceTest {
             deptService.fetchAndSaveDeptInfo(corpTokenVO, null);
         } catch (HttpException e) {
             e.printStackTrace();
-        } catch (UnirestException e) {
-            e.printStackTrace();
         }
     }
 

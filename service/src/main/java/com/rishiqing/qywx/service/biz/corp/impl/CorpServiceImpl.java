@@ -3,6 +3,7 @@ package com.rishiqing.qywx.service.biz.corp.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.eventbus.AsyncEventBus;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import com.rishiqing.common.exception.ActiveCorpException;
 import com.rishiqing.qywx.service.biz.corp.CorpService;
 import com.rishiqing.qywx.service.common.corp.CorpAppManageService;
 import com.rishiqing.qywx.service.common.corp.CorpManageService;
@@ -28,7 +29,6 @@ import java.util.List;
 
 public class CorpServiceImpl implements CorpService {
     private static final Logger logger = LoggerFactory.getLogger("SERVICE_CORP_TRANSFER_LOGGER");
-    private static final Logger activeCorpLogger = LoggerFactory.getLogger("SERVICE_ACTIVE_CORP_LOGGER");
     @Autowired
     private SuiteTokenManageService suiteTokenManageService;
     @Autowired
@@ -49,7 +49,7 @@ public class CorpServiceImpl implements CorpService {
     private GlobalSuite suite;
 
     @Override
-    public void activeCorp(String authCode) throws UnirestException, HttpException {
+    public void activeCorp(String authCode) throws ActiveCorpException {
         try {
             logger.info("----begin to active corp----" + new Date());
             String suiteKey = suite.getSuiteKey();
@@ -61,13 +61,12 @@ public class CorpServiceImpl implements CorpService {
             logger.info("----end active corp----" + new Date());
         } catch (Exception e) {
             //  致命错误，将导致无法获知用户已经开通应用
-            activeCorpLogger.error("!!!!active corp error!!!! ", e);
-            throw e;
+            throw new ActiveCorpException("active corp error", e);
         }
     }
 
     @Override
-    public CorpVO fetchAndSaveCorpInfo(SuiteTokenVO suiteToken, CorpSuiteVO corpSuite) throws HttpException, UnirestException {
+    public CorpVO fetchAndSaveCorpInfo(SuiteTokenVO suiteToken, CorpSuiteVO corpSuite){
         JSONObject json = httpUtil.getCorpAuthInfo(suiteToken, corpSuite);
 
         String suiteKey = suiteToken.getSuiteKey();
@@ -99,7 +98,7 @@ public class CorpServiceImpl implements CorpService {
     }
 
     @Override
-    public CorpVO fetchAndChangeCorpInfo(SuiteTokenVO suiteToken, CorpSuiteVO corpSuite) throws UnirestException, HttpException {
+    public CorpVO fetchAndChangeCorpInfo(SuiteTokenVO suiteToken, CorpSuiteVO corpSuite){
         JSONObject json = httpUtil.getCorpAuthInfo(suiteToken, corpSuite);
         String suiteKey = suiteToken.getSuiteKey();
         //1. 保存corp信息

@@ -1,6 +1,6 @@
 package com.rishiqing.common.exception;
 
-public class RsqSyncException extends Exception {
+public class RsqSyncException extends RuntimeException {
 
     private long errcode;
     private String errmsg;
