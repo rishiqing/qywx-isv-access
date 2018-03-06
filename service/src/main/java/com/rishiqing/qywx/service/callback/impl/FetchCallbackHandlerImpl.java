@@ -30,7 +30,6 @@ import java.util.Map;
  * Date: 2018-02-28 19:03
  */
 public class FetchCallbackHandlerImpl implements FetchCallbackHandler {
-    private static final Logger logger = LoggerFactory.getLogger("SERVICE_EVENT_LISTENER_LOGGER");
 
     @Autowired
     private SuiteTokenManageService suiteTokenManageService;
@@ -51,13 +50,13 @@ public class FetchCallbackHandlerImpl implements FetchCallbackHandler {
     @Autowired
     private CallbackFailService callbackFailService;
 
-    public void handleFetchCorp(String permanentCode){
-        String corpId = null;
+    public void handleFetchCorp(String corpId, String permanentCode){
         String suiteKey = suite.getSuiteKey();
         SuiteTokenVO suiteTokenVO = suiteTokenManageService.getSuiteToken(suiteKey);
 
         //  首先获取corp相关信息
         CorpSuiteVO permanentCodeCorpSuite = new CorpSuiteVO();
+        permanentCodeCorpSuite.setCorpId(corpId);
         permanentCodeCorpSuite.setPermanentCode(permanentCode);
         CorpVO corpVO = corpService.fetchAndSaveCorpInfo(suiteTokenVO, permanentCodeCorpSuite);
 

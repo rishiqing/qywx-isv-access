@@ -46,8 +46,11 @@ public class AsyncServiceImpl implements AsyncService {
     private Queue pushCorpCallbackQueue;
 
     @Override
-    public void sendToFetchCorpAll(String permanentCode) {
-        asyncFetchDeptAndStaffEventBus.post(permanentCode);
+    public void sendToFetchCorpAll(String corpId, String permanentCode) {
+        CorpSuiteMessage msg = new CorpSuiteMessage();
+        msg.setCorpId(corpId);
+        msg.setPermanentCode(permanentCode);
+        asyncFetchDeptAndStaffEventBus.post(msg);
     }
 
     @Override

@@ -21,11 +21,11 @@ import java.util.Map;
  */
 @SuppressWarnings(value = "unchecked")
 public class DefaultRestHttpClient implements RestHttpClient {
-    private static final Logger logger = LoggerFactory.getLogger("DEFAULT_HTTP_REQUEST_LOGGER");
+    private static final Logger logger = LoggerFactory.getLogger("CONSOLE_LOGGER");
 
-    private static final Map<String, String> HEADERS_DEFALUT = new HashMap<String, String>();
+    private static final Map<String, String> HEADERS_DEFAULT = new HashMap<String, String>();
     static {
-        HEADERS_DEFALUT.put("Content-Type", "application/json");
+        HEADERS_DEFAULT.put("Content-Type", "application/json");
     }
 
     @Override
@@ -34,7 +34,7 @@ public class DefaultRestHttpClient implements RestHttpClient {
                 path, queryMap, fieldMap, body, options);
         HttpRequestWithBody request = Unirest.post(path);
         //  默认header
-        request.headers(HEADERS_DEFALUT);
+        request.headers(HEADERS_DEFAULT);
         if(queryMap != null && !queryMap.isEmpty()){
             request.queryString(queryMap);
         }
@@ -68,7 +68,7 @@ public class DefaultRestHttpClient implements RestHttpClient {
                 path, queryMap, options);
         GetRequest request = Unirest.get(path);
         //  默认header
-        request.headers(HEADERS_DEFALUT);
+        request.headers(HEADERS_DEFAULT);
         if(queryMap != null && !queryMap.isEmpty()){
             request.queryString(queryMap);
         }

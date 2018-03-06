@@ -94,7 +94,7 @@ public class CallbackServiceImpl implements CallbackService {
         try {
             WXBizMsgCrypt wxcpt = new WXBizMsgCrypt(token, encodingAesKey, suiteKey);
             String str = wxcpt.decryptMsg(signature, timestamp, nonce, body);
-            logger.info("----callback message----" + str);
+            logger.info("----callback message----{}", str);
             Map map = XmlUtil.simpleXmlString2Map(str);
             String infoType = (String)map.get("InfoType");
             CallbackInfoType type = CallbackInfoType.getCallbackInfoType(infoType);

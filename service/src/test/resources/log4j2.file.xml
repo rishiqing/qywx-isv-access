@@ -96,17 +96,8 @@
         <Logger name="SERVICE_CORP_MANAGE_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
             <AppenderRef ref="SERVICE_CORP_MANAGE_APPENDER"/>
         </Logger>
-        <Logger name="DEFAULT_HTTP_REQUEST_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
-            <AppenderRef ref="DEFAULT_HTTP_REQUEST_APPENDER"/>
-        </Logger>
         <Logger name="SERVICE_HTTP_REQUEST_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
             <AppenderRef ref="SERVICE_HTTP_REQUEST_APPENDER"/>
-        </Logger>
-        <Logger name="SERVICE_EVENT_LISTENER_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
-            <AppenderRef ref="SERVICE_EVENT_LISTENER_APPENDER"/>
-        </Logger>
-        <Logger name="SERVICE_CORP_TRANSFER_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
-            <AppenderRef ref="SERVICE_CORP_TRANSFER_APPENDER"/>
         </Logger>
         <Logger name="SYS_LIMIT_WARN_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
             <AppenderRef ref="SYS_LIMIT_WARN_APPENDER"/>

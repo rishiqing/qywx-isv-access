@@ -61,6 +61,9 @@ public class Json2BeanConverter {
 
     public static CorpSuiteVO generateCorpSuite(String suiteKey, String corpId, JSONObject json){
         CorpSuiteVO corpSuiteVO = new CorpSuiteVO();
+        if(null == corpId && json.containsKey("auth_corp_info")){
+            corpId = json.getJSONObject("auth_corp_info").getString("corpid");
+        }
         corpSuiteVO.setCorpId(corpId);
         corpSuiteVO.setSuiteKey(suiteKey);
         corpSuiteVO.setPermanentCode(json.getString("permanent_code"));

@@ -24,17 +24,17 @@
         <property name="queueCapacity" value="1000" />
     </bean>
 
-    <bean name="quartzScheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
-        <property name="dataSource" ref="dataSource" />
-        <property name="applicationContextSchedulerContextKey" value="applicationContextKey" />
-        <property name="configLocation" value="classpath:quartz.properties"/>
-        <property name="triggers">
-            <list>
-                <ref bean="redoAuthCallbackTrigger" />
-                <ref bean="redoContactCallbackTrigger" />
-            </list>
-        </property>
-    </bean>
+    <!--<bean name="quartzScheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">-->
+        <!--<property name="dataSource" ref="dataSource" />-->
+        <!--<property name="applicationContextSchedulerContextKey" value="applicationContextKey" />-->
+        <!--<property name="configLocation" value="classpath:quartz.properties"/>-->
+        <!--<property name="triggers">-->
+            <!--<list>-->
+                <!--<ref bean="redoAuthCallbackTrigger" />-->
+                <!--<ref bean="redoContactCallbackTrigger" />-->
+            <!--</list>-->
+        <!--</property>-->
+    <!--</bean>-->
 
     <!--授权相关的重做，5min一次-->
     <bean id="redoAuthCallbackJobDetail" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">

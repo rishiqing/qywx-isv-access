@@ -20,7 +20,6 @@ import static org.junit.Assert.assertTrue;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:service-test-spring-context.xml")
 public class HttpUtilCorpTest {
-    private static final Logger logger = LoggerFactory.getLogger("SERVICE_HTTP_REQUEST_LOGGER");
     @Autowired
     private CorpTokenManageService corpTokenManageService;
     @Autowired

@@ -23,7 +23,7 @@ import static org.junit.Assert.assertNotNull;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:service-test-spring-context.xml")
 public class HttpUtilTest {
-    private static final Logger logger = LoggerFactory.getLogger("SERVICE_HTTP_REQUEST_LOGGER");
+    private static final Logger logger = LoggerFactory.getLogger("CONSOLE_LOGGER");
     private static final long TICKET_EXPIRE = 7200L;
     @Autowired
     private Map isvGlobal;
@@ -42,7 +42,7 @@ public class HttpUtilTest {
 
         try {
             JSONObject json = httpUtil.getSuiteToken(suite, ticket);
-            logger.info("response body: " + json);
+            logger.info("response body: {}", json);
             String token = json.getString("suite_access_token");
             long expired = json.getLong("expires_in");
             assertNotNull(token);

@@ -22,7 +22,6 @@ import org.springframework.beans.factory.annotation.Autowired;
  * Date: 2018-02-08 11:54
  */
 public class RsqCorpServiceImpl implements RsqCorpService {
-    private static final Logger logger = LoggerFactory.getLogger("SERVICE_CORP_PUSH_RSQ_LOGGER");
 
     @Autowired
     private GlobalSuite suite;

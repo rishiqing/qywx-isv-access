@@ -28,7 +28,6 @@ import java.util.*;
  * Date: 2018-02-08 11:55
  */
 public class RsqStaffServiceImpl implements RsqStaffService {
-    private static final Logger logger = LoggerFactory.getLogger("SERVICE_CORP_PUSH_RSQ_LOGGER");
 
     @Autowired
     private GlobalSuite suite;

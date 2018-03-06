@@ -31,7 +31,6 @@ import java.util.Map;
  * Date: 2018-02-10 17:34
  */
 public class PushCallbackHandlerImpl implements PushCallbackHandler {
-    private static final Logger logger = LoggerFactory.getLogger("SERVICE_CORP_PUSH_RSQ_LOGGER");
 
     @Autowired
     private CorpManageService corpManageService;

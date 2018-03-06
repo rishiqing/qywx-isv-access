@@ -16,8 +16,8 @@ public class RedoFailFetchCallbackHandlerImpl implements FetchCallbackHandler {
     private FetchCallbackHandler fetchCallbackHandler;
 
     @Override
-    public void handleFetchCorp(String permanentCode) {
-        fetchCallbackHandler.handleFetchCorp(permanentCode);
+    public void handleFetchCorp(String corpId, String permanentCode) {
+        fetchCallbackHandler.handleFetchCorp(corpId, permanentCode);
     }
 
     @Override

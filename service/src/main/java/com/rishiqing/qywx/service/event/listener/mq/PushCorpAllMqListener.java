@@ -17,7 +17,7 @@ import javax.jms.MessageListener;
  * Date: 2018-02-09 19:21
  */
 public class PushCorpAllMqListener implements MessageListener {
-    private static final Logger logger = LoggerFactory.getLogger("SERVICE_EVENT_LISTENER_LOGGER");
+    private static final Logger logger = LoggerFactory.getLogger("SERVICE_EVENT_PUSH_LISTENER_LOGGER");
 
     @Autowired
     private PushCallbackHandler logFailPushCallbackHandler;

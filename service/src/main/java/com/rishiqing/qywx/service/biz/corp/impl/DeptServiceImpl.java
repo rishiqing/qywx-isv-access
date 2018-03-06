@@ -24,7 +24,6 @@ import java.util.List;
  */
 public class DeptServiceImpl implements DeptService {
     private static final Logger limitLogger = LoggerFactory.getLogger("SYS_LIMIT_WARN_LOGGER");
-    private static final Logger logger = LoggerFactory.getLogger("SERVICE_CORP_TRANSFER_LOGGER");
     @Autowired
     private HttpUtilCorp httpUtilCorp;
     @Autowired
@@ -39,9 +38,7 @@ public class DeptServiceImpl implements DeptService {
      */
     @Override
     public void fetchAndSaveDeptInfo(CorpTokenVO corpTokenVO, @Nullable CorpDeptVO corpDeptVO) {
-        logger.info("====fetchAndSaveDeptInfo====");
         JSONObject json = httpUtilCorp.getDepartmentList(corpTokenVO, corpDeptVO);
-        logger.info("------json----" + json);
         String corpId = corpTokenVO.getCorpId();
         List<CorpDeptVO> deptList =
                 Json2BeanConverter.generateDepartmentList(corpId, json);

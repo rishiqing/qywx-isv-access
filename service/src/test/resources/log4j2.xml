@@ -12,30 +12,41 @@
         <Root level="error">
             <AppenderRef ref="Console"/>
         </Root>
+        <Logger name="CONSOLE_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
+            <AppenderRef ref="Console"/>
+        </Logger>
         <Logger name="WEB_CALLBACK_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
             <AppenderRef ref="Console"/>
         </Logger>
-        <Logger name="SERVICE_CORP_MANAGE_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
+        <Logger name="WEB_JS_CONFIG_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
             <AppenderRef ref="Console"/>
         </Logger>
-        <Logger name="SERVICE_CORP_TRANSFER_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
+        <Logger name="WEB_OAUTH_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
             <AppenderRef ref="Console"/>
         </Logger>
-        <Logger name="SERVICE_CORP_PUSH_RSQ_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
+        <Logger name="WEB_ID_MAP_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
             <AppenderRef ref="Console"/>
         </Logger>
-        <Logger name="DEFAULT_HTTP_REQUEST_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
+        <Logger name="WEB_DB_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
             <AppenderRef ref="Console"/>
         </Logger>
-        <Logger name="SERVICE_HTTP_REQUEST_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
+        <Logger name="SERVICE_EVENT_FETCH_LISTENER_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
             <AppenderRef ref="Console"/>
         </Logger>
-        <Logger name="SERVICE_EVENT_LISTENER_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
+        <Logger name="SERVICE_EVENT_PUSH_LISTENER_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
             <AppenderRef ref="Console"/>
         </Logger>
+        <Logger name="SERVICE_JOB_AUTH_CALLBACK_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
+            <AppenderRef ref="Console"/>
+        </Logger>
+        <Logger name="SERVICE_JOB_CONTACT_CALLBACK_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
+            <AppenderRef ref="Console"/>
+        </Logger>
+        <!--系统限制日志-->
         <Logger name="SYS_LIMIT_WARN_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
             <AppenderRef ref="Console"/>
         </Logger>
+        <!--用户激活这种重要操作的日志-->
         <Logger name="SERVICE_ACTIVE_CORP_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
             <AppenderRef ref="Console"/>
         </Logger>

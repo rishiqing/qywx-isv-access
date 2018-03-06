@@ -33,7 +33,7 @@ import java.util.Map;
  * 重新实现的RestHttpClient，可以自动判断suite和corp的token是否失效，如果失效，那么会自动获取
  */
 public class SuiteCheckRestHttpClient implements RestHttpClient {
-    private static final Logger logger = LoggerFactory.getLogger("SERVICE_HTTP_REQUEST_LOGGER");
+    private static final Logger logger = LoggerFactory.getLogger("CONSOLE_LOGGER");
     @Autowired
     private Map isvGlobal;
     @Autowired
@@ -98,7 +98,7 @@ public class SuiteCheckRestHttpClient implements RestHttpClient {
             throw new HttpException("http post request getSuiteToken status error: " + resp.getStatus() + ", " + resp.getBody());
         }
         JSONObject jsonResponse = JSON.parseObject(resp.getBody());
-        logger.info("{} post response: {}", path, jsonResponse);
+        logger.debug("{} post response: {}", path, jsonResponse);
         Long errcode = jsonResponse.getLong("errcode");
         if(errcode != null && !errcode.equals(0L)){
             if(errcode.equals(42009L) || errcode.equals(40082L)){
@@ -145,7 +145,7 @@ public class SuiteCheckRestHttpClient implements RestHttpClient {
             throw new HttpException("http get request getSuiteToken status error: " + resp.getStatus() + ", " + resp.getBody());
         }
         JSONObject jsonResponse = JSON.parseObject(resp.getBody());
-        logger.info("{} post response: {}", path, jsonResponse);
+        logger.debug("{} post response: {}", path, jsonResponse);
         Long errcode = jsonResponse.getLong("errcode");
         if(errcode != null && !errcode.equals(0L)){
             if(errcode.equals(42009L) || errcode.equals(40082L)){
@@ -192,7 +192,7 @@ public class SuiteCheckRestHttpClient implements RestHttpClient {
         }
         JSONObject jsonResponse = JSON.parseObject(resp.getBody());
         Long errcode = jsonResponse.getLong("errcode");
-        logger.info("{} post response: {}", RequestUrl.SUITE_ACCESS_TOKEN, jsonResponse);
+        logger.debug("{} post response: {}", RequestUrl.SUITE_ACCESS_TOKEN, jsonResponse);
         if(errcode != null && !errcode.equals(0L)){
             throw new HttpException(errcode, jsonResponse.getString("errmsg"));
         }
@@ -227,7 +227,7 @@ public class SuiteCheckRestHttpClient implements RestHttpClient {
         }
         JSONObject jsonResponse = JSON.parseObject(resp.getBody());
         Long errcode = jsonResponse.getLong("errcode");
-        logger.info("{} post response: {}", RequestUrl.CORP_ACCESS_TOKEN, jsonResponse);
+        logger.debug("{} post response: {}", RequestUrl.CORP_ACCESS_TOKEN, jsonResponse);
         if(errcode != null && !errcode.equals(0L)){
             //  如果遇到suiteAccessToken失效，那么重新获取suiteAccessToken
             if(errcode.equals(42009L) || errcode.equals(40082L)){

@@ -19,7 +19,7 @@ import java.util.Map;
  * Date: 2018-02-10 14:20
  */
 public class PushCorpCallbackMqListener implements MessageListener {
-    private static final Logger logger = LoggerFactory.getLogger("SERVICE_EVENT_LISTENER_LOGGER");
+    private static final Logger logger = LoggerFactory.getLogger("SERVICE_EVENT_PUSH_LISTENER_LOGGER");
 
     @Autowired
     private PushCallbackHandler logFailPushCallbackHandler;

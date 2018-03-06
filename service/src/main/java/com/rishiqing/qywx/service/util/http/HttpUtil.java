@@ -1,5 +1,6 @@
 package com.rishiqing.qywx.service.util.http;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.rishiqing.qywx.service.constant.RequestUrl;
@@ -10,11 +11,14 @@ import com.rishiqing.qywx.service.model.isv.SuiteTokenVO;
 import com.rishiqing.qywx.service.model.isv.SuiteVO;
 import com.rishiqing.common.util.http.client.RestHttpClient;
 import com.rishiqing.qywx.service.util.http.converter.Bean2JsonConverter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class HttpUtil {
+    private static final Logger logger = LoggerFactory.getLogger("CONSOLE_LOGGER");
     private RestHttpClient restHttpClient;
 
     public HttpUtil(RestHttpClient restHttpClient) {
@@ -30,6 +34,7 @@ public class HttpUtil {
 
     public JSONObject getPermanentCode(SuiteTokenVO suiteTokenVO, String authCode) {
         JSONObject params = Bean2JsonConverter.prepareAuthCode(suiteTokenVO, authCode);
+        logger.debug("====getPermanentCode===={}", JSON.toJSONString(params));
         Map<String ,Object> options = new HashMap<>();
         options.put("suiteKey", suiteTokenVO.getSuiteKey());
         Map<String, Object> queryMap = new HashMap<>();

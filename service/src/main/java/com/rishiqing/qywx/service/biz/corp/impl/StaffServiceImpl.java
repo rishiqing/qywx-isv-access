@@ -21,7 +21,6 @@ import java.util.List;
 
 public class StaffServiceImpl implements StaffService {
     private static final Logger limitLogger = LoggerFactory.getLogger("SYS_LIMIT_WARN_LOGGER");
-    private static final Logger logger = LoggerFactory.getLogger("SERVICE_CORP_TRANSFER_LOGGER");
     @Autowired
     private HttpUtilCorp httpUtilCorp;
     @Autowired
