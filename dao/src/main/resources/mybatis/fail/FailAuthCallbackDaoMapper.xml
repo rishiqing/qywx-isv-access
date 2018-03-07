@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rishiqing.qywx.dao.mapper.fail.FailAuthCallbackDao">
+    <resultMap id="failAuthCallbackMap" type="com.rishiqing.qywx.dao.model.fail.FailAuthCallbackDO">
+        <id property="id" column="id" />
+        <result property="dateCreated" column="date_created" />
+        <result property="lastUpdated" column="last_updated" />
+        <result property="suiteKey" column="suite_key" />
+        <result property="corpId" column="corp_id" />
+        <result property="failType" column="fail_type" />
+        <result property="infoType" column="info_type" />
+        <result property="failNote" column="fail_note" />
+    </resultMap>
+
+    <sql id="selectAllFields">
+        id, date_created, last_updated, suite_key, corp_id, fail_type, info_type, fail_note
+    </sql>
+
+    <select id="listFailAuthCallbackWithLimit" resultMap="failAuthCallbackMap">
+        SELECT <include refid="selectAllFields" /> FROM isv_fail_auth_callback
+        ORDER BY id ASC LIMIT #{limit}
+    </select>
+
+    <insert id="saveOrUpdateFailAuthCallback" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO isv_fail_auth_callback (
+            date_created,
+            last_updated,
+            suite_key,
+            corp_id,
+            fail_type,
+            info_type,
+            fail_note
+        ) VALUES (
+            now(),
+            now(),
+            #{suiteKey},
+            #{corpId},
+            #{failType},
+            #{infoType},
+            #{failNote}
+        ) ON DUPLICATE KEY UPDATE
+            last_updated = now(),
+            fail_note = #{failNote}
+    </insert>
+
+    <delete id="removeFailAuthCallbackById">
+        DELETE FROM isv_fail_auth_callback WHERE id = #{id}
+    </delete>
+</mapper>

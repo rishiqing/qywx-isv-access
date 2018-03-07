@@ -5,11 +5,8 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import com.rishiqing.qywx.service.common.corp.CorpSuiteManageService;
 import com.rishiqing.qywx.service.common.corp.CorpTokenManageService;
 import com.rishiqing.qywx.service.common.isv.SuiteTokenManageService;
-import com.rishiqing.qywx.service.exception.AccessTokenExpiredException;
-import com.rishiqing.qywx.service.exception.HttpException;
-import com.rishiqing.qywx.service.model.corp.CorpSuiteVO;
+import com.rishiqing.common.exception.HttpException;
 import com.rishiqing.qywx.service.model.corp.CorpTokenVO;
-import com.rishiqing.qywx.service.model.isv.SuiteTokenVO;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -23,7 +20,6 @@ import static org.junit.Assert.assertTrue;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:service-test-spring-context.xml")
 public class HttpUtilCorpTest {
-    private static final Logger logger = LoggerFactory.getLogger("SERVICE_HTTP_REQUEST_LOGGER");
     @Autowired
     private CorpTokenManageService corpTokenManageService;
     @Autowired
@@ -43,7 +39,7 @@ public class HttpUtilCorpTest {
             JSONObject json = httpUtilCorp.getDepartmentList(corpTokenVO, null);
             System.out.println(json);
             assertTrue(json.containsKey("department"));
-        } catch (UnirestException | HttpException e) {
+        } catch (HttpException e) {
             e.printStackTrace();
         }
     }
@@ -54,10 +50,10 @@ public class HttpUtilCorpTest {
         String suiteKey = "tj146dbe5cecf74725";
         CorpTokenVO corpTokenVO = corpTokenManageService.getCorpToken(suiteKey, corpId);
         try {
-            JSONObject json = httpUtilCorp.getDepartmentStaffList(corpTokenVO, null);
+            JSONObject json = httpUtilCorp.getDepartmentStaffList(corpTokenVO, null, true);
             System.out.println(json);
             assertTrue(json.containsKey("userlist"));
-        } catch (UnirestException | HttpException e) {
+        } catch (HttpException e) {
             e.printStackTrace();
         }
     }
@@ -71,7 +67,7 @@ public class HttpUtilCorpTest {
             JSONObject json = httpUtilCorp.getJsapiTicket(corpTokenVO);
             System.out.println(json);
             assertTrue(json.containsKey("ticket"));
-        } catch (UnirestException | HttpException e) {
+        } catch (HttpException e) {
             e.printStackTrace();
         }
     }

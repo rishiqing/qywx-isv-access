@@ -16,6 +16,8 @@ public class SuiteConverter {
         suiteVO.setEncodingAesKey(suiteDO.getEncodingAesKey());
         suiteVO.setToken(suiteDO.getToken());
         suiteVO.setCorpId(suiteDO.getCorpId());
+        suiteVO.setRsqAppName(suiteDO.getRsqAppName());
+        suiteVO.setRsqAppToken(suiteDO.getRsqAppToken());
 
         return suiteVO;
     }

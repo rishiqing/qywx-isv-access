@@ -1,6 +1,6 @@
-package com.rishiqing.qywx.web.exception;
+package com.rishiqing.qywx.service.exception;
 
-public class CallbackException extends Exception {
+public class CallbackException extends RuntimeException {
     public CallbackException() {
         super();
     }

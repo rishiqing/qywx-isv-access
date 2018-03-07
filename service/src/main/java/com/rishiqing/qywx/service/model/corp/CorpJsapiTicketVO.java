@@ -1,5 +1,7 @@
 package com.rishiqing.qywx.service.model.corp;
 
+import java.util.Date;
+
 public class CorpJsapiTicketVO {
     private Long id;
 
@@ -7,6 +9,7 @@ public class CorpJsapiTicketVO {
     private String corpId;
     private String corpJsapiTicket;
     private Long expiresIn;
+    private Date updateTime;
 
     public Long getId() {
         return id;
@@ -48,6 +51,14 @@ public class CorpJsapiTicketVO {
         this.expiresIn = expiresIn;
     }
 
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
     @Override
     public String toString() {
         return "CorpJsapiTicketVO{" +
@@ -56,6 +67,7 @@ public class CorpJsapiTicketVO {
                 ", corpId='" + corpId + '\'' +
                 ", corpJsapiTicket='" + corpJsapiTicket + '\'' +
                 ", expiresIn=" + expiresIn +
+                ", updateTime=" + updateTime +
                 '}';
     }
 }

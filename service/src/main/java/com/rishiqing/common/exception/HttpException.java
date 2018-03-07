@@ -1,6 +1,6 @@
-package com.rishiqing.qywx.service.exception;
+package com.rishiqing.common.exception;
 
-public class HttpException extends Exception {
+public class HttpException extends RuntimeException {
 
     private long errcode;
     private String errmsg;

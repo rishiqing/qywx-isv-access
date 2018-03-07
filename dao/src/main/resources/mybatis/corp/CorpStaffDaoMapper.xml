@@ -24,12 +24,15 @@
         <result property="rsqUsername" column="rsq_username" />
         <result property="rsqPassword" column="rsq_password" />
         <result property="rsqLoginToken" column="rsq_login_token" />
+        <result property="adminType" column="admin_type" />
+        <result property="union_id" column="union_id" />
     </resultMap>
 
     <sql id="selectAllFields">
         id, date_created, last_updated, corp_id, user_id, `name`, department, order_in_depts, is_leader_in_depts,
         position, mobile, gender, email, avatar, tel, english_name, `status`, extattr,
-        rsq_user_id, rsq_username, rsq_password, rsq_login_token
+        rsq_user_id, rsq_username, rsq_password, rsq_login_token,
+        admin_type, union_id
     </sql>
 
     <select id="getCorpStaffByCorpIdAndUserId" resultMap="corpStaffMap">
@@ -65,7 +68,7 @@
             english_name,
             `status`,
             extattr,
-            rsq_user_id, rsq_username, rsq_password, rsq_login_token
+            rsq_user_id, rsq_username, rsq_password, rsq_login_token, admin_type
         ) VALUES (
             now(),
             now(),
@@ -87,7 +90,8 @@
             #{rsqUserId},
             #{rsqUsername},
             #{rsqPassword},
-            #{rsqLoginToken}
+            #{rsqLoginToken},
+            #{adminType}
         ) ON DUPLICATE KEY UPDATE
             last_updated = now(),
             `name` = #{name},
@@ -106,10 +110,50 @@
             rsq_user_id = #{rsqUserId},
             rsq_username = #{rsqUsername},
             rsq_password = #{rsqPassword},
-            rsq_login_token = #{rsqLoginToken}
+            rsq_login_token = #{rsqLoginToken},
+            admin_type = #{adminType}
     </insert>
 
     <delete id="removeCorpStaffByCorpIdAndUserId">
         DELETE FROM isv_corp_staff WHERE corp_id = #{corpId} AND user_id = #{userId}
     </delete>
+
+    <resultMap type="com.rishiqing.qywx.dao.model.corp.CorpStaffIdsDO" id="corpStaffIdsMap">
+        <result property="userId" column="user_id" />
+        <result property="rsqUserId" column="rsq_user_id" />
+        <result property="avatar" column="avatar" />
+        <result property="name" column="name" />
+    </resultMap>
+
+    <select id="getUserIdFromRsqId" resultMap="corpStaffIdsMap">
+        SELECT user_id, rsq_user_id, avatar, `name`  FROM isv_corp_staff
+        WHERE corp_id = #{corpId}
+        AND rsq_user_id IN
+        <foreach collection="rsqIds" item="item" index="index"
+                 open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        ORDER BY FIELD(rsq_user_id,
+        <foreach collection="rsqIds" item="item" index="index"
+                 open="" separator="," close="">
+            #{item}
+        </foreach>
+        )
+    </select>
+
+    <select id="getRsqIdFromUserId" resultMap="corpStaffIdsMap">
+        SELECT user_id, rsq_user_id, avatar, `name` FROM isv_corp_staff
+        WHERE corp_id = #{corpId}
+        AND user_id IN
+        <foreach collection="userIds" item="item" index="index"
+                 open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        ORDER BY FIELD(user_id,
+        <foreach collection="userIds" item="item" index="index"
+                 open="" separator="," close="">
+            #{item}
+        </foreach>
+        )
+    </select>
 </mapper>

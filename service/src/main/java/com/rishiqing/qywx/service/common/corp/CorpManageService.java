@@ -1,13 +1,10 @@
 package com.rishiqing.qywx.service.common.corp;
 
-import com.mashape.unirest.http.exceptions.UnirestException;
-import com.rishiqing.qywx.service.exception.HttpException;
-import com.rishiqing.qywx.service.exception.SuiteAccessTokenExpiredException;
-import com.rishiqing.qywx.service.model.corp.CorpSuiteVO;
 import com.rishiqing.qywx.service.model.corp.CorpVO;
-import com.rishiqing.qywx.service.model.isv.SuiteTokenVO;
 
 public interface CorpManageService {
+
+    CorpVO getCorpByCorpId(String corpId);
     /**
      * 保存corp信息
      * @param corpVO

@@ -3,6 +3,8 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+    <!--全局缓存的suite-->
+    <bean id="suite" class="com.rishiqing.qywx.service.common.isv.GlobalSuite" init-method="init"/>
     <!--基础service-->
     <bean id="suiteManageService" class="com.rishiqing.qywx.service.common.isv.impl.SuiteManageServiceImpl" />
     <bean id="suiteTicketManageService" class="com.rishiqing.qywx.service.common.isv.impl.SuiteTicketManageServiceImpl" />
@@ -15,50 +17,51 @@
     <bean id="corpAppManageService" class="com.rishiqing.qywx.service.common.corp.impl.CorpAppManageServiceImpl" />
     <bean id="corpTokenManageService" class="com.rishiqing.qywx.service.common.corp.impl.CorpTokenManageServiceImpl" />
     <bean id="corpJsapiTicketManageService" class="com.rishiqing.qywx.service.common.corp.impl.CorpJsapiTicketManageServiceImpl" />
+    <bean id="rsqInfoManageService" class="com.rishiqing.qywx.service.common.rsq.impl.RsqInfoManageServiceImpl" />
     <bean id="demoService" class="com.rishiqing.qywx.service.demo.DemoServiceImpl" />
 
     <!--业务service-->
     <bean id="corpService" class="com.rishiqing.qywx.service.biz.corp.impl.CorpServiceImpl" />
     <bean id="deptService" class="com.rishiqing.qywx.service.biz.corp.impl.DeptServiceImpl" />
     <bean id="staffService" class="com.rishiqing.qywx.service.biz.corp.impl.StaffServiceImpl" />
+    <!--日事清相关-->
+    <bean id="idMapService" class="com.rishiqing.qywx.service.biz.rsq.impl.IdMapServiceImpl" />
+    <bean id="rsqCorpService" class="com.rishiqing.qywx.service.biz.rsq.impl.RsqCorpServiceImpl" />
+    <bean id="rsqDeptService" class="com.rishiqing.qywx.service.biz.rsq.impl.RsqDeptServiceImpl" />
+    <bean id="rsqStaffService" class="com.rishiqing.qywx.service.biz.rsq.impl.RsqStaffServiceImpl" />
+
+    <!--callback相关顶层server handler-->
+    <bean id="pushCallbackHandler" class="com.rishiqing.qywx.service.callback.impl.PushCallbackHandlerImpl" />
+    <bean id="fetchCallbackHandler" class="com.rishiqing.qywx.service.callback.impl.FetchCallbackHandlerImpl" />
+    <bean id="logFailFetchCallbackHandler" class="com.rishiqing.qywx.service.callback.impl.LogFailFetchCallbackHandlerImpl" />
+    <bean id="logFailPushCallbackHandler" class="com.rishiqing.qywx.service.callback.impl.LogFailPushCallbackHandlerImpl" />
+    <bean id="redoFailFetchCallbackHandler" class="com.rishiqing.qywx.service.callback.impl.RedoFailFetchCallbackHandlerImpl" />
+    <bean id="redoFailPushCallbackHandler" class="com.rishiqing.qywx.service.callback.impl.RedoFailPushCallbackHandlerImpl" />
+
+    <!--记录异步过程中发生的错误-->
+    <bean id="callbackFailService" class="com.rishiqing.qywx.service.common.fail.impl.CallbackFailServiceImpl" />
 
     <!--工具类-->
-    <bean id="requestClient" class="com.rishiqing.qywx.service.util.http.RequestClient" />
+    <!--默认的httpClient-->
+    <bean id="defaultRestHttpClient" class="com.rishiqing.common.util.http.client.impl.DefaultRestHttpClient" />
+    <!--自动进行suiteCheck的httpClient-->
+    <bean id="suiteCheckRestHttpClient" class="com.rishiqing.qywx.service.util.http.client.impl.SuiteCheckRestHttpClient" />
+
     <!--isv相关的http请求工具-->
     <bean id="httpUtil" class="com.rishiqing.qywx.service.util.http.HttpUtil">
-        <constructor-arg ref="requestClient" />
+        <constructor-arg ref="suiteCheckRestHttpClient" />
     </bean>
     <!--公司及通讯录相关的http请求工具-->
     <bean id="httpUtilCorp" class="com.rishiqing.qywx.service.util.http.HttpUtilCorp">
-        <constructor-arg ref="requestClient" />
+        <constructor-arg ref="suiteCheckRestHttpClient" />
     </bean>
     <!--授权认证相关的http请求工具-->
     <bean id="httpUtilAuth" class="com.rishiqing.qywx.service.util.http.HttpUtilAuth">
-        <constructor-arg ref="requestClient" />
+        <constructor-arg ref="suiteCheckRestHttpClient" />
     </bean>
-
-    <!--AsyncEventBus-->
-    <bean id="asyncFetchDeptAndStaffExecutorFactory" class="com.rishiqing.qywx.service.event.executor.AsyncFetchDeptAndStaffExecutorFactory" />
-    <bean id="asyncFetchDeptAndStaffExecutor" factory-bean="asyncFetchDeptAndStaffExecutorFactory" factory-method="getFetchDeptAndStaffExecutor" />
-    <bean id="asyncFetchDeptAndStaffEventBus" class="com.google.common.eventbus.AsyncEventBus">
-        <constructor-arg ref="asyncFetchDeptAndStaffExecutor" />
-    </bean>
-    <bean id="fetchDeptAndStaffListener" class="com.rishiqing.qywx.service.event.listener.FetchDeptAndStaffListener" />
-
-    <bean id="demoExecutorFactory" class="com.rishiqing.qywx.service.demo.event.DemoExecutorFactory" />
-    <bean id="demoExecutor" factory-bean="demoExecutorFactory" factory-method="getFetchDeptAndStaffExecutor" />
-    <bean id="demoEventBus" class="com.google.common.eventbus.AsyncEventBus">
-        <constructor-arg ref="demoExecutor" />
-    </bean>
-    <bean id="demoListener" class="com.rishiqing.qywx.service.demo.event.DemoListener" />
-
-    <bean id="eventBusInitService" class="com.rishiqing.qywx.service.event.EventBusInitServiceImpl"
-          init-method="register">
-        <property name="eventMap">
-            <map>
-                <entry key-ref="asyncFetchDeptAndStaffEventBus" value-ref="fetchDeptAndStaffListener" />
-                <entry key-ref="demoEventBus" value-ref="demoListener" />
-            </map>
-        </property>
+    <!--日事清相关的请求-->
+    <bean id="httpUtilRsqSync" class="com.rishiqing.common.util.http.impl.HttpUtilRsqSyncImpl">
+        <constructor-arg index="0" value="${isv.rsq.url.root}"/>
+        <constructor-arg index="1" ref="defaultRestHttpClient"/>
     </bean>
 </beans>

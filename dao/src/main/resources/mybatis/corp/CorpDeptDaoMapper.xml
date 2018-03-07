@@ -30,6 +30,12 @@
             WHERE corp_id = #{corpId}
         ]]>
     </select>
+    <select id="listCorpDeptByCorpIdAndParentId" resultMap="corpDeptMap">
+        SELECT <include refid="selectAllFields" /> FROM isv_corp_dept
+        <![CDATA[
+            WHERE corp_id = #{corpId} and parent_id = #{parentId}
+        ]]>
+    </select>
 
     <insert id="saveOrUpdateCorpDept" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO isv_corp_dept (

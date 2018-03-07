@@ -12,6 +12,9 @@ public class SuiteVO {
     private String token;  //  已填写用于生成签名和校验毁掉请求的合法性
     private String corpId;  // isv所在公司的corpId
 
+    private String rsqAppName;  // 日事清调用的名称
+    private String rsqAppToken;  // 日事清调用的token
+
     public Long getId() {
         return id;
     }
@@ -68,6 +71,22 @@ public class SuiteVO {
         this.corpId = corpId;
     }
 
+    public String getRsqAppName() {
+        return rsqAppName;
+    }
+
+    public void setRsqAppName(String rsqAppName) {
+        this.rsqAppName = rsqAppName;
+    }
+
+    public String getRsqAppToken() {
+        return rsqAppToken;
+    }
+
+    public void setRsqAppToken(String rsqAppToken) {
+        this.rsqAppToken = rsqAppToken;
+    }
+
     @Override
     public String toString() {
         return "SuiteVO{" +
@@ -78,6 +97,8 @@ public class SuiteVO {
                 ", encodingAesKey='" + encodingAesKey + '\'' +
                 ", token='" + token + '\'' +
                 ", corpId='" + corpId + '\'' +
+                ", rsqAppName='" + rsqAppName + '\'' +
+                ", rsqAppToken='" + rsqAppToken + '\'' +
                 '}';
     }
 }

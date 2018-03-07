@@ -23,6 +23,9 @@ public class CorpStaffDO {
     private Long status;
     private String extattr;
 
+    private Long adminType;
+    private String unionId;
+
     private String rsqUserId;
     private String rsqUsername;
     private String rsqPassword;
@@ -204,6 +207,22 @@ public class CorpStaffDO {
         this.rsqLoginToken = rsqLoginToken;
     }
 
+    public Long getAdminType() {
+        return adminType;
+    }
+
+    public void setAdminType(Long adminType) {
+        this.adminType = adminType;
+    }
+
+    public String getUnionId() {
+        return unionId;
+    }
+
+    public void setUnionId(String unionId) {
+        this.unionId = unionId;
+    }
+
     @Override
     public String toString() {
         return "CorpStaffDO{" +
@@ -225,6 +244,8 @@ public class CorpStaffDO {
                 ", englishName='" + englishName + '\'' +
                 ", status=" + status +
                 ", extattr='" + extattr + '\'' +
+                ", adminType=" + adminType +
+                ", unionId='" + unionId + '\'' +
                 ", rsqUserId='" + rsqUserId + '\'' +
                 ", rsqUsername='" + rsqUsername + '\'' +
                 ", rsqPassword='" + rsqPassword + '\'' +

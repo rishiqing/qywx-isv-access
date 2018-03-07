@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class CorpSuiteMessage implements Serializable {
     private String suiteKey;
     private String corpId;
+    private String permanentCode;
 
     public String getSuiteKey() {
         return suiteKey;
@@ -22,11 +23,20 @@ public class CorpSuiteMessage implements Serializable {
         this.corpId = corpId;
     }
 
+    public String getPermanentCode() {
+        return permanentCode;
+    }
+
+    public void setPermanentCode(String permanentCode) {
+        this.permanentCode = permanentCode;
+    }
+
     @Override
     public String toString() {
         return "CorpSuiteMessage{" +
                 "suiteKey='" + suiteKey + '\'' +
                 ", corpId='" + corpId + '\'' +
+                ", permanentCode='" + permanentCode + '\'' +
                 '}';
     }
 }

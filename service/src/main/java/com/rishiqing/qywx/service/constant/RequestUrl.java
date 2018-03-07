@@ -9,4 +9,5 @@ public class RequestUrl {
     public static final String DEPARTMENT_LIST = "https://qyapi.weixin.qq.com/cgi-bin/department/list";
     public static final String DEPARTMENT_STAFF_LIST = "https://qyapi.weixin.qq.com/cgi-bin/user/list";
     public static final String AUTH_LOGIN_USER = "https://qyapi.weixin.qq.com/cgi-bin/user/getuserinfo";
+    public static final String GET_APP_ADMIN_LIST = "https://qyapi.weixin.qq.com/cgi-bin/service/get_admin_list";
 }

@@ -11,7 +11,7 @@ public interface JsConfigService {
      * @param corpId
      * @return
      */
-    Map<String, Object> getJsapiSignature(String url, String corpId) throws JsConfigException;
+    Map<String, Object> getJsapiSignature(String url, String corpId);
 
-    void refreshJsapiTicket(String corpId) throws JsConfigException;
+    void refreshJsapiTicket(String corpId);
 }

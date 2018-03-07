@@ -14,6 +14,7 @@ public class CorpJsapiTicketConverter {
         corpJsapiTicketVO.setCorpId(corpJsapiTicketDO.getCorpId());
         corpJsapiTicketVO.setCorpJsapiTicket(corpJsapiTicketDO.getCorpJsapiTicket());
         corpJsapiTicketVO.setExpiresIn(corpJsapiTicketDO.getExpiresIn());
+        corpJsapiTicketVO.setUpdateTime(corpJsapiTicketDO.getUpdateTime());
         return corpJsapiTicketVO;
     }
     
@@ -27,6 +28,7 @@ public class CorpJsapiTicketConverter {
         corpJsapiTicketDO.setCorpId(corpJsapiTicketVO.getCorpId());
         corpJsapiTicketDO.setCorpJsapiTicket(corpJsapiTicketVO.getCorpJsapiTicket());
         corpJsapiTicketDO.setExpiresIn(corpJsapiTicketVO.getExpiresIn());
+        corpJsapiTicketDO.setUpdateTime(corpJsapiTicketVO.getUpdateTime());
         return corpJsapiTicketDO;
     }
 }

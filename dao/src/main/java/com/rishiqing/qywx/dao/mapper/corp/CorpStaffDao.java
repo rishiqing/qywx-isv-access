@@ -1,6 +1,7 @@
 package com.rishiqing.qywx.dao.mapper.corp;
 
 import com.rishiqing.qywx.dao.model.corp.CorpStaffDO;
+import com.rishiqing.qywx.dao.model.corp.CorpStaffIdsDO;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -34,4 +35,21 @@ public interface CorpStaffDao {
      * @param userId
      */
     void removeCorpStaffByCorpIdAndUserId(@Param("corpId") String corpId, @Param("userId") String userId);
+
+    /**
+     * 根据staff的rsqId获取到userId
+     * @param rsqIds
+     * @return
+     */
+    public List<CorpStaffIdsDO> getUserIdFromRsqId(
+            @Param("corpId") String corpId,
+            @Param("rsqIds") String[] rsqIds);
+    /**
+     * 根据staff的rsqId获取到userId
+     * @param userIds
+     * @return
+     */
+    public List<CorpStaffIdsDO> getRsqIdFromUserId(
+            @Param("corpId") String corpId,
+            @Param("userIds") String[] userIds);
 }
