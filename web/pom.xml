@@ -96,7 +96,6 @@
         </dependency>
     </dependencies>
     <build>
-        <finalName>ding-isv-access</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
