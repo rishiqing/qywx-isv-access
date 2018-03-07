@@ -6,6 +6,7 @@ import com.rishiqing.qywx.service.common.fail.CallbackFailService;
 import com.rishiqing.qywx.service.constant.CallbackChangeType;
 import com.rishiqing.qywx.service.constant.CallbackFailType;
 import com.rishiqing.qywx.service.constant.CallbackInfoType;
+import com.rishiqing.qywx.service.exception.CallbackException;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Map;
@@ -32,7 +33,7 @@ public class LogFailPushCallbackHandlerImpl implements PushCallbackHandler {
                     CallbackInfoType.CHANGE_CONTACT,
                     null,
                     null);
-            throw e;
+            throw new CallbackException(e);
         }
     }
 
@@ -47,7 +48,7 @@ public class LogFailPushCallbackHandlerImpl implements PushCallbackHandler {
                     CallbackInfoType.CHANGE_CONTACT,
                     CallbackChangeType.CREATE_PARTY,
                     jsonString);
-            throw e;
+            throw new CallbackException(e);
         }
     }
 
@@ -62,7 +63,7 @@ public class LogFailPushCallbackHandlerImpl implements PushCallbackHandler {
                     CallbackInfoType.CHANGE_CONTACT,
                     CallbackChangeType.UPDATE_PARTY,
                     jsonString);
-            throw e;
+            throw new CallbackException(e);
         }
     }
 
@@ -77,7 +78,7 @@ public class LogFailPushCallbackHandlerImpl implements PushCallbackHandler {
                     CallbackInfoType.CHANGE_CONTACT,
                     CallbackChangeType.DELETE_PARTY,
                     jsonString);
-            throw e;
+            throw new CallbackException(e);
         }
     }
 
@@ -92,7 +93,7 @@ public class LogFailPushCallbackHandlerImpl implements PushCallbackHandler {
                     CallbackInfoType.CHANGE_CONTACT,
                     CallbackChangeType.CREATE_USER,
                     jsonString);
-            throw e;
+            throw new CallbackException(e);
         }
     }
 
@@ -107,7 +108,7 @@ public class LogFailPushCallbackHandlerImpl implements PushCallbackHandler {
                     CallbackInfoType.CHANGE_CONTACT,
                     CallbackChangeType.UPDATE_USER,
                     jsonString);
-            throw e;
+            throw new CallbackException(e);
         }
     }
 
@@ -122,7 +123,7 @@ public class LogFailPushCallbackHandlerImpl implements PushCallbackHandler {
                     CallbackInfoType.CHANGE_CONTACT,
                     CallbackChangeType.DELETE_USER,
                     jsonString);
-            throw e;
+            throw new CallbackException(e);
         }
     }
 }

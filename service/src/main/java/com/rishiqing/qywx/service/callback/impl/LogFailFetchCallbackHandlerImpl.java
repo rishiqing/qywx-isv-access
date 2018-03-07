@@ -6,6 +6,7 @@ import com.rishiqing.qywx.service.common.fail.CallbackFailService;
 import com.rishiqing.qywx.service.constant.CallbackChangeType;
 import com.rishiqing.qywx.service.constant.CallbackFailType;
 import com.rishiqing.qywx.service.constant.CallbackInfoType;
+import com.rishiqing.qywx.service.exception.CallbackException;
 import com.rishiqing.qywx.service.exception.ObjectNotExistException;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -33,7 +34,7 @@ public class LogFailFetchCallbackHandlerImpl implements FetchCallbackHandler {
                     CallbackInfoType.CREATE_AUTH,
                     null,
                     permanentCode);
-            throw e;
+            throw new CallbackException(e);
         }
     }
 
@@ -48,7 +49,7 @@ public class LogFailFetchCallbackHandlerImpl implements FetchCallbackHandler {
                     CallbackInfoType.CHANGE_CONTACT,
                     CallbackChangeType.CREATE_PARTY,
                     jsonSting);
-            throw e;
+            throw new CallbackException(e);
         }
     }
 
@@ -63,7 +64,7 @@ public class LogFailFetchCallbackHandlerImpl implements FetchCallbackHandler {
                     CallbackInfoType.CHANGE_CONTACT,
                     CallbackChangeType.UPDATE_PARTY,
                     jsonSting);
-            throw e;
+            throw new CallbackException(e);
         }
     }
 
@@ -78,7 +79,7 @@ public class LogFailFetchCallbackHandlerImpl implements FetchCallbackHandler {
                     CallbackInfoType.CHANGE_CONTACT,
                     CallbackChangeType.DELETE_PARTY,
                     jsonSting);
-            throw e;
+            throw new CallbackException(e);
         }
     }
 
@@ -93,7 +94,7 @@ public class LogFailFetchCallbackHandlerImpl implements FetchCallbackHandler {
                     CallbackInfoType.CHANGE_CONTACT,
                     CallbackChangeType.CREATE_USER,
                     jsonSting);
-            throw e;
+            throw new CallbackException(e);
         }
     }
 
@@ -108,7 +109,7 @@ public class LogFailFetchCallbackHandlerImpl implements FetchCallbackHandler {
                     CallbackInfoType.CHANGE_CONTACT,
                     CallbackChangeType.UPDATE_USER,
                     jsonSting);
-            throw e;
+            throw new CallbackException(e);
         }
     }
 
@@ -123,7 +124,7 @@ public class LogFailFetchCallbackHandlerImpl implements FetchCallbackHandler {
                     CallbackInfoType.CHANGE_CONTACT,
                     CallbackChangeType.DELETE_USER,
                     jsonSting);
-            throw e;
+            throw new CallbackException(e);
         }
     }
 }

@@ -30,7 +30,7 @@ public class CorpStaffIdsConverter {
         if(list == null){
             return null;
         }
-        List<CorpStaffIdsVO> newList = new ArrayList<>(list.size());
+        List<CorpStaffIdsVO> newList = new ArrayList<CorpStaffIdsVO>(list.size());
         Iterator<CorpStaffIdsDO> it = list.iterator();
         while (it.hasNext()){
             CorpStaffIdsDO obj = it.next();

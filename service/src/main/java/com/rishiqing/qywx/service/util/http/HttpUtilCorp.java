@@ -24,9 +24,9 @@ public class HttpUtilCorp {
     }
 
     public JSONObject getJsapiTicket(CorpTokenVO corpTokenVO) {
-        Map<String, Object> options = new HashMap<>();
+        Map<String, Object> options = new HashMap<String, Object>();
         options.put("corpId", corpTokenVO.getCorpId());
-        Map<String, Object> queryMap = new HashMap<>();
+        Map<String, Object> queryMap = new HashMap<String, Object>();
         queryMap.put("access_token", corpTokenVO.getCorpToken());
         return restHttpClient.get(
                 RequestUrl.CORP_JSAPI_TICKET,
@@ -36,9 +36,9 @@ public class HttpUtilCorp {
     }
 
     public JSONObject getDepartmentList(CorpTokenVO corpTokenVO, CorpDeptVO corpDeptVO) {
-        Map<String, Object> options = new HashMap<>();
+        Map<String, Object> options = new HashMap<String, Object>();
         options.put("corpId", corpTokenVO.getCorpId());
-        Map<String, Object> queryMap = new HashMap<>();
+        Map<String, Object> queryMap = new HashMap<String, Object>();
         queryMap.put("access_token", corpTokenVO.getCorpToken());
         if(corpDeptVO != null){
             queryMap.put("id", corpDeptVO.getDeptId());
@@ -51,9 +51,9 @@ public class HttpUtilCorp {
     }
 
     public JSONObject getDepartmentStaffList(CorpTokenVO corpTokenVO, @Nullable CorpDeptVO corpDeptVO, Boolean fetchChild) {
-        Map<String, Object> options = new HashMap<>();
+        Map<String, Object> options = new HashMap<String, Object>();
         options.put("corpId", corpTokenVO.getCorpId());
-        Map<String, Object> queryMap = new HashMap<>();
+        Map<String, Object> queryMap = new HashMap<String, Object>();
         queryMap.put("access_token", corpTokenVO.getCorpToken());
 //        默认不使用递归调用
 //        queryMap.put("fetch_child", "1");  //递归获取
@@ -77,7 +77,7 @@ public class HttpUtilCorp {
 
     public JSONObject getAppAdminList(SuiteTokenVO suiteTokenVO, CorpAppVO corpAppVO) {
         JSONObject params = Bean2JsonConverter.prepareGetAdminList(suiteTokenVO, corpAppVO);
-        Map<String, Object> queryMap = new HashMap<>();
+        Map<String, Object> queryMap = new HashMap<String, Object>();
         queryMap.put("suite_access_token", suiteTokenVO.getSuiteToken());
 
         return restHttpClient.post(

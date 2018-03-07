@@ -86,7 +86,7 @@
                 <SizeBasedTriggeringPolicy size="50 MB"/>
             </Policies>
         </RollingFile>
-        <!--将信息推送到日事清服务器相关listener的日志输出-->
+        <!--将信息推送到日事清服务器相关lis的日志输出-->
         <RollingFile name="SERVICE_EVENT_PUSH_LISTENER_APPENDER" fileName="${baseDir}/service_event_push_listener.log"
                      filePattern="${baseDir}/$${date:yyyy-MM}/service_event_push_listener-%d{MM-dd-yyyy}-%i.log.gz">
             <PatternLayout charset="UTF-8">

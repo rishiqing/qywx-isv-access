@@ -56,14 +56,4 @@
         <property name="jobDetail" ref="redoContactCallbackJobDetail" />
         <property name="cronExpression" value="0 */2 * * * ?" />
     </bean>
-
-    <!--<bean id="demoJobDetail" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">-->
-        <!--<property name="jobClass" value="com.rishiqing.qywx.service.scheduler.DemoJob" />-->
-        <!--<property name="durability" value="true" />-->
-    <!--</bean>-->
-
-    <!--<bean id="demoTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">-->
-        <!--<property name="jobDetail" ref="demoJobDetail" />-->
-        <!--<property name="cronExpression" value="0 */1 * * * ?" />-->
-    <!--</bean>-->
 </beans>

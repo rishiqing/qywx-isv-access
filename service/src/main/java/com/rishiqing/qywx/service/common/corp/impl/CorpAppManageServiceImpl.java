@@ -29,7 +29,7 @@ public class CorpAppManageServiceImpl implements CorpAppManageService {
     @Override
     public List<CorpAppVO> listCorpApp(String corpId) {
         List<CorpAppDO> list = corpAppDao.listCorpAppByCorpId(corpId);
-        List<CorpAppVO> voList = new ArrayList<>();
+        List<CorpAppVO> voList = new ArrayList<CorpAppVO>();
         for(CorpAppDO corpAppDO : list){
             voList.add(CorpAppConverter.corpAppDO2CorpAppVO(corpAppDO));
         }

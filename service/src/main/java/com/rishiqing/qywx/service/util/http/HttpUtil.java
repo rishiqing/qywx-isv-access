@@ -35,9 +35,9 @@ public class HttpUtil {
     public JSONObject getPermanentCode(SuiteTokenVO suiteTokenVO, String authCode) {
         JSONObject params = Bean2JsonConverter.prepareAuthCode(suiteTokenVO, authCode);
         logger.debug("====getPermanentCode===={}", JSON.toJSONString(params));
-        Map<String ,Object> options = new HashMap<>();
+        Map<String ,Object> options = new HashMap<String, Object>();
         options.put("suiteKey", suiteTokenVO.getSuiteKey());
-        Map<String, Object> queryMap = new HashMap<>();
+        Map<String, Object> queryMap = new HashMap<String, Object>();
         queryMap.put("suite_access_token", suiteTokenVO.getSuiteToken());
         return restHttpClient.post(
                 RequestUrl.PERMANENT_CODE, queryMap, null, params.toString(), options
@@ -46,9 +46,9 @@ public class HttpUtil {
 
     public JSONObject getCorpAuthInfo(SuiteTokenVO suiteTokenVO, CorpSuiteVO corpSuiteVO){
         JSONObject params = Bean2JsonConverter.preparePermanentCode(suiteTokenVO, corpSuiteVO);
-        Map<String ,Object> options = new HashMap<>();
+        Map<String ,Object> options = new HashMap<String ,Object>();
         options.put("suiteKey", suiteTokenVO.getSuiteKey());
-        Map<String, Object> queryMap = new HashMap<>();
+        Map<String, Object> queryMap = new HashMap<String ,Object>();
         queryMap.put("suite_access_token", suiteTokenVO.getSuiteToken());
         return restHttpClient.post(
                 RequestUrl.CORP_AUTH_INFO, queryMap, null, params.toString(), options
@@ -57,9 +57,9 @@ public class HttpUtil {
 
     public JSONObject getCorpAccessToken(SuiteTokenVO suiteTokenVO, CorpSuiteVO corpSuiteVO) {
         JSONObject params = Bean2JsonConverter.preparePermanentCode(suiteTokenVO, corpSuiteVO);
-        Map<String ,Object> options = new HashMap<>();
+        Map<String ,Object> options = new HashMap<String ,Object>();
         options.put("suiteKey", suiteTokenVO.getSuiteKey());
-        Map<String, Object> queryMap = new HashMap<>();
+        Map<String, Object> queryMap = new HashMap<String ,Object>();
         queryMap.put("suite_access_token", suiteTokenVO.getSuiteToken());
         return restHttpClient.post(
                 RequestUrl.CORP_ACCESS_TOKEN, queryMap, null, params.toString(), options

@@ -43,7 +43,7 @@ public class RsqStaffServiceImpl implements RsqStaffService {
     @Override
     public void pushAndCreateAllCorpStaff(CorpVO corpVO) {
         List<CorpStaffVO> list = corpStaffManageService.listCorpStaffByCorpId(corpVO.getCorpId());
-        List<CorpStaffVO> adminList = new ArrayList<>();
+        List<CorpStaffVO> adminList = new ArrayList<CorpStaffVO>();
 
         for (CorpStaffVO corpStaffVO : list) {
             List<CorpDeptVO> deptList = corpDeptManageService.listCorpDeptListByCorpIdAndDeptIdString(corpVO.getCorpId(), corpStaffVO.getDepartment());

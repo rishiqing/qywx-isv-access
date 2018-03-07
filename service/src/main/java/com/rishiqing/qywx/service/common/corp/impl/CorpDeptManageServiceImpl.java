@@ -24,7 +24,7 @@ public class CorpDeptManageServiceImpl implements CorpDeptManageService {
         String strIds = strDeptIds.replaceAll("\\[", "")
                 .replaceAll("\\]", "");
         String[] arr = strIds.split("\\,");
-        List<CorpDeptVO> list = new ArrayList<>(arr.length);
+        List<CorpDeptVO> list = new ArrayList<CorpDeptVO>(arr.length);
         for(String strId : arr){
             if(null != strId && !"".equals(strId)){
                 CorpDeptVO corpDeptVO = getCorpDeptByCorpIdAndDeptId(corpId, Long.valueOf(strId));

@@ -49,9 +49,6 @@
         <constructor-arg ref="connectionFactory" />
     </bean>
 
-    <!--获取企业-->
-    <amq:queue id="pullOrgInfoQueue" physicalName="pullOrgInfo.queue" />
-
     <!--测试queue-->
     <amq:queue id="demoQueue" physicalName="demo.queue" />
     <bean id="demoMqListener" class="com.rishiqing.qywx.service.event.listener.mq.DemoMqListener" />

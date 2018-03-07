@@ -79,7 +79,7 @@ public class Json2BeanConverter {
             return null;
         }
         JSONArray jsonAgentArray = jsonAuth.getJSONArray("agent");
-        List<CorpAppVO> result = new ArrayList<>();
+        List<CorpAppVO> result = new ArrayList<CorpAppVO>();
 
         Iterator<Object> it = jsonAgentArray.iterator();
         while(it.hasNext()){
@@ -121,7 +121,7 @@ public class Json2BeanConverter {
             return null;
         }
         JSONArray jsonDeptList = json.getJSONArray("department");
-        List<CorpDeptVO> list = new ArrayList<>(jsonDeptList.size());
+        List<CorpDeptVO> list = new ArrayList<CorpDeptVO>(jsonDeptList.size());
         Iterator<Object> it = jsonDeptList.iterator();
         while (it.hasNext()){
             JSONObject jsonDept = (JSONObject)it.next();
@@ -140,7 +140,7 @@ public class Json2BeanConverter {
             return null;
         }
         JSONArray jsonStaffList = json.getJSONArray("userlist");
-        List<CorpStaffVO> list = new ArrayList<>(jsonStaffList.size());
+        List<CorpStaffVO> list = new ArrayList<CorpStaffVO>(jsonStaffList.size());
         Iterator<Object> it = jsonStaffList.iterator();
         while (it.hasNext()){
             JSONObject jsonStaff = (JSONObject)it.next();
@@ -200,7 +200,7 @@ public class Json2BeanConverter {
             return null;
         }
         JSONArray jsonStaffList = json.getJSONArray("admin");
-        List<CorpStaffVO> list = new ArrayList<>(jsonStaffList.size());
+        List<CorpStaffVO> list = new ArrayList<CorpStaffVO>(jsonStaffList.size());
         Iterator<Object> it = jsonStaffList.iterator();
         while (it.hasNext()){
             JSONObject jsonStaff = (JSONObject)it.next();

@@ -26,9 +26,9 @@ public class HttpUtilAuth {
      * @throws UnirestException
      */
     public JSONObject getLoginUser(CorpTokenVO corpTokenVO, String code) {
-        Map<String, Object> options = new HashMap<>();
+        Map<String, Object> options = new HashMap<String, Object>();
         options.put("corpId", corpTokenVO.getCorpId());
-        Map<String, Object> queryMap = new HashMap<>();
+        Map<String, Object> queryMap = new HashMap<String, Object>();
         queryMap.put("access_token", corpTokenVO.getCorpToken());
         queryMap.put("code", code);
         return restHttpClient.get(
