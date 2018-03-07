@@ -50,7 +50,7 @@
     </bean>
 
     <!--测试queue-->
-    <amq:queue id="demoQueue" physicalName="demo.queue" />
+    <amq:queue id="demoQueue" physicalName="qywx.demo.queue" />
     <bean id="demoMqListener" class="com.rishiqing.qywx.service.event.listener.mq.DemoMqListener" />
     <bean id="demoJmsContainer"
           class="org.springframework.jms.listener.DefaultMessageListenerContainer">
@@ -60,7 +60,7 @@
     </bean>
 
     <!--企业同步到日事清所有组织结构的listener-->
-    <amq:queue id="pushCorpAllQueue" physicalName="push.corpAll" />
+    <amq:queue id="pushCorpAllQueue" physicalName="qywx.push.corpAll" />
     <bean id="pushCorpAllMqListener" class="com.rishiqing.qywx.service.event.listener.mq.PushCorpAllMqListener" />
     <bean id="pushCorpAllMqContainer"
           class="org.springframework.jms.listener.DefaultMessageListenerContainer">
@@ -70,7 +70,7 @@
     </bean>
 
     <!--企业同步到日事清corp回调的listener-->
-    <amq:queue id="pushCorpCallbackQueue" physicalName="push.corpCallback" />
+    <amq:queue id="pushCorpCallbackQueue" physicalName="qywx..corpCallback" />
     <bean id="pushCorpCallbackMqListener" class="com.rishiqing.qywx.service.event.listener.mq.PushCorpCallbackMqListener" />
     <bean id="pushCorpCallbackMqContainer"
           class="org.springframework.jms.listener.DefaultMessageListenerContainer">
