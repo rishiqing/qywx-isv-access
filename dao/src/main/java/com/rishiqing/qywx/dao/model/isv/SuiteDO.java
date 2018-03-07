@@ -17,6 +17,9 @@ public class SuiteDO {
     private String token;  //  已填写用于生成签名和校验毁掉请求的合法性
     private String corpId;  // isv所在公司的corpId
 
+    private String rsqAppName;  //调用日事清接口的name
+    private String rsqAppToken;  //调用日事清接口的凭证
+
     public Long getId() {
         return id;
     }
@@ -89,6 +92,22 @@ public class SuiteDO {
         this.corpId = corpId;
     }
 
+    public String getRsqAppName() {
+        return rsqAppName;
+    }
+
+    public void setRsqAppName(String rsqAppName) {
+        this.rsqAppName = rsqAppName;
+    }
+
+    public String getRsqAppToken() {
+        return rsqAppToken;
+    }
+
+    public void setRsqAppToken(String rsqAppToken) {
+        this.rsqAppToken = rsqAppToken;
+    }
+
     @Override
     public String toString() {
         return "SuiteDO{" +
@@ -101,6 +120,8 @@ public class SuiteDO {
                 ", encodingAesKey='" + encodingAesKey + '\'' +
                 ", token='" + token + '\'' +
                 ", corpId='" + corpId + '\'' +
+                ", rsqAppName='" + rsqAppName + '\'' +
+                ", rsqAppToken='" + rsqAppToken + '\'' +
                 '}';
     }
 }

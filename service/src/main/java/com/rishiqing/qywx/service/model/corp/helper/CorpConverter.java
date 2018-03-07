@@ -1,5 +1,6 @@
 package com.rishiqing.qywx.service.model.corp.helper;
 
+import com.rishiqing.common.model.RsqTeamVO;
 import com.rishiqing.qywx.dao.model.corp.CorpDO;
 import com.rishiqing.qywx.service.model.corp.CorpVO;
 
@@ -26,6 +27,7 @@ public class CorpConverter {
         corpVO.setSubjectType(corpDO.getSubjectType());
         corpVO.setVerifiedEndTime(corpDO.getVerifiedEndTime());
         corpVO.setAuthCanceled(corpDO.getAuthCanceled());
+        corpVO.setRsqId(corpDO.getRsqId());
 
         return corpVO;
     }
@@ -51,7 +53,17 @@ public class CorpConverter {
         corpDO.setSubjectType(corpVO.getSubjectType());
         corpDO.setVerifiedEndTime(corpVO.getVerifiedEndTime());
         corpDO.setAuthCanceled(corpVO.getAuthCanceled());
+        corpDO.setRsqId(corpVO.getRsqId());
 
         return corpDO;
+    }
+    public static RsqTeamVO corpVO2RsqTeamVO(CorpVO corpVO){
+        RsqTeamVO rsqTeamVO = new RsqTeamVO();
+        rsqTeamVO.setCorpId(corpVO.getCorpId());
+        rsqTeamVO.setName(corpVO.getCorpName());
+        if(null != corpVO.getRsqId()){
+            rsqTeamVO.setId(Long.valueOf(corpVO.getRsqId()));
+        }
+        return rsqTeamVO;
     }
 }

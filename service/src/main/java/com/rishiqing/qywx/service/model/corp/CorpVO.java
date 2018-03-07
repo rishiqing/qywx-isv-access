@@ -22,6 +22,8 @@ public class CorpVO {
     private String authAvatar;
     private Boolean authCanceled;
 
+    private String rsqId;
+
     public Long getId() {
         return id;
     }
@@ -158,6 +160,14 @@ public class CorpVO {
         this.authCanceled = authCanceled;
     }
 
+    public String getRsqId() {
+        return rsqId;
+    }
+
+    public void setRsqId(String rsqId) {
+        this.rsqId = rsqId;
+    }
+
     @Override
     public String toString() {
         return "CorpVO{" +
@@ -177,6 +187,8 @@ public class CorpVO {
                 ", authUserId='" + authUserId + '\'' +
                 ", authName='" + authName + '\'' +
                 ", authAvatar='" + authAvatar + '\'' +
+                ", authCanceled=" + authCanceled +
+                ", rsqId='" + rsqId + '\'' +
                 '}';
     }
 }

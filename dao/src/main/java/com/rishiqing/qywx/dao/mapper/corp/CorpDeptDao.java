@@ -22,6 +22,15 @@ public interface CorpDeptDao {
      * @return
      */
     List<CorpDeptDO> listCorpDeptByCorpId(@Param("corpId") String corpId);
+
+    /**
+     * 根据corpId和parentId获取dept
+     * @param corpId
+     * @param parentId
+     * @return
+     */
+    List<CorpDeptDO> listCorpDeptByCorpIdAndParentId(@Param("corpId") String corpId, @Param("parentId") Long parentId);
+
     /**
      * 保存或者更新corpDept
      * @param corpDeptDO

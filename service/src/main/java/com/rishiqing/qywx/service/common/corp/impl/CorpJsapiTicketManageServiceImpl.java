@@ -1,6 +1,7 @@
 package com.rishiqing.qywx.service.common.corp.impl;
 
 import com.rishiqing.qywx.dao.mapper.corp.CorpJsapiTicketDao;
+import com.rishiqing.qywx.dao.model.corp.CorpJsapiTicketDO;
 import com.rishiqing.qywx.service.common.corp.CorpJsapiTicketManageService;
 import com.rishiqing.qywx.service.model.corp.CorpJsapiTicketVO;
 import com.rishiqing.qywx.service.model.corp.helper.CorpJsapiTicketConverter;
@@ -22,5 +23,26 @@ public class CorpJsapiTicketManageServiceImpl implements CorpJsapiTicketManageSe
         corpJsapiTicketDao.saveOrUpdateCorpJsapiTicket(
                 CorpJsapiTicketConverter.corpJsapiTicketVO2CorpJsapiTicketDO(corpJsapiTicketVO)
         );
+    }
+
+    /**
+     * 更新ticket的方法，只有当ticket有变化时才更新
+     * @param newTicket
+     */
+    @Override
+    public void updateTicket(CorpJsapiTicketVO newTicket){
+        CorpJsapiTicketDO oldTicket = corpJsapiTicketDao.getCorpJsapiTicketBySuiteKeyAndCorpId(
+                newTicket.getSuiteKey(),
+                newTicket.getCorpId()
+        );
+        if(null == oldTicket){
+            saveCorpJsapiTicket(newTicket);
+            return;
+        }
+        //   对比，只有当发生变化时才更新
+        if(!oldTicket.getCorpJsapiTicket().equals(newTicket.getCorpJsapiTicket())){
+            saveCorpJsapiTicket(newTicket);
+            return;
+        }
     }
 }

@@ -1,7 +1,8 @@
-package com.rishiqing.qywx.service.event;
+package com.rishiqing.qywx.service.event.service.impl;
 
 import com.google.common.eventbus.EventBus;
 import com.rishiqing.qywx.service.event.listener.EventListener;
+import com.rishiqing.qywx.service.event.service.EventBusInitService;
 
 import java.util.Iterator;
 import java.util.Map;

@@ -16,4 +16,6 @@ public interface CorpJsapiTicketManageService {
      * @param corpJsapiTicketVO
      */
     void saveCorpJsapiTicket(CorpJsapiTicketVO corpJsapiTicketVO);
+
+    void updateTicket(CorpJsapiTicketVO newTicket);
 }

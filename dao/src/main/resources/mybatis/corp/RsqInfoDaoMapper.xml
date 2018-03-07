@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rishiqing.qywx.dao.mapper.rsq.RsqInfoDao">
+    <update id="updateCorpRsqInfo">
+        UPDATE isv_corp SET rsq_id = #{rsqId} WHERE corp_id = #{corpId}
+    </update>
+
+    <update id="updateCorpDeptRsqInfo">
+        UPDATE isv_corp_dept SET rsq_id = #{rsqId} WHERE corp_id = #{corpId} AND dept_id = #{deptId}
+    </update>
+
+    <update id="updateCorpStaffRsqInfo">
+        UPDATE isv_corp_staff SET
+            rsq_user_id = #{rsqUserId},
+            rsq_username = #{rsqUsername},
+            rsq_password = #{rsqPassword},
+            rsq_login_token = #{rsqLoginToken}
+        WHERE corp_id = #{corpId} AND user_id = #{userId}
+    </update>
+</mapper>

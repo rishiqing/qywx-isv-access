@@ -35,8 +35,8 @@ public class CorpController {
             @RequestParam("agentId") String agentId,
             @RequestParam("userId") String userId
     ) {
-        logger.error("/corp/staff, corpId: {}, agentId: {}, userId: {}", corpId, agentId, userId);
-        Map<String, Object> result = new HashMap<>();
+        logger.info("/corp/staff, corpId: {}, agentId: {}, userId: {}", corpId, agentId, userId);
+        Map<String, Object> result = new HashMap<String, Object>();
         try {
             CorpStaffVO corpStaffVO = corpStaffManageService.getCorpLoginStaffInfo(corpId, userId);
             result.put("user", corpStaffVO);

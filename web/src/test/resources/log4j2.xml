@@ -35,8 +35,5 @@
         <Logger name="WEB_CALLBACK_LOGGER" level="info" additivity="false" includeLocation="true">
             <AppenderRef ref="WEB_CALLBACK_APPENDER"/>
         </Logger>
-        <Logger name="SERVICE_HTTP_REQUEST_LOGGER" level="info" additivity="false" includeLocation="true">
-            <AppenderRef ref="SERVICE_HTTP_REQUEST_APPENDER"/>
-        </Logger>
     </Loggers>
 </Configuration>

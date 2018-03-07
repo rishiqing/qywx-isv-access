@@ -10,6 +10,11 @@
     <packaging>war</packaging>
     <name>web app for qiye weixin</name>
     <url>https://www.rishiqing.com</url>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>com.rishiqing.qywx</groupId>
@@ -91,16 +96,43 @@
         </dependency>
     </dependencies>
     <build>
-        <finalName>qywx.isv.access.web</finalName>
+        <finalName>ding-isv-access</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.3</version>
                 <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
+                    <webResources>
+                        <resource>
+                            <!--不使用maven管理的本地的lib-->
+                            <directory>lib/</directory>
+                            <targetPath>WEB-INF/lib</targetPath>
+                            <includes>
+                                <include>**/*.jar</include>
+                            </includes>
+                        </resource>
+                    </webResources>
                 </configuration>
             </plugin>
+            <!--<plugin>-->
+                <!--<artifactId>maven-assembly-plugin</artifactId>-->
+                <!--<executions>-->
+                    <!--<execution>-->
+                        <!--<id>web-service-war</id>-->
+                        <!--<phase>package</phase>-->
+                        <!--<goals>-->
+                            <!--<goal>single</goal>-->
+                        <!--</goals>-->
+                        <!--<configuration>-->
+                            <!--<descriptors>-->
+                                <!--<descriptor>src/main/assembly/main.xml</descriptor>-->
+                                <!--&lt;!&ndash;<descriptor>src/main/assembly/job.xml</descriptor>&ndash;&gt;-->
+                            <!--</descriptors>-->
+                        <!--</configuration>-->
+                    <!--</execution>-->
+                <!--</executions>-->
+            <!--</plugin>-->
         </plugins>
     </build>
 </project>

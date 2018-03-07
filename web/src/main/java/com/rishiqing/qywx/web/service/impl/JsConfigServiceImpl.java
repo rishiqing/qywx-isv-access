@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.rishiqing.qywx.service.common.corp.CorpJsapiTicketManageService;
 import com.rishiqing.qywx.service.common.corp.CorpTokenManageService;
-import com.rishiqing.qywx.service.exception.HttpException;
+import com.rishiqing.common.exception.HttpException;
 import com.rishiqing.qywx.service.model.corp.CorpJsapiTicketVO;
 import com.rishiqing.qywx.service.model.corp.CorpTokenVO;
 import com.rishiqing.qywx.service.util.http.HttpUtilCorp;
@@ -12,16 +12,11 @@ import com.rishiqing.qywx.service.util.http.converter.Json2BeanConverter;
 import com.rishiqing.qywx.web.exception.JsConfigException;
 import com.rishiqing.qywx.web.service.JsConfigService;
 import com.rishiqing.qywx.web.util.codec.JsapiSignature;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 public class JsConfigServiceImpl implements JsConfigService {
     @Autowired
@@ -33,7 +28,7 @@ public class JsConfigServiceImpl implements JsConfigService {
     @Autowired
     private HttpUtilCorp httpUtilCorp;
     @Override
-    public Map<String, Object> getJsapiSignature(String url, String corpId) throws JsConfigException {
+    public Map<String, Object> getJsapiSignature(String url, String corpId) {
         String suiteKey = (String)isvGlobal.get("suiteKey");
         CorpJsapiTicketVO jsTicket = corpJsapiTicketManageService.getCorpJsapiTicket(suiteKey, corpId);
         String sig = "";
@@ -58,17 +53,36 @@ public class JsConfigServiceImpl implements JsConfigService {
     }
 
     @Override
-    public void refreshJsapiTicket(String corpId) throws JsConfigException {
+    public void refreshJsapiTicket(String corpId) {
         String suiteKey = (String)isvGlobal.get("suiteKey");
         CorpTokenVO corpTokenVO = corpTokenManageService.getCorpToken(suiteKey, corpId);
+        CorpJsapiTicketVO oldTicket = corpJsapiTicketManageService.getCorpJsapiTicket(suiteKey, corpId);
         JSONObject json = null;
         try {
-            json = httpUtilCorp.getJsapiTicket(corpTokenVO);
-        } catch (HttpException | UnirestException e) {
+            if(null == oldTicket){
+                fetchAndSaveTicket(corpTokenVO, null);
+                return;
+            }
+            //判断时间expire之后才进行获取新的ticket
+            long now = new Date().getTime() / 1000;
+            long last = oldTicket.getUpdateTime().getTime() / 1000;
+            if(now - last >= oldTicket.getExpiresIn()){
+                fetchAndSaveTicket(corpTokenVO, oldTicket);
+            }
+        } catch (HttpException e) {
             throw new JsConfigException("js config exception", e);
         }
-        CorpJsapiTicketVO jsapiTicketVO = Json2BeanConverter.generateCorpJsapiTicket(suiteKey, corpId, json);
-        corpJsapiTicketManageService.saveCorpJsapiTicket(jsapiTicketVO);
+    }
+
+    private void fetchAndSaveTicket(CorpTokenVO corpTokenVO, CorpJsapiTicketVO dbTicket){
+        String suiteKey = corpTokenVO.getSuiteKey();
+        String corpId = corpTokenVO.getCorpId();
+        JSONObject json = httpUtilCorp.getJsapiTicket(corpTokenVO);
+        CorpJsapiTicketVO newTicket = Json2BeanConverter.generateCorpJsapiTicket(suiteKey, corpId, json);
+        //只有旧的dbTicket不存在，或者在新旧ticket不相同时，才会更新
+        if(null == dbTicket || !newTicket.getCorpJsapiTicket().equals(dbTicket.getCorpJsapiTicket())){
+            corpJsapiTicketManageService.saveCorpJsapiTicket(newTicket);
+        }
     }
 
     // 随机生成16位字符串

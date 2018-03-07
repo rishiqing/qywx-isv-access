@@ -11,6 +11,7 @@ public class CorpJsapiTicketDO {
     private String corpId;
     private String corpJsapiTicket;
     private Long expiresIn;
+    private Date updateTime;
 
     public Long getId() {
         return id;
@@ -68,6 +69,14 @@ public class CorpJsapiTicketDO {
         this.expiresIn = expiresIn;
     }
 
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
     @Override
     public String toString() {
         return "CorpJsapiTicketDO{" +
@@ -78,6 +87,7 @@ public class CorpJsapiTicketDO {
                 ", corpId='" + corpId + '\'' +
                 ", corpJsapiTicket='" + corpJsapiTicket + '\'' +
                 ", expiresIn=" + expiresIn +
+                ", updateTime=" + updateTime +
                 '}';
     }
 }

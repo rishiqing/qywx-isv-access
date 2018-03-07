@@ -1,5 +1,6 @@
 package com.rishiqing.qywx.service.common.isv.impl;
 
+import com.rishiqing.common.exception.HttpException;
 import com.rishiqing.qywx.dao.mapper.isv.SuiteDao;
 import com.rishiqing.qywx.service.common.isv.SuiteManageService;
 import com.rishiqing.qywx.service.model.isv.SuiteVO;

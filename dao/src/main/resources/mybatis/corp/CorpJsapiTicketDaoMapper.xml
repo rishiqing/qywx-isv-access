@@ -9,10 +9,11 @@
         <result property="suiteKey" column="suite_key" />
         <result property="corpJsapiTicket" column="corp_jsapi_ticket" />
         <result property="expiresIn" column="expires_in" />
+        <result property="updateTime" column="update_time" />
     </resultMap>
 
     <sql id="selectAllFields">
-        id, date_created, last_updated, corp_id, suite_key, corp_jsapi_ticket, expires_in
+        id, date_created, last_updated, corp_id, suite_key, corp_jsapi_ticket, expires_in, update_time
     </sql>
 
     <select id="getCorpJsapiTicketBySuiteKeyAndCorpId" resultMap="corpJsapiTicketMap">
@@ -29,18 +30,21 @@
             corp_id,
             suite_key,
             corp_jsapi_ticket,
-            expires_in
+            expires_in,
+            update_time
         ) VALUES (
             now(),
             now(),
             #{corpId},
             #{suiteKey},
             #{corpJsapiTicket},
-            #{expiresIn}
+            #{expiresIn},
+            now()
         ) ON DUPLICATE KEY UPDATE
             last_updated = now(),
             corp_jsapi_ticket = #{corpJsapiTicket},
-            expires_in = #{expiresIn}
+            expires_in = #{expiresIn},
+            update_time = now()
     </insert>
 
     <delete id="removeCorpJsapiTicketBySuiteKeyAndCorpId">

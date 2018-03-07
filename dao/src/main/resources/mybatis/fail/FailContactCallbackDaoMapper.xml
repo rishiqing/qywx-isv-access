@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rishiqing.qywx.dao.mapper.fail.FailContactCallbackDao">
+    <resultMap id="failContactCallbackMap" type="com.rishiqing.qywx.dao.model.fail.FailContactCallbackDO">
+        <id property="id" column="id" />
+        <result property="dateCreated" column="date_created" />
+        <result property="lastUpdated" column="last_updated" />
+        <result property="suiteKey" column="suite_key" />
+        <result property="corpId" column="corp_id" />
+        <result property="failType" column="fail_type" />
+        <result property="changeType" column="change_type" />
+        <result property="failNote" column="fail_note" />
+        <result property="eventMsg" column="event_msg" />
+    </resultMap>
+
+    <sql id="selectAllFields">
+        id, date_created, last_updated, suite_key, corp_id, fail_type, change_type, fail_note, event_msg
+    </sql>
+
+    <select id="listFailContactCallbackWithLimit" resultMap="failContactCallbackMap">
+        SELECT <include refid="selectAllFields" /> FROM isv_fail_contact_callback
+        ORDER BY id ASC LIMIT #{limit}
+    </select>
+
+    <insert id="saveOrUpdateFailContactCallback" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO isv_fail_contact_callback (
+            date_created,
+            last_updated,
+            suite_key,
+            corp_id,
+            fail_type,
+            change_type,
+            fail_note,
+            event_msg
+        ) VALUES (
+            now(),
+            now(),
+            #{suiteKey},
+            #{corpId},
+            #{failType},
+            #{changeType},
+            #{failNote},
+            #{eventMsg}
+        ) ON DUPLICATE KEY UPDATE
+            last_updated = now(),
+            fail_note = #{failNote},
+            event_msg = #{eventMsg}
+    </insert>
+
+    <delete id="removeFailContactCallbackById">
+        DELETE FROM isv_fail_contact_callback WHERE id = #{id}
+    </delete>
+</mapper>

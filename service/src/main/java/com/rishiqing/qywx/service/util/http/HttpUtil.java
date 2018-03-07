@@ -2,74 +2,75 @@ package com.rishiqing.qywx.service.util.http;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.rishiqing.qywx.service.constant.RequestUrl;
-import com.rishiqing.qywx.service.exception.HttpException;
-import com.rishiqing.qywx.service.exception.SuiteAccessTokenExpiredException;
+import com.rishiqing.common.exception.HttpException;
 import com.rishiqing.qywx.service.model.corp.CorpSuiteVO;
 import com.rishiqing.qywx.service.model.isv.SuiteTicketVO;
 import com.rishiqing.qywx.service.model.isv.SuiteTokenVO;
 import com.rishiqing.qywx.service.model.isv.SuiteVO;
+import com.rishiqing.common.util.http.client.RestHttpClient;
 import com.rishiqing.qywx.service.util.http.converter.Bean2JsonConverter;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class HttpUtil {
-    private RequestClient requestClient;
+    private static final Logger logger = LoggerFactory.getLogger("CONSOLE_LOGGER");
+    private RestHttpClient restHttpClient;
 
-    public HttpUtil(RequestClient requestClient) {
-        this.requestClient = requestClient;
+    public HttpUtil(RestHttpClient restHttpClient) {
+        this.restHttpClient = restHttpClient;
     }
 
-    public JSONObject getSuiteToken(SuiteVO suiteVO, SuiteTicketVO suiteTicketVO) throws UnirestException, HttpException {
+    public JSONObject getSuiteToken(SuiteVO suiteVO, SuiteTicketVO suiteTicketVO){
         JSONObject params = Bean2JsonConverter.prepareSuiteTicket(suiteVO, suiteTicketVO);
-        return requestClient.post(
+        return restHttpClient.post(
                 RequestUrl.SUITE_ACCESS_TOKEN, null, null, params.toString(), null
         );
     }
 
-    public JSONObject getPermanentCode(SuiteTokenVO suiteTokenVO, String authCode) throws UnirestException, HttpException {
+    public JSONObject getPermanentCode(SuiteTokenVO suiteTokenVO, String authCode) {
         JSONObject params = Bean2JsonConverter.prepareAuthCode(suiteTokenVO, authCode);
-        Map<String ,String> options = new HashMap<>();
+        logger.debug("====getPermanentCode===={}", JSON.toJSONString(params));
+        Map<String ,Object> options = new HashMap<String, Object>();
         options.put("suiteKey", suiteTokenVO.getSuiteKey());
-        Map<String, Object> queryMap = new HashMap<>();
+        Map<String, Object> queryMap = new HashMap<String, Object>();
         queryMap.put("suite_access_token", suiteTokenVO.getSuiteToken());
-        return requestClient.post(
+        return restHttpClient.post(
                 RequestUrl.PERMANENT_CODE, queryMap, null, params.toString(), options
         );
     }
 
-    public JSONObject getCorpAuthInfo(SuiteTokenVO suiteTokenVO, CorpSuiteVO corpSuiteVO) throws UnirestException, HttpException {
+    public JSONObject getCorpAuthInfo(SuiteTokenVO suiteTokenVO, CorpSuiteVO corpSuiteVO){
         JSONObject params = Bean2JsonConverter.preparePermanentCode(suiteTokenVO, corpSuiteVO);
-        Map<String ,String> options = new HashMap<>();
+        Map<String ,Object> options = new HashMap<String ,Object>();
         options.put("suiteKey", suiteTokenVO.getSuiteKey());
-        Map<String, Object> queryMap = new HashMap<>();
+        Map<String, Object> queryMap = new HashMap<String ,Object>();
         queryMap.put("suite_access_token", suiteTokenVO.getSuiteToken());
-        return requestClient.post(
+        return restHttpClient.post(
                 RequestUrl.CORP_AUTH_INFO, queryMap, null, params.toString(), options
         );
     }
 
-    public JSONObject getCorpAccessToken(SuiteTokenVO suiteTokenVO, CorpSuiteVO corpSuiteVO) throws UnirestException, HttpException {
+    public JSONObject getCorpAccessToken(SuiteTokenVO suiteTokenVO, CorpSuiteVO corpSuiteVO) {
         JSONObject params = Bean2JsonConverter.preparePermanentCode(suiteTokenVO, corpSuiteVO);
-        Map<String ,String> options = new HashMap<>();
+        Map<String ,Object> options = new HashMap<String ,Object>();
         options.put("suiteKey", suiteTokenVO.getSuiteKey());
-        Map<String, Object> queryMap = new HashMap<>();
+        Map<String, Object> queryMap = new HashMap<String ,Object>();
         queryMap.put("suite_access_token", suiteTokenVO.getSuiteToken());
-        return requestClient.post(
+        return restHttpClient.post(
                 RequestUrl.CORP_ACCESS_TOKEN, queryMap, null, params.toString(), options
         );
     }
 
-    public RequestClient getRequestClient() {
-        return requestClient;
+    public RestHttpClient getRestHttpClient() {
+        return restHttpClient;
     }
 
-    public void setRequestClient(RequestClient requestClient) {
-        this.requestClient = requestClient;
+    public void setRestHttpClient(RestHttpClient restHttpClient) {
+        this.restHttpClient = restHttpClient;
     }
 }

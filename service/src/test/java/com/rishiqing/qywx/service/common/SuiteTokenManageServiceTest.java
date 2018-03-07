@@ -1,16 +1,12 @@
 package com.rishiqing.qywx.service.common;
 
-import com.mashape.unirest.http.exceptions.UnirestException;
 import com.rishiqing.qywx.service.common.isv.SuiteTokenManageService;
-import com.rishiqing.qywx.service.exception.HttpException;
-import com.rishiqing.qywx.service.model.isv.SuiteTokenVO;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.Date;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
