@@ -63,3 +63,7 @@ CREATE TABLE `isv_fail_contact_callback` (
   `event_msg` VARCHAR(512) NOT NULL COMMENT '企业回调事件的消息体',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8mb4 COMMENT='企业通讯录事件回调失败的记录';
+
+# jsapi ticket 添加更新时间字段
+ALTER TABLE `isv_corp_jsapi_ticket`
+  ADD COLUMN `update_time` datetime NOT NULL COMMENT '上次更新ticket的时间';
