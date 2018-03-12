@@ -26,7 +26,7 @@ public class JsConfigController {
 
     @RequestMapping("/get_js_config")
     @ResponseBody
-    public String getJsConfig(
+    public Map getJsConfig(
             @RequestParam("url") String url,
             @RequestParam("corpId") String corpId,
             @RequestParam(value = "agentId", required = false) String agentId
@@ -48,12 +48,12 @@ public class JsConfigController {
             map.put("errcode", ResultCode.SYS_ERROR);
             map.put("errmsg", ResultCode.SYS_ERROR_MSG);
         }
-        return JSONObject.toJSONString(map);
+        return map;
     }
 
     @RequestMapping("/refresh_js_ticket")
     @ResponseBody
-    public String getJsConfig(
+    public Map getJsConfig(
             @RequestParam("corpId") String corpId,
             @RequestParam(value = "agentId", required = false) String agentId
     ){
@@ -74,6 +74,6 @@ public class JsConfigController {
             map.put("errcode", ResultCode.SYS_ERROR);
             map.put("errmsg", ResultCode.SYS_ERROR_MSG);
         }
-        return JSONObject.toJSONString(map);
+        return map;
     }
 }
