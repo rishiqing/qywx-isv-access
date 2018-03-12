@@ -30,7 +30,7 @@ public class CorpController {
 
     @RequestMapping(value = "/staff", method = {RequestMethod.GET})
     @ResponseBody
-    public String getCorpStaff (
+    public Map getCorpStaff (
             @RequestParam("corpId") String corpId,
             @RequestParam("agentId") String agentId,
             @RequestParam("userId") String userId
@@ -47,6 +47,6 @@ public class CorpController {
             result.put("errcode", ResultCode.SYS_ERROR);
             result.put("errmsg", ResultCode.SYS_ERROR_MSG);
         }
-        return JSONObject.toJSONString(result);
+        return result;
     }
 }

@@ -41,9 +41,11 @@ public class CallbackController {
         } catch (ActiveCorpException e) {
             //激活应用失败
             logger.error("active corp error", e);
+            resultStr = "fail";
         } catch (Exception e) {
             //验证URL失败，错误原因请查看异常
             logger.error("callback exception", e);
+            resultStr = "fail";
         }
         return resultStr;
     }

@@ -29,7 +29,7 @@ public class IdMapController {
 
     @ResponseBody
     @RequestMapping(value = "/idmap/userid2rsqid", method = {RequestMethod.POST})
-    public String userId2RsqId(
+    public Map userId2RsqId(
             @RequestParam("corpid") String corpId,
             @RequestBody String jsonBody
     ) {
@@ -46,12 +46,12 @@ public class IdMapController {
             map.put("errcode", ResultCode.SYS_ERROR);
             map.put("errmsg", ResultCode.SYS_ERROR_MSG);
         }
-        return JSONObject.toJSONString(map);
+        return map;
     }
 
     @ResponseBody
     @RequestMapping(value = "/idmap/rsqid2userid", method = {RequestMethod.POST})
-    public String rsqId2UserId(
+    public Map rsqId2UserId(
             @RequestParam("corpid") String corpId,
             @RequestBody String jsonBody
     ) {
@@ -74,6 +74,6 @@ public class IdMapController {
             map.put("errcode", ResultCode.SYS_ERROR);
             map.put("errmsg", ResultCode.SYS_ERROR_MSG);
         }
-        return JSONObject.toJSONString(map);
+        return map;
     }
 }
