@@ -104,4 +104,10 @@ public class DemoController {
         System.out.println("=======end");
         return "success";
     }
+
+    @RequestMapping(value = "/send/test", produces = "text/plain")
+    @ResponseBody
+    public String sendString(){
+        return "success";
+    }
 }
