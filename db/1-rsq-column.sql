@@ -67,3 +67,16 @@ CREATE TABLE `isv_fail_contact_callback` (
 # jsapi ticket 添加更新时间字段
 ALTER TABLE `isv_corp_jsapi_ticket`
   ADD COLUMN `update_time` datetime NOT NULL COMMENT '上次更新ticket的时间';
+
+# suite预授权码
+CREATE TABLE `isv_suite_pre_auth_code` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `date_created` datetime NOT NULL COMMENT '创建时间',
+  `last_updated` datetime NOT NULL COMMENT '修改时间',
+  `suite_key` varchar(128) NOT NULL COMMENT '套件key',
+  `suite_pre_auth_code` varchar(256) NOT NULL COMMENT '套件的预授权码',
+  `expires_in` bigint(10) NOT NULL COMMENT '过期时间(s)',
+  `code_update_time` datetime NOT NULL COMMENT 'code更新的时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `u_suite_key` (`suite_key`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COMMENT='套件的预授权码表';

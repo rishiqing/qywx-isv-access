@@ -6,6 +6,7 @@ import com.rishiqing.qywx.service.constant.RequestUrl;
 import com.rishiqing.common.exception.HttpException;
 import com.rishiqing.qywx.service.model.corp.CorpTokenVO;
 import com.rishiqing.common.util.http.client.RestHttpClient;
+import com.rishiqing.qywx.service.model.isv.SuiteTokenVO;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -35,6 +36,21 @@ public class HttpUtilAuth {
                 RequestUrl.AUTH_LOGIN_USER,
                 queryMap,
                 options
+        );
+    }
+
+    /**
+     * 获取预授权码
+     * @param suiteTokenVO
+     * @return
+     */
+    public JSONObject getPreAuthCode(SuiteTokenVO suiteTokenVO){
+        Map<String, Object> queryMap = new HashMap<String, Object>();
+        queryMap.put("suite_access_token", suiteTokenVO.getSuiteToken());
+        return restHttpClient.get(
+                RequestUrl.GET_PRE_AUTH_CODE,
+                queryMap,
+                null
         );
     }
 

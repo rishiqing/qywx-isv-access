@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rishiqing.qywx.dao.mapper.isv.SuitePreAuthCodeDao">
+    <resultMap id="suitePreAuthCodeMap" type="com.rishiqing.qywx.dao.model.isv.SuitePreAuthCodeDO">
+        <id property="id" column="id" />
+        <result property="dateCreated" column="date_created" />
+        <result property="lastUpdated" column="last_updated" />
+        <result property="suiteKey" column="suite_key" />
+        <result property="suitePreAuthCode" column="suite_pre_auth_code" />
+        <result property="expiresIn" column="expires_in" />
+        <result property="codeUpdateTime" column="code_update_time" />
+    </resultMap>
+
+    <sql id="selectAllFields">
+        id, date_created, last_updated, suite_key, suite_pre_auth_code, expires_in, code_update_time
+    </sql>
+
+    <select id="getSuitePreAuthCodeBySuiteKey" resultMap="suitePreAuthCodeMap">
+        SELECT <include refid="selectAllFields" /> FROM isv_suite_pre_auth_code
+        <![CDATA[
+            WHERE suite_key = #{suiteKey}
+        ]]>
+    </select>
+
+    <insert id="saveOrUpdateSuitePreAuthCode" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO isv_suite_pre_auth_code (
+            date_created,
+            last_updated,
+            suite_key,
+            suite_pre_auth_code,
+            expires_in,
+            code_update_time
+        ) VALUES (
+            now(),
+            now(),
+            #{suiteKey},
+            #{suitePreAuthCode},
+            #{expiresIn},
+            now()
+        ) ON DUPLICATE KEY UPDATE
+            last_updated = now(),
+            suite_pre_auth_code = #{suitePreAuthCode},
+            expires_in = #{expiresIn},
+            code_update_time = now()
+    </insert>
+</mapper>
