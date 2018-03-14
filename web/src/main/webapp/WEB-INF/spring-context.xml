@@ -22,12 +22,14 @@
         <entry key="appId" value="${isv.app.id}" />
         <entry key="appMobileIndexPage" value="${isv.app.page.mobile.index}" />
         <entry key="appCookieName" value="${isv.app.page.cookie.name}" />
+        <entry key="isvAuthRedirectUri" value="${isv.app.page.auth.redirect}" />
     </util:map>
 
     <!--web层需要用到的service-->
     <bean id="callbackService" class="com.rishiqing.qywx.web.service.impl.CallbackServiceImpl" />
     <bean id="jsConfigService" class="com.rishiqing.qywx.web.service.impl.JsConfigServiceImpl" />
     <bean id="oauthService" class="com.rishiqing.qywx.web.service.impl.OauthServiceImpl" />
+    <bean id="isvAuthService" class="com.rishiqing.qywx.web.service.impl.IsvAuthServiceImpl" />
 
     <!--service层的服务beans-->
     <import resource="classpath:spring-beans.xml" />

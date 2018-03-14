@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.rishiqing.qywx.dao.model.corp.CorpJsapiTicketDO;
 import com.rishiqing.qywx.dao.model.corp.CorpTokenDO;
 import com.rishiqing.qywx.service.model.corp.*;
+import com.rishiqing.qywx.service.model.isv.SuitePreAuthCodeVO;
 import com.rishiqing.qywx.service.model.isv.SuiteTokenVO;
 
 import java.util.ArrayList;
@@ -211,5 +212,15 @@ public class Json2BeanConverter {
             list.add(staffVO);
         }
         return list;
+    }
+
+    public static SuitePreAuthCodeVO generateSuitePreAuthCode(JSONObject json){
+        if(null == json){
+            return null;
+        }
+        SuitePreAuthCodeVO suitePreAuthCodeVO = new SuitePreAuthCodeVO();
+        suitePreAuthCodeVO.setSuitePreAuthCode(json.getString("pre_auth_code"));
+        suitePreAuthCodeVO.setExpiresIn(json.getLong("expires_in"));
+        return suitePreAuthCodeVO;
     }
 }
