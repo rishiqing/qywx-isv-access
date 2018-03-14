@@ -9,6 +9,7 @@
     <bean id="suiteManageService" class="com.rishiqing.qywx.service.common.isv.impl.SuiteManageServiceImpl" />
     <bean id="suiteTicketManageService" class="com.rishiqing.qywx.service.common.isv.impl.SuiteTicketManageServiceImpl" />
     <bean id="suiteTokenManageService" class="com.rishiqing.qywx.service.common.isv.impl.SuiteTokenManageServiceImpl" />
+    <bean id="suitePreAuthCodeManageService" class="com.rishiqing.qywx.service.common.isv.impl.SuitePreAuthCodeManageServiceImpl" />
     <bean id="appManageService" class="com.rishiqing.qywx.service.common.isv.impl.AppManageServiceImpl" />
     <bean id="corpManageService" class="com.rishiqing.qywx.service.common.corp.impl.CorpManageServiceImpl" />
     <bean id="corpDeptManageService" class="com.rishiqing.qywx.service.common.corp.impl.CorpDeptManageServiceImpl" />

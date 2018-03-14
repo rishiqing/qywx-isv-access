@@ -141,6 +141,17 @@
                 <SizeBasedTriggeringPolicy size="50 MB"/>
             </Policies>
         </RollingFile>
+        <!--从日事清网站发起授权的相关logger-->
+        <RollingFile name="WEB_ISV_AUTH_APPENDER" fileName="${baseDir}/web_isv_auth.log"
+                     filePattern="${baseDir}/$${date:yyyy-MM}/web_isv_auth-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout charset="UTF-8">
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p %C{1.}.%M:%L - %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="6" modulate="true" />
+                <SizeBasedTriggeringPolicy size="50 MB"/>
+            </Policies>
+        </RollingFile>
     </Appenders>
     <Loggers>
         <Root level="error">
@@ -184,6 +195,10 @@
         <!--用户激活这种重要操作的日志-->
         <Logger name="SERVICE_ACTIVE_CORP_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
             <AppenderRef ref="SERVICE_ACTIVE_CORP_APPENDER"/>
+        </Logger>
+        <!--从日事清网站发起授权的相关logger-->
+        <Logger name="WEB_ISV_AUTH_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
+            <AppenderRef ref="WEB_ISV_AUTH_APPENDER"/>
         </Logger>
     </Loggers>
 </Configuration>
