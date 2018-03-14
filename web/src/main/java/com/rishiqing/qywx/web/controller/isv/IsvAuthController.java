@@ -1,7 +1,11 @@
 package com.rishiqing.qywx.web.controller.isv;
 
+import com.alibaba.fastjson.JSONObject;
 import com.rishiqing.qywx.service.constant.RequestUrl;
+import com.rishiqing.qywx.service.model.corp.CorpSuiteVO;
 import com.rishiqing.qywx.service.model.isv.SuitePreAuthCodeVO;
+import com.rishiqing.qywx.service.model.isv.SuiteTokenVO;
+import com.rishiqing.qywx.service.util.http.converter.Json2BeanConverter;
 import com.rishiqing.qywx.web.service.IsvAuthService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +30,7 @@ import java.util.Map;
 @RequestMapping("/isvAuth")
 public class IsvAuthController {
     private static Logger logger = LoggerFactory.getLogger("WEB_ISV_AUTH_LOGGER");
+
     @Autowired
     private Map isvGlobal;
     @Autowired
@@ -54,6 +59,7 @@ public class IsvAuthController {
         logger.debug("----begin to auth corp from isv----auth_code: {}, expires_in: {}, state: {}", authCode, expiresIn, state);
         try {
             String authPage = "/checkpreload.html";
+            isvAuthService.afterAuth(authCode);
             return "redirect:" + authPage;
         } catch (Exception e) {
             logger.error("/isvAuth/after internal exception: ", e);
