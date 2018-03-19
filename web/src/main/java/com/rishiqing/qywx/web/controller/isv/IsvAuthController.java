@@ -58,9 +58,9 @@ public class IsvAuthController {
     ){
         logger.debug("----begin to auth corp from isv----auth_code: {}, expires_in: {}, state: {}", authCode, expiresIn, state);
         try {
-            String authPage = "/checkpreload.html";
+            String redirectAfterUrl = (String)isvGlobal.get("isvAuthRedirectUriAfter");
             isvAuthService.afterAuth(authCode);
-            return "redirect:" + authPage;
+            return "redirect:" + redirectAfterUrl;
         } catch (Exception e) {
             logger.error("/isvAuth/after internal exception: ", e);
             return "redirect:/error.html";
