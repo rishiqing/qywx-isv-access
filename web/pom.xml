@@ -102,18 +102,18 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>2.3</version>
-                <configuration>
-                    <webResources>
-                        <resource>
-                            <!--不使用maven管理的本地的lib-->
-                            <directory>lib/</directory>
-                            <targetPath>WEB-INF/lib</targetPath>
-                            <includes>
-                                <include>**/*.jar</include>
-                            </includes>
-                        </resource>
-                    </webResources>
-                </configuration>
+                <!--<configuration>-->
+                    <!--<webResources>-->
+                        <!--<resource>-->
+                            <!--&lt;!&ndash;不使用maven管理的本地的lib&ndash;&gt;-->
+                            <!--<directory>lib/</directory>-->
+                            <!--<targetPath>WEB-INF/lib</targetPath>-->
+                            <!--<includes>-->
+                                <!--<include>**/*.jar</include>-->
+                            <!--</includes>-->
+                        <!--</resource>-->
+                    <!--</webResources>-->
+                <!--</configuration>-->
             </plugin>
             <!--<plugin>-->
                 <!--<artifactId>maven-assembly-plugin</artifactId>-->
