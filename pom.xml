@@ -7,7 +7,7 @@
     <groupId>com.rishiqing.qywx</groupId>
     <artifactId>qywx.isv.access</artifactId>
     <packaging>pom</packaging>
-    <version>1.0-SNAPSHOT</version>
+    <version>0.1.0</version>
     <modules>
         <module>dao</module>
         <module>service</module>
