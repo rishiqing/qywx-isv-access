@@ -1,4 +1,4 @@
-FROM registry.cn-beijing.aliyuncs.com/rsq-main/tomcat:7.0.85
+FROM registry-internal.cn-beijing.aliyuncs.com/rsq-public/tomcat:8.0.50
 
 LABEL name="qywx-isv-access" \
        description="backend for integration of rishiqing and qywx(enterprise version of WeChat)" \
