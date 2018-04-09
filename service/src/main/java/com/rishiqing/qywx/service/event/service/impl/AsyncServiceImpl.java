@@ -33,17 +33,17 @@ public class AsyncServiceImpl implements AsyncService {
     private AsyncEventBus asyncFetchDeptAndStaffEventBus;
 
     //  mq相关注入
-    @Autowired
-    private JmsTemplate jmsTemplate;
-    @Autowired
-    @Qualifier("demoQueue")
-    private Queue demoQueue;
-    @Autowired
-    @Qualifier("pushCorpAllQueue")
-    private Queue pushCorpAllQueue;
-    @Autowired
-    @Qualifier("pushCorpCallbackQueue")
-    private Queue pushCorpCallbackQueue;
+//    @Autowired
+//    private JmsTemplate jmsTemplate;
+//    @Autowired
+//    @Qualifier("demoQueue")
+//    private Queue demoQueue;
+//    @Autowired
+//    @Qualifier("pushCorpAllQueue")
+//    private Queue pushCorpAllQueue;
+//    @Autowired
+//    @Qualifier("pushCorpCallbackQueue")
+//    private Queue pushCorpCallbackQueue;
 
     @Override
     public void sendToFetchCorpAll(String corpId, String permanentCode) {
@@ -55,38 +55,38 @@ public class AsyncServiceImpl implements AsyncService {
 
     @Override
     public void sendToDemo(DemoMessage message){
-        jmsTemplate.send(demoQueue, message);
+//        jmsTemplate.send(demoQueue, message);
     }
 
     @Override
     public void sendToPushCorpAuthCallback(final CorpVO corpVO, final CallbackInfoType type, final Map callbackMap){
         final String corpId = corpVO.getCorpId();
         final String typeKey = type.getKey();
-        jmsTemplate.send(pushCorpAllQueue, new MessageCreator() {
-            @Override
-            public Message createMessage(Session session) throws JMSException {
-                MapMessage mapMessage = session.createMapMessage();
-                mapMessage.setString("corpId", corpId);
-                mapMessage.setString("infoType", typeKey);
-                mapMessage.setObject("content", callbackMap);
-                return mapMessage;
-            }
-        });
+//        jmsTemplate.send(pushCorpAllQueue, new MessageCreator() {
+//            @Override
+//            public Message createMessage(Session session) throws JMSException {
+//                MapMessage mapMessage = session.createMapMessage();
+//                mapMessage.setString("corpId", corpId);
+//                mapMessage.setString("infoType", typeKey);
+//                mapMessage.setObject("content", callbackMap);
+//                return mapMessage;
+//            }
+//        });
     }
 
     @Override
     public void sendToPushCorpCallback(final CorpVO corpVO, final CallbackChangeType type, final Map callbackMap){
         final String corpId = corpVO.getCorpId();
         final String typeKey = type.getKey();
-        jmsTemplate.send(pushCorpCallbackQueue, new MessageCreator() {
-            @Override
-            public Message createMessage(Session session) throws JMSException {
-                MapMessage mapMessage = session.createMapMessage();
-                mapMessage.setString("corpId", corpId);
-                mapMessage.setString("changeType", typeKey);
-                mapMessage.setObject("content", callbackMap);
-                return mapMessage;
-            }
-        });
+//        jmsTemplate.send(pushCorpCallbackQueue, new MessageCreator() {
+//            @Override
+//            public Message createMessage(Session session) throws JMSException {
+//                MapMessage mapMessage = session.createMapMessage();
+//                mapMessage.setString("corpId", corpId);
+//                mapMessage.setString("changeType", typeKey);
+//                mapMessage.setObject("content", callbackMap);
+//                return mapMessage;
+//            }
+//        });
     }
 }
