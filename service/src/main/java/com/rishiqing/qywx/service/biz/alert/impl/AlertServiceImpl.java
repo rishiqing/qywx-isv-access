@@ -33,7 +33,7 @@ public class AlertServiceImpl implements AlertService {
         try {
             String todoId = todoAlertVO.getTodoId();
             List<Long> millsList = todoAlertVO.getMillsList();
-            List<String> ruleList = todoAlertVO.getRuleList();
+//            List<String> ruleList = todoAlertVO.getRuleList();
 
             String groupKeyString = "rsq-alert-" + corpId + "-" + todoId;
             //  先根据corpId和todoId，查出是否已经有计时任务存在，如果有，先统一删除
@@ -43,10 +43,10 @@ public class AlertServiceImpl implements AlertService {
                 quartzAlertScheduler.deleteJob(jobKey);
             }
             Iterator it = millsList.iterator();
-            Iterator itRule = ruleList.iterator();
+//            Iterator itRule = ruleList.iterator();
             while (it.hasNext()) {
                 Long mills = (Long)it.next();
-                String remind = (String)itRule.next();
+//                String remind = (String)itRule.next();
                 JobKey jobKey = new JobKey("J-" + mills, "J-" + groupKeyString);
                 //JobDetail currentDetail = quartzRemindScheduler.getJobDetail(jobKey);
                 //if(currentDetail != null){

@@ -23,13 +23,13 @@ public class TodoAlertConverter {
         }
         todoAlertVO.setMillsList(milliList);
 
-        array = json.getJSONArray("remind_array");
-        List<String> alertList = new ArrayList<String>(array.size());
-        for (Object element: array) {
-            String alert = (String) element;
-            alertList.add(alert);
-        }
-        todoAlertVO.setRuleList(alertList);
+//        array = json.getJSONArray("remind_array");
+//        List<String> alertList = new ArrayList<String>(array.size());
+//        for (Object element: array) {
+//            String alert = (String) element;
+//            alertList.add(alert);
+//        }
+//        todoAlertVO.setRuleList(alertList);
 
         todoAlertVO.setUserIdListString(json.getString("userid_list"));
         todoAlertVO.setMsgType(json.getString("msgtype"));
