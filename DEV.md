@@ -112,6 +112,19 @@ spring-mybatis会扫描`*Dao`文件，并生成相关的bean
   2. typeName取值包括：corp/scheduler等,一般跟包名相关
   3. functionName，可以是callback/request等，一般跟具体功能相关
   
+## 打包说明  
+
+目前的应用需要生成同时三个子应用：
+- main主应用，用来提供基础服务
+- job应用，用来做重试等定期任务
+- alert应用，提醒服务器，如果用户设置了提醒，那么使用此服务器来保存并发送提醒
+
+因此，使用maven的maven-assembly-plugin同时打包成三个应用。执行：
+`clean package -Dmaven.test.skip=true -Denv=beta`
+
+- maven.test.skip: 是否跳过测试
+- env: 用来处理日志文件。例如指定了`env=beta`，那么在打包的时候将会使用`webapp/WEB-INF/log4j2.beta.xml`作为配置文件
+
 ## 测试
 
 ### 引入xml配置文件
