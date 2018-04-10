@@ -8,7 +8,7 @@
        http://www.springframework.org/schema/task/spring-task-3.0.xsd">
 
     <!--引入jdbc-->
-    <import resource="spring-jdbc.xml" />
+    <import resource="classpath:spring-jdbc.xml" />
 
     <task:annotation-driven />
 

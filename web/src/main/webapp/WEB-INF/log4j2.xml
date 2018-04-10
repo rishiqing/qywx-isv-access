@@ -163,6 +163,17 @@
                 <SizeBasedTriggeringPolicy size="50 MB"/>
             </Policies>
         </RollingFile>
+        <!--提醒相关的日志-->
+        <RollingFile name="WEB_ALERT_APPENDER" fileName="${baseDir}/web_alert.log"
+                     filePattern="${baseDir}/$${date:yyyy-MM}/web_alert-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout charset="UTF-8">
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p %C{1.}.%M:%L - %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="6" modulate="true" />
+                <SizeBasedTriggeringPolicy size="50 MB"/>
+            </Policies>
+        </RollingFile>
     </Appenders>
     <Loggers>
         <Root level="error">
@@ -213,6 +224,10 @@
         </Logger>
         <!--应用消息相关的日志-->
         <Logger name="WEB_MESSAGE_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
+            <AppenderRef ref="Console"/>
+        </Logger>
+        <!--应用消息相关的日志-->
+        <Logger name="WEB_ALERT_LOGGER" level="${globalLevel}" additivity="false" includeLocation="true">
             <AppenderRef ref="Console"/>
         </Logger>
     </Loggers>
