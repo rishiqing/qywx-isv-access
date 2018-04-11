@@ -34,16 +34,6 @@
             <outputDirectory>./WEB-INF</outputDirectory>
             <destName>log4j2.xml</destName>
         </file>
-        <file>
-            <source>src/main/webapp/WEB-INF/spring-context.xml</source>
-            <outputDirectory>./WEB-INF</outputDirectory>
-            <destName>spring-context.dev.xml</destName>
-        </file>
-        <file>
-            <source>src/main/webapp/WEB-INF/spring-context.main.xml</source>
-            <outputDirectory>./WEB-INF</outputDirectory>
-            <destName>spring-context.xml</destName>
-        </file>
     </files>
     <dependencySets>
         <!--依赖的jar包-->

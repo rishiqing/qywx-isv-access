@@ -1,8 +1,6 @@
 package com.rishiqing.qywx.service.biz.corp.impl;
 
 import com.alibaba.fastjson.JSONObject;
-import com.google.common.eventbus.AsyncEventBus;
-import com.mashape.unirest.http.exceptions.UnirestException;
 import com.rishiqing.common.exception.ActiveCorpException;
 import com.rishiqing.qywx.service.biz.corp.CorpService;
 import com.rishiqing.qywx.service.common.corp.CorpAppManageService;
@@ -13,7 +11,7 @@ import com.rishiqing.qywx.service.common.fail.CallbackFailService;
 import com.rishiqing.qywx.service.common.isv.GlobalSuite;
 import com.rishiqing.qywx.service.common.isv.SuiteTokenManageService;
 import com.rishiqing.qywx.service.constant.ServiceConstant;
-import com.rishiqing.qywx.service.event.service.AsyncService;
+import com.rishiqing.qywx.service.event.service.EventBusService;
 import com.rishiqing.qywx.service.model.corp.*;
 import com.rishiqing.qywx.service.model.isv.SuiteTokenVO;
 import com.rishiqing.qywx.service.util.http.HttpUtil;
@@ -40,7 +38,7 @@ public class CorpServiceImpl implements CorpService {
     @Autowired
     private HttpUtil httpUtil;
     @Autowired
-    private AsyncService asyncService;
+    private EventBusService eventBusService;
     @Autowired
     private CallbackFailService callbackFailService;
     @Autowired
@@ -55,7 +53,7 @@ public class CorpServiceImpl implements CorpService {
             JSONObject json = httpUtil.getPermanentCode(suiteToken, authCode);
             CorpSuiteVO corpSuiteVO = Json2BeanConverter.generateCorpSuite(suiteKey, null, json);
             //  异步获取企业的组织架构
-            asyncService.sendToFetchCorpAll(corpSuiteVO.getCorpId(), corpSuiteVO.getPermanentCode());
+            eventBusService.sendToFetchCorpAll(corpSuiteVO.getCorpId(), corpSuiteVO.getPermanentCode());
             activeLogger.debug("----end active corp----authCode: {}", authCode);
         } catch (Exception e) {
             //  致命错误，将导致无法获知用户已经开通应用

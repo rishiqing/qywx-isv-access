@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:amq="http://activemq.apache.org/schema/core"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://activemq.apache.org/schema/core
+       http://activemq.apache.org/schema/core/activemq-core.xsd">
+
+    <!--==========================activemq相关==============================-->
+    <bean id="queueService" class="com.rishiqing.qywx.service.event.service.impl.QueueServiceImpl"/>
+    <!--activemq-->
+    <amq:connectionFactory id="amqConnectionFactory"
+                           brokerURL="failover:(tcp://${amq.broker.url1},tcp://${amq.broker.url2})?randomize=false&amp;jms.useAsyncSend=true"
+                           userName="${amq.username}"
+                           password="${amq.password}" />
+    <bean id="connectionFactory" class="org.springframework.jms.connection.CachingConnectionFactory">
+        <constructor-arg ref="amqConnectionFactory" />
+        <property name="sessionCacheSize" value="100" />
+    </bean>
+
+    <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+        <constructor-arg ref="connectionFactory" />
+    </bean>
+
+    <!--测试queue-->
+    <amq:queue id="demoQueue" physicalName="qywx.demo.queue" />
+
+    <!--企业同步到日事清所有组织结构的listener-->
+    <amq:queue id="pushCorpAllQueue" physicalName="qywx.push.corpAll" />
+
+    <!--企业同步到日事清corp回调的listener-->
+    <amq:queue id="pushCorpCallbackQueue" physicalName="qywx.push.corpCallback" />
+</beans>

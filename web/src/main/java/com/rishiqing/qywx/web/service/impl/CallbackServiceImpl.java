@@ -14,7 +14,7 @@ import com.rishiqing.qywx.service.common.isv.SuiteTokenManageService;
 import com.rishiqing.common.exception.HttpException;
 import com.rishiqing.qywx.service.constant.CallbackChangeType;
 import com.rishiqing.qywx.service.constant.CallbackInfoType;
-import com.rishiqing.qywx.service.event.service.AsyncService;
+import com.rishiqing.qywx.service.event.service.QueueService;
 import com.rishiqing.qywx.service.model.corp.CorpSuiteVO;
 import com.rishiqing.qywx.service.model.corp.CorpVO;
 import com.rishiqing.qywx.service.model.isv.SuiteTicketVO;
@@ -53,7 +53,7 @@ public class CallbackServiceImpl implements CallbackService {
     @Autowired
     private StaffService staffService;
     @Autowired
-    private AsyncService asyncService;
+    private QueueService queueService;
     @Autowired
     private FetchCallbackHandler logFailFetchCallbackHandler;
 
@@ -221,6 +221,6 @@ public class CallbackServiceImpl implements CallbackService {
                 //  对于不识别的infoType，直接抛出异常
                 throw new CallbackException("contact change, changeType not handled: " + changeType);
         }
-        asyncService.sendToPushCorpCallback(corpVO, type, map);
+        queueService.sendToPushCorpCallback(corpVO, type, map);
     }
 }
