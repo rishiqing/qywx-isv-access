@@ -11,6 +11,7 @@ import com.rishiqing.qywx.service.model.corp.CorpTokenVO;
 import com.rishiqing.common.util.http.client.RestHttpClient;
 import com.rishiqing.qywx.service.model.isv.SuiteTokenVO;
 import com.rishiqing.qywx.service.util.http.converter.Bean2JsonConverter;
+import com.rishiqing.qywx.service.util.http.converter.Map2JsonConverter;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -86,6 +87,21 @@ public class HttpUtilCorp {
                 null,
                 JSONObject.toJSONString(params),
                 null
+        );
+    }
+
+    public JSONObject postSendMessage(CorpTokenVO corpTokenVO, Map<String, Object> map) {
+        Map<String, Object> queryMap = new HashMap<String, Object>();
+        queryMap.put("access_token", corpTokenVO.getCorpToken());
+        Map<String, Object> options = new HashMap<String, Object>();
+        options.put("corpId", corpTokenVO.getCorpId());
+        JSONObject json = Map2JsonConverter.prepareSendMessage(map);
+        return restHttpClient.post(
+                RequestUrl.POST_SEND_MESSAGE,
+                queryMap,
+                null,
+                JSONObject.toJSONString(json),
+                options
         );
     }
 

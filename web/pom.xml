@@ -10,6 +10,8 @@
     <packaging>war</packaging>
     <name>web app for qiye weixin</name>
     <url>https://www.rishiqing.com</url>
+    <!--发布的时候修改这里来控制版本号-->
+    <version>0.1.0</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -115,24 +117,25 @@
                     <!--</webResources>-->
                 <!--</configuration>-->
             </plugin>
-            <!--<plugin>-->
-                <!--<artifactId>maven-assembly-plugin</artifactId>-->
-                <!--<executions>-->
-                    <!--<execution>-->
-                        <!--<id>web-service-war</id>-->
-                        <!--<phase>package</phase>-->
-                        <!--<goals>-->
-                            <!--<goal>single</goal>-->
-                        <!--</goals>-->
-                        <!--<configuration>-->
-                            <!--<descriptors>-->
-                                <!--<descriptor>src/main/assembly/main.xml</descriptor>-->
-                                <!--&lt;!&ndash;<descriptor>src/main/assembly/job.xml</descriptor>&ndash;&gt;-->
-                            <!--</descriptors>-->
-                        <!--</configuration>-->
-                    <!--</execution>-->
-                <!--</executions>-->
-            <!--</plugin>-->
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>web-service-war</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <descriptors>
+                                <descriptor>src/main/assembly/main.xml</descriptor>
+                                <descriptor>src/main/assembly/job.xml</descriptor>
+                                <descriptor>src/main/assembly/alert.xml</descriptor>
+                            </descriptors>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 </project>
