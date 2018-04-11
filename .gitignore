@@ -8,3 +8,7 @@ service/*.iml
 service/target/
 web/*.iml
 web/target/
+webalert/*.iml
+webalert/target/
+webjob/*.iml
+webjob/target/
