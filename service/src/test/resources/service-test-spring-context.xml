@@ -31,5 +31,5 @@
     <import resource="classpath:spring-dao.xml" />
 
     <!--queue层-->
-    <import resource="classpath:main/spring-queue.xml" />
+    <import resource="classpath:WEB-INF/spring-queue.xml" />
 </beans>

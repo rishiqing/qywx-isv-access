@@ -12,6 +12,8 @@
         <module>dao</module>
         <module>service</module>
         <module>web</module>
+        <module>webjob</module>
+        <module>webalert</module>
     </modules>
     <properties>
         <spring.version>4.3.12.RELEASE</spring.version>

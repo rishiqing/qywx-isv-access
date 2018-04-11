@@ -6,9 +6,9 @@
         <version>0.1.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>qywx.isv.access.web</artifactId>
+    <artifactId>qywx.isv.access.webalert</artifactId>
     <packaging>war</packaging>
-    <name>web app for qiye weixin</name>
+    <name>web alert server for qiye weixin</name>
     <url>https://www.rishiqing.com</url>
     <!--发布的时候修改这里来控制版本号-->
     <version>0.1.0</version>
@@ -98,7 +98,7 @@
         </dependency>
     </dependencies>
     <build>
-        <finalName>qywxbackauth</finalName>
+        <finalName>qywxbackauth-alert</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -128,7 +128,7 @@
                         </goals>
                         <configuration>
                             <descriptors>
-                                <descriptor>src/main/assembly/main.xml</descriptor>
+                                <descriptor>src/main/assembly/alert.xml</descriptor>
                             </descriptors>
                         </configuration>
                     </execution>

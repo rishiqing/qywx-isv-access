@@ -1,7 +1,5 @@
 package com.rishiqing.qywx.service.callback.impl;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.rishiqing.qywx.service.biz.corp.CorpService;
 import com.rishiqing.qywx.service.biz.corp.DeptService;
 import com.rishiqing.qywx.service.biz.corp.StaffService;
@@ -11,16 +9,11 @@ import com.rishiqing.qywx.service.common.corp.CorpTokenManageService;
 import com.rishiqing.qywx.service.common.fail.CallbackFailService;
 import com.rishiqing.qywx.service.common.isv.GlobalSuite;
 import com.rishiqing.qywx.service.common.isv.SuiteTokenManageService;
-import com.rishiqing.qywx.service.constant.CallbackChangeType;
-import com.rishiqing.qywx.service.constant.CallbackFailType;
 import com.rishiqing.qywx.service.constant.CallbackInfoType;
-import com.rishiqing.qywx.service.event.service.AsyncService;
-import com.rishiqing.qywx.service.exception.ObjectNotExistException;
+import com.rishiqing.qywx.service.event.service.QueueService;
 import com.rishiqing.qywx.service.model.corp.*;
 import com.rishiqing.qywx.service.model.isv.SuiteTokenVO;
 import com.rishiqing.qywx.service.util.http.converter.Xml2BeanConverter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Map;
@@ -44,7 +37,7 @@ public class FetchCallbackHandlerImpl implements FetchCallbackHandler {
     @Autowired
     private StaffService staffService;
     @Autowired
-    private AsyncService asyncService;
+    private QueueService queueService;
     @Autowired
     private GlobalSuite suite;
     @Autowired
@@ -71,7 +64,7 @@ public class FetchCallbackHandlerImpl implements FetchCallbackHandler {
         //  获取管理员相关信息
         staffService.fetchAndSaveAdminList(suiteTokenVO, corpAppVO);
         //  成功后通知同步日事清
-        asyncService.sendToPushCorpAuthCallback(corpVO, CallbackInfoType.CREATE_AUTH, null);
+        queueService.sendToPushCorpAuthCallback(corpVO, CallbackInfoType.CREATE_AUTH, null);
     }
 
     /**

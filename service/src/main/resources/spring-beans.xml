@@ -20,13 +20,11 @@
     <bean id="corpJsapiTicketManageService" class="com.rishiqing.qywx.service.common.corp.impl.CorpJsapiTicketManageServiceImpl" />
     <bean id="rsqInfoManageService" class="com.rishiqing.qywx.service.common.rsq.impl.RsqInfoManageServiceImpl" />
     <bean id="sendMessageService" class="com.rishiqing.qywx.service.common.message.impl.SendMessageServiceImpl" />
-    <bean id="demoService" class="com.rishiqing.qywx.service.demo.DemoServiceImpl" />
 
     <!--业务service-->
     <bean id="corpService" class="com.rishiqing.qywx.service.biz.corp.impl.CorpServiceImpl" />
     <bean id="deptService" class="com.rishiqing.qywx.service.biz.corp.impl.DeptServiceImpl" />
     <bean id="staffService" class="com.rishiqing.qywx.service.biz.corp.impl.StaffServiceImpl" />
-    <bean id="alertService" class="com.rishiqing.qywx.service.biz.alert.impl.AlertServiceImpl" />
     <!--日事清相关-->
     <bean id="idMapService" class="com.rishiqing.qywx.service.biz.rsq.impl.IdMapServiceImpl" />
     <bean id="rsqCorpService" class="com.rishiqing.qywx.service.biz.rsq.impl.RsqCorpServiceImpl" />
@@ -66,5 +64,25 @@
     <bean id="httpUtilRsqSync" class="com.rishiqing.common.util.http.impl.HttpUtilRsqSyncImpl">
         <constructor-arg index="0" value="${isv.rsq.url.root}"/>
         <constructor-arg index="1" ref="defaultRestHttpClient"/>
+    </bean>
+
+    <!--==========================eventBus相关==============================-->
+    <!--AsyncEventBus-->
+    <bean id="eventBusService" class="com.rishiqing.qywx.service.event.service.impl.EventBusServiceImpl"/>
+    <bean id="asyncFetchCorpAllExecutorFactory" class="com.rishiqing.qywx.service.event.executor.AsyncFetchCorpAllExecutorFactory" />
+    <bean id="asyncFetchCorpAllExecutor" factory-bean="asyncFetchCorpAllExecutorFactory" factory-method="getFetchCorpAllExecutor" />
+    <bean id="asyncFetchCorpAllEventBus" class="com.google.common.eventbus.AsyncEventBus">
+        <constructor-arg ref="asyncFetchCorpAllExecutor" />
+    </bean>
+    <bean id="fetchCorpAllListener" class="com.rishiqing.qywx.service.event.listener.FetchCorpAllListener" />
+
+    <bean id="eventBusInitService" class="com.rishiqing.qywx.service.event.service.impl.EventBusInitServiceImpl"
+          init-method="register">
+        <property name="eventMap">
+            <map>
+                <entry key-ref="asyncFetchCorpAllEventBus" value-ref="fetchCorpAllListener" />
+                <!--<entry key-ref="demoEventBus" value-ref="demoListener" />-->
+            </map>
+        </property>
     </bean>
 </beans>
