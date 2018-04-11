@@ -8,6 +8,6 @@ LABEL name="qywx-isv-access-job" \
 ENV CATALINA_HOME /usr/local/tomcat
 WORKDIR $CATALINA_HOME
 
-ADD web/target/qywxbackauth-job-*.war webapps/qywxbackauth-job.war
+ADD target/qywxbackauth-job-*.war webapps/qywxbackauth-job.war
 
 CMD ["catalina.sh", "run"]
