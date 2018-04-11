@@ -70,7 +70,7 @@
     </bean>
 
     <!--企业同步到日事清corp回调的listener-->
-    <amq:queue id="pushCorpCallbackQueue" physicalName="qywx..corpCallback" />
+    <amq:queue id="pushCorpCallbackQueue" physicalName="qywx.push.corpCallback" />
     <bean id="pushCorpCallbackMqListener" class="com.rishiqing.qywx.service.event.listener.mq.PushCorpCallbackMqListener" />
     <bean id="pushCorpCallbackMqContainer"
           class="org.springframework.jms.listener.DefaultMessageListenerContainer">
