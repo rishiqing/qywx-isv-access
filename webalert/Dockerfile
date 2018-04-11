@@ -8,6 +8,6 @@ LABEL name="qywx-isv-access-alert" \
 ENV CATALINA_HOME /usr/local/tomcat
 WORKDIR $CATALINA_HOME
 
-ADD web/target/qywxbackauth-alert-*.war webapps/qywxbackauth-alert.war
+ADD target/qywxbackauth-alert-*.war webapps/qywxbackauth-alert.war
 
 CMD ["catalina.sh", "run"]
