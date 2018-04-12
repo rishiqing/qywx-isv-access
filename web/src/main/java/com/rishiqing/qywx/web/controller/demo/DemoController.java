@@ -23,8 +23,8 @@ import java.util.Map;
 @Controller
 @RequestMapping("/demo")
 public class DemoController {
-    private static final Logger webLogger = LoggerFactory.getLogger("WEB_LOGGER");
-    private static final Logger serviceLogger = LoggerFactory.getLogger("SERVICE_LOGGER");
+    private static final Logger webLogger = LoggerFactory.getLogger("WEB_CALLBACK_LOGGER");
+    private static final Logger consoleLogger = LoggerFactory.getLogger("CONSOLE_LOGGER");
 
     @Autowired
     private Map isvGlobal;
@@ -80,7 +80,7 @@ public class DemoController {
     @ResponseBody
     public String demoLog(){
         webLogger.info("this is webLogger from demoLogController");
-        serviceLogger.info("this is serviceLogger from demoLogController");
+        consoleLogger.info("this is consoleLogger from demoLogController");
         return demoService.printHelloWorld();
     }
 
