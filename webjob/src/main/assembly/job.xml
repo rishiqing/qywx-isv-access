@@ -27,10 +27,10 @@
         <file>
             <source>src/main/webapp/WEB-INF/log4j2.xml</source>
             <outputDirectory>./WEB-INF</outputDirectory>
-            <destName>log4j2.dev.xml</destName>
+            <destName>dev-log-config</destName>
         </file>
         <file>
-            <source>src/main/webapp/WEB-INF/log4j2.${env}.xml</source>
+            <source>src/main/webapp/WEB-INF/${env}-log-config</source>
             <outputDirectory>./WEB-INF</outputDirectory>
             <destName>log4j2.xml</destName>
         </file>
