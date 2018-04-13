@@ -18,6 +18,7 @@ import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
+import java.util.Date;
 import java.util.Map;
 
 @Controller
@@ -105,6 +106,7 @@ public class DemoController {
     @RequestMapping(value = "/send/test", produces = "text/plain")
     @ResponseBody
     public String sendString(){
-        return "success";
+        Date d = new Date();
+        return "success: " + d;
     }
 }
