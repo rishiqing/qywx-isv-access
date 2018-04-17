@@ -107,10 +107,6 @@
             english_name = #{englishName},
             `status` = #{status},
             extattr = #{extattr},
-            rsq_user_id = #{rsqUserId},
-            rsq_username = #{rsqUsername},
-            rsq_password = #{rsqPassword},
-            rsq_login_token = #{rsqLoginToken},
             admin_type = #{adminType}
     </insert>
 
