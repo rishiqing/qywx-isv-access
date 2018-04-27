@@ -78,6 +78,7 @@ public class CorpServiceImpl implements CorpService {
         CorpSuiteVO corpSuiteVO = Json2BeanConverter.generateCorpSuite(suiteKey, corpId, json);
         corpSuiteVO.setPermanentCode(permanentCode);
         corpSuiteManageService.saveCorpSuite(corpSuiteVO);
+        corpVO.setCorpSuiteVO(corpSuiteVO);
 
         //3. 保存corpApp信息
         //3.1  corpApp信息的问题
@@ -90,11 +91,14 @@ public class CorpServiceImpl implements CorpService {
         for(CorpAppVO corpAppVO : list){
             corpAppManageService.saveCorpApp(corpAppVO);
         }
+        corpVO.setCorpAppVOList(list);
 
         //4. 获取并保存corpToken信息
         JSONObject jsonToken = httpUtil.getCorpAccessToken(suiteToken, corpSuite);
         CorpTokenVO corpTokenVO = Json2BeanConverter.generateCorpToken(suiteKey, corpId, jsonToken);
         corpTokenManageService.saveCorpToken(corpTokenVO);
+        corpVO.setCorpTokenVO(corpTokenVO);
+
         return corpVO;
     }
 

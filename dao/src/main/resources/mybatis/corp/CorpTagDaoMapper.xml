@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rishiqing.qywx.dao.mapper.corp.CorpTagDao">
+    <resultMap id="corpTagMap" type="com.rishiqing.qywx.dao.model.corp.CorpTagDO">
+        <id property="id" column="id" />
+        <result property="dateCreated" column="date_created" />
+        <result property="lastUpdated" column="last_updated" />
+        <result property="corpId" column="corp_id" />
+        <result property="tagId" column="tag_id" />
+        <result property="tagName" column="tag_name" />
+    </resultMap>
+
+    <resultMap id="corpTagCorpStaffMap" type="com.rishiqing.qywx.dao.model.corp.CorpTagCorpStaffDO">
+        <id property="id" column="id" />
+        <result property="dateCreated" column="date_created" />
+        <result property="lastUpdated" column="last_updated" />
+        <result property="corpId" column="corp_id" />
+        <result property="tagId" column="tag_id" />
+        <result property="userId" column="user_id" />
+    </resultMap>
+
+    <resultMap id="corpTagCorpDeptMap" type="com.rishiqing.qywx.dao.model.corp.CorpTagCorpDeptDO">
+        <id property="id" column="id" />
+        <result property="dateCreated" column="date_created" />
+        <result property="lastUpdated" column="last_updated" />
+        <result property="corpId" column="corp_id" />
+        <result property="tagId" column="tag_id" />
+        <result property="deptId" column="dept_id" />
+    </resultMap>
+
+    <sql id="selectAllTagFields">
+        id, date_created, last_updated, corp_id, tag_id
+    </sql>
+
+    <!--tag操作-->
+    <select id="getCorpTagByCorpIdAndTagId" resultMap="corpTagMap">
+        SELECT <include refid="selectAllFields" />, tag_name FROM isv_corp_tag
+        <![CDATA[
+            WHERE corp_id = #{corpId} and tag_id = #{tagId}
+        ]]>
+    </select>
+
+    <insert id="saveOrUpdateCorpTag" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO isv_corp_tag (
+            date_created,
+            last_updated,
+            corp_id,
+            tag_id,
+            tag_name
+        ) VALUES (
+            now(),
+            now(),
+            #{corpId},
+            #{tagId},
+            #{tagName}
+        ) ON DUPLICATE KEY UPDATE
+            last_updated = now(),
+            tag_name = #{tagName}
+    </insert>
+
+    <delete id="removeCorpTagByCorpIdAndTagId">
+        DELETE FROM isv_corp_tag WHERE corp_id = #{corpId} AND tag_id = #{tagId}
+    </delete>
+
+    <!--tag与staff的关联操作-->
+    <select id="listCorpTagCorpStaffByCorpIdAndTagId" resultMap="corpTagCorpStaffMap">
+        SELECT <include refid="selectAllFields" />, user_id FROM isv_corp_tag_staff
+        <![CDATA[
+            WHERE corp_id = #{corpId} AND tag_id = #{tagId}
+        ]]>
+    </select>
+
+    <select id="getCorpTagCorpStaffByCorpIdAndTagIdAndUserId" resultMap="corpTagCorpStaffMap">
+        SELECT <include refid="selectAllFields" />, user_id FROM isv_corp_tag_staff
+        <![CDATA[
+            WHERE corp_id = #{corpId} AND tag_id = #{tagId} AND user_id = #{userId}
+        ]]>
+    </select>
+
+    <insert id="saveOrUpdateCorpTagCorpStaff" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO isv_corp_tag_staff (
+        date_created,
+        last_updated,
+        corp_id,
+        tag_id,
+        user_id
+        ) VALUES (
+        now(),
+        now(),
+        #{userId}
+        ) ON DUPLICATE KEY UPDATE
+        last_updated = now(),
+        user_id = #{userId}
+    </insert>
+
+    <delete id="removeCorpTagCorpStaffByCorpIdAndTagIdAndUserId">
+        DELETE FROM isv_corp_tag_staff WHERE corp_id = #{corpId} AND tag_id = #{tagId} AND user_id = #{userId}
+    </delete>
+
+    <!--标签与部门的关联表-->
+    <select id="listCorpTagCorpDeptByCorpIdAndTagId" resultMap="corpTagCorpDeptMap">
+        SELECT <include refid="selectAllFields" />, dept_id FROM isv_corp_tag_dept
+        <![CDATA[
+            WHERE corp_id = #{corpId} AND tag_id = #{tagId}
+        ]]>
+    </select>
+
+    <select id="getCorpTagCorpDeptByCorpIdAndTagIdAndDeptId" resultMap="corpTagCorpDeptMap">
+        SELECT <include refid="selectAllFields" />, dept_id FROM isv_corp_tag_dept
+        <![CDATA[
+            WHERE corp_id = #{corpId} AND tag_id = #{tagId} AND dept_id = #{deptId}
+        ]]>
+    </select>
+
+    <insert id="saveOrUpdateCorpTagCorpDept" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO isv_corp_tag_dept (
+        date_created,
+        last_updated,
+        corp_id,
+        tag_id,
+        dept_id
+        ) VALUES (
+        now(),
+        now(),
+        #{deptId}
+        ) ON DUPLICATE KEY UPDATE
+        last_updated = now(),
+        dept_id = #{deptId}
+    </insert>
+
+    <delete id="removeCorpTagCorpDeptByCorpIdAndTagIdAndDeptId">
+        DELETE FROM isv_corp_tag_dept WHERE corp_id = #{corpId} AND tag_id = #{tagId} AND dept_id = #{deptId}
+    </delete>
+</mapper>

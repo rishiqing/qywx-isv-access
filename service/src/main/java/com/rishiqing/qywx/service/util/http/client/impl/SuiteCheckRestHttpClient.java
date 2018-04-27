@@ -78,6 +78,7 @@ public class SuiteCheckRestHttpClient implements RestHttpClient {
      */
     @Override
     public JSONObject post(String path, Map<String, Object> queryMap, Map<String, Object> fieldMap, String body, Map<String, Object> options) {
+        logger.debug("path: {}, queryMap: {}, fieldMap: {}, body: {}, options: {}", path, queryMap, fieldMap, body, options);
         HttpRequestWithBody request = Unirest.post(path);
         if(queryMap != null && !queryMap.isEmpty()){
             request.queryString(queryMap);
@@ -131,6 +132,7 @@ public class SuiteCheckRestHttpClient implements RestHttpClient {
      */
     @Override
     public JSONObject get(String path, Map<String, Object> queryMap, Map<String, Object> options) {
+        logger.debug("path: {}, queryMap: {}, options: {}", path, queryMap, options);
         GetRequest request = Unirest.get(path);
         if(queryMap != null && !queryMap.isEmpty()){
             request.queryString(queryMap);
