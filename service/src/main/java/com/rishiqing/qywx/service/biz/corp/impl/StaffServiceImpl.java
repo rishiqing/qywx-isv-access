@@ -66,6 +66,15 @@ public class StaffServiceImpl implements StaffService {
     }
 
     @Override
+    public void fetchAndSaveStaff(CorpTokenVO corpTokenVO, String userId) {
+        JSONObject json = httpUtilCorp.getStaff(corpTokenVO, userId);
+        String corpId = corpTokenVO.getCorpId();
+        CorpStaffVO staff =
+                Json2BeanConverter.generateCorpStaff(corpId, json);
+        corpStaffManageService.saveOrUpdateCorpStaff(staff);
+    }
+
+    @Override
     public CorpStaffVO getStaff(CorpStaffVO corpStaffVO) {
         return corpStaffManageService.getCorpStaffByCorpIdAndUserId(corpStaffVO.getCorpId(), corpStaffVO.getUserId());
     }
