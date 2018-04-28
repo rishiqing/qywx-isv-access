@@ -275,4 +275,33 @@ public class Json2BeanConverter {
         suitePreAuthCodeVO.setExpiresIn(json.getLong("expires_in"));
         return suitePreAuthCodeVO;
     }
+
+    public static CorpTagDetailVO generateCorpTagDetail(String corpId, Long tagId, JSONObject json){
+        if(null == json){
+            return null;
+        }
+
+        JSONArray userArray = json.getJSONArray("userlist");
+        List<String> userList = new ArrayList<>(userArray.size());
+        JSONArray partyArray = json.getJSONArray("partylist");
+        List<Long> partyList = new ArrayList<>(partyArray.size());
+
+        for(Object obj : userArray){
+            JSONObject userObj = (JSONObject)obj;
+            userList.add(userObj.getString("userid"));
+        }
+
+        for(Object obj : partyArray){
+            partyList.add((Long)obj);
+        }
+
+        CorpTagDetailVO corpTagDetailVO = new CorpTagDetailVO();
+        corpTagDetailVO.setCorpId(corpId);
+        corpTagDetailVO.setTagId(tagId);
+        corpTagDetailVO.setTagName(json.getString("tagname"));
+        corpTagDetailVO.setUserList(userList);
+        corpTagDetailVO.setPartyList(partyList);
+
+        return corpTagDetailVO;
+    }
 }

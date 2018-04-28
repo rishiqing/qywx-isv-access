@@ -25,7 +25,7 @@ public class DeptServiceTest {
         String suiteKey = "tj146dbe5cecf74725";
         CorpTokenVO corpTokenVO = corpTokenManageService.getCorpToken(suiteKey, corpId);
         try {
-            deptService.fetchAndSaveDeptInfo(corpTokenVO, null);
+            deptService.fetchAndSaveDeptStaffList(corpTokenVO, null);
         } catch (HttpException e) {
             e.printStackTrace();
         }

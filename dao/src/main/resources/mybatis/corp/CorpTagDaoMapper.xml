@@ -34,7 +34,7 @@
 
     <!--tag操作-->
     <select id="getCorpTagByCorpIdAndTagId" resultMap="corpTagMap">
-        SELECT <include refid="selectAllFields" />, tag_name FROM isv_corp_tag
+        SELECT <include refid="selectAllTagFields" />, tag_name FROM isv_corp_tag
         <![CDATA[
             WHERE corp_id = #{corpId} and tag_id = #{tagId}
         ]]>
@@ -64,14 +64,14 @@
 
     <!--tag与staff的关联操作-->
     <select id="listCorpTagCorpStaffByCorpIdAndTagId" resultMap="corpTagCorpStaffMap">
-        SELECT <include refid="selectAllFields" />, user_id FROM isv_corp_tag_staff
+        SELECT <include refid="selectAllTagFields" />, user_id FROM isv_corp_tag_staff
         <![CDATA[
             WHERE corp_id = #{corpId} AND tag_id = #{tagId}
         ]]>
     </select>
 
     <select id="getCorpTagCorpStaffByCorpIdAndTagIdAndUserId" resultMap="corpTagCorpStaffMap">
-        SELECT <include refid="selectAllFields" />, user_id FROM isv_corp_tag_staff
+        SELECT <include refid="selectAllTagFields" />, user_id FROM isv_corp_tag_staff
         <![CDATA[
             WHERE corp_id = #{corpId} AND tag_id = #{tagId} AND user_id = #{userId}
         ]]>
@@ -99,14 +99,14 @@
 
     <!--标签与部门的关联表-->
     <select id="listCorpTagCorpDeptByCorpIdAndTagId" resultMap="corpTagCorpDeptMap">
-        SELECT <include refid="selectAllFields" />, dept_id FROM isv_corp_tag_dept
+        SELECT <include refid="selectAllTagFields" />, dept_id FROM isv_corp_tag_dept
         <![CDATA[
             WHERE corp_id = #{corpId} AND tag_id = #{tagId}
         ]]>
     </select>
 
     <select id="getCorpTagCorpDeptByCorpIdAndTagIdAndDeptId" resultMap="corpTagCorpDeptMap">
-        SELECT <include refid="selectAllFields" />, dept_id FROM isv_corp_tag_dept
+        SELECT <include refid="selectAllTagFields" />, dept_id FROM isv_corp_tag_dept
         <![CDATA[
             WHERE corp_id = #{corpId} AND tag_id = #{tagId} AND dept_id = #{deptId}
         ]]>
