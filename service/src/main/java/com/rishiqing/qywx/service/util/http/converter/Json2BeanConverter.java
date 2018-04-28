@@ -2,8 +2,6 @@ package com.rishiqing.qywx.service.util.http.converter;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.rishiqing.qywx.dao.model.corp.CorpJsapiTicketDO;
-import com.rishiqing.qywx.dao.model.corp.CorpTokenDO;
 import com.rishiqing.qywx.service.model.corp.*;
 import com.rishiqing.qywx.service.model.isv.SuitePreAuthCodeVO;
 import com.rishiqing.qywx.service.model.isv.SuiteTokenVO;
@@ -119,23 +117,23 @@ public class Json2BeanConverter {
         List<Long> extraTagList = new ArrayList<>(extraTagArray.size());
         
         for(Object party : allowPartyArray){
-            allowPartyList.add((Long)party);
+            allowPartyList.add(((Integer) party).longValue());
         }
         for(Object user : allowUserArray){
             allowUserList.add((String)user);
         }
         for(Object tag : allowTagArray){
-            allowTagList.add((Long)tag);
+            allowTagList.add(((Integer)tag).longValue());
         }
 
         for(Object party : extraPartyArray){
-            extraPartyList.add((Long)party);
+            extraPartyList.add(((Integer)party).longValue());
         }
         for(Object user : extraUserArray){
             extraUserList.add((String)user);
         }
         for(Object tag : extraTagArray){
-            extraTagList.add((Long)tag);
+            extraTagList.add(((Integer)tag).longValue());
         }
 
         privilegeVO.setAllowParty(allowPartyList);
@@ -292,7 +290,7 @@ public class Json2BeanConverter {
         }
 
         for(Object obj : partyArray){
-            partyList.add((Long)obj);
+            partyList.add(((Integer)obj).longValue());
         }
 
         CorpTagDetailVO corpTagDetailVO = new CorpTagDetailVO();

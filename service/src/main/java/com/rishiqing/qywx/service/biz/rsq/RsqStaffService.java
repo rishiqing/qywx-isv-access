@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface RsqStaffService {
 
-    void pushAndCreateAllCorpStaff(CorpVO corpVO);
+    void pushAllCorpStaff(CorpVO corpVO);
 
     CorpStaffVO pushAndCreateStaff(CorpVO corpVO, List<CorpDeptVO> corpDeptVOList, CorpStaffVO corpStaffVO);
 

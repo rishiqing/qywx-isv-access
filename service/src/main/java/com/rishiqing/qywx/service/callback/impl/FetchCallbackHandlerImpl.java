@@ -83,6 +83,11 @@ public class FetchCallbackHandlerImpl implements FetchCallbackHandler {
             }
         }
 
+        //  获取管理员相关信息
+        staffService.fetchAndSaveAdminList(suiteTokenVO, corpAppVO);
+        //  成功后通知同步日事清
+        queueService.sendToPushCorpAuthCallback(corpVO, CallbackInfoType.CREATE_AUTH, null);
+
 //        //  获取部门相关信息
 //        deptService.fetchAndSaveDeptInfo(corpTokenVO, null);
 //        //  获取员工相关信息

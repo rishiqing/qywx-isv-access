@@ -9,6 +9,8 @@ import java.util.List;
  */
 public interface CorpDeptManageService {
 
+    List<CorpDeptVO> listCorpDeptListByCorpId(String corpId);
+
     List<CorpDeptVO> listCorpDeptListByCorpIdAndParentId(String corpId, Long parentId);
 
     List<CorpDeptVO> listCorpDeptListByCorpIdAndDeptIdString(String corpId, String strDeptIds);

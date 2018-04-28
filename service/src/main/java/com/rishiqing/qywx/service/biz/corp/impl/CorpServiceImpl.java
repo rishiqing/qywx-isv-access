@@ -2,6 +2,7 @@ package com.rishiqing.qywx.service.biz.corp.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.rishiqing.common.exception.ActiveCorpException;
+import com.rishiqing.common.exception.ReauthCorpException;
 import com.rishiqing.qywx.service.biz.corp.CorpService;
 import com.rishiqing.qywx.service.common.corp.CorpAppManageService;
 import com.rishiqing.qywx.service.common.corp.CorpManageService;
@@ -62,6 +63,22 @@ public class CorpServiceImpl implements CorpService {
     }
 
     @Override
+    public void reauthCorp(String corpId) throws ReauthCorpException {
+        try {
+            activeLogger.debug("----begin to reauth corp----authCode: {}", corpId);
+            String suiteKey = suite.getSuiteKey();
+            CorpSuiteVO corpSuiteVO = corpSuiteManageService.getCorpSuite(suiteKey, corpId);
+            //  异步获取企业的组织架构
+            eventBusService.sendToFetchCorpAll(corpSuiteVO.getCorpId(), corpSuiteVO.getPermanentCode());
+            activeLogger.debug("----end reauth corp----authCode: {}", corpId);
+        } catch (Exception e) {
+            //  致命错误，将导致无法获知用户已经开通应用
+            throw new ReauthCorpException("reauth corp error", e);
+        }
+    }
+
+
+    @Override
     public CorpVO fetchAndSaveCorpInfo(SuiteTokenVO suiteToken, CorpSuiteVO corpSuite){
 
         String permanentCode = corpSuite.getPermanentCode();
@@ -102,8 +119,7 @@ public class CorpServiceImpl implements CorpService {
         return corpVO;
     }
 
-    @Override
-    public CorpVO fetchAndChangeCorpInfo(SuiteTokenVO suiteToken, CorpSuiteVO corpSuite){
+    private CorpVO fetchAndChangeCorpInfo(SuiteTokenVO suiteToken, CorpSuiteVO corpSuite){
         JSONObject json = httpUtil.getCorpAuthInfo(suiteToken, corpSuite);
         String suiteKey = suiteToken.getSuiteKey();
         //1. 保存corp信息

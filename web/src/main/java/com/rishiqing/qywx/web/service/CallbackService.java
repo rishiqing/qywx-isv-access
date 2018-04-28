@@ -1,6 +1,7 @@
 package com.rishiqing.qywx.web.service;
 
 import com.rishiqing.common.exception.ActiveCorpException;
+import com.rishiqing.common.exception.ReauthCorpException;
 import com.rishiqing.qywx.service.exception.CallbackException;
 
 /**
@@ -25,5 +26,5 @@ public interface CallbackService {
      * @return
      * @throws CallbackException
      */
-    String receiveMessage(String signature, String timestamp, String nonce, String body) throws ActiveCorpException;
+    String receiveMessage(String signature, String timestamp, String nonce, String body) throws ActiveCorpException, ReauthCorpException;
 }
