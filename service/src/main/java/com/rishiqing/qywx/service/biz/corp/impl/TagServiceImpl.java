@@ -50,7 +50,7 @@ public class TagServiceImpl implements TagService {
 
         List<Long> partyList = corpTagDetailVO.getPartyList();
         for(Long deptId : partyList){
-
+            deptService.fetchAndSaveDeptStaffList(corpTokenVO, deptId);
         }
     }
 }

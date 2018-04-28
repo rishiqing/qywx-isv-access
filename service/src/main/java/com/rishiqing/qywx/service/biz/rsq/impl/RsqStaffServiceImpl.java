@@ -40,14 +40,21 @@ public class RsqStaffServiceImpl implements RsqStaffService {
     @Autowired
     private RsqInfoManageService rsqInfoManageService;
 
+    /**
+     * 将企业corpVO中的成员同步到日事清
+     * 由于用户在开通微应用的时候，选择的可见范围可能只有部分成员、部分部门，因此push的时候可能出现成员所属部门不存在的情况，这里采用这样的方案
+     * 1  由于一个员工可能属于多个部门，遍历其所属的部门，如果存在就转换为rsqId，如果不存在就忽略。
+     * 2  如果一个员工所属的部门的部门rsqId列表为空，那么就不设置该用户的所属部门，在日事清里表现为“未分配部门”；反之则设置相应的部门
+     * @param corpVO
+     */
     @Override
-    public void pushAndCreateAllCorpStaff(CorpVO corpVO) {
+    public void pushAllCorpStaff(CorpVO corpVO) {
         List<CorpStaffVO> list = corpStaffManageService.listCorpStaffByCorpId(corpVO.getCorpId());
         List<CorpStaffVO> adminList = new ArrayList<CorpStaffVO>();
 
         for (CorpStaffVO corpStaffVO : list) {
             List<CorpDeptVO> deptList = corpDeptManageService.listCorpDeptListByCorpIdAndDeptIdString(corpVO.getCorpId(), corpStaffVO.getDepartment());
-            pushAndCreateStaff(corpVO, deptList, corpStaffVO);
+            pushStaff(corpVO, deptList, corpStaffVO);
             if(null != corpStaffVO.getAdminType() && corpStaffVO.getAdminType() != -1){
                 adminList.add(corpStaffVO);
             }
@@ -56,6 +63,14 @@ public class RsqStaffServiceImpl implements RsqStaffService {
         //  提交管理员列表
         for(CorpStaffVO corpStaffVO : adminList){
             pushAndSetStaffAdmin(corpVO, corpStaffVO);
+        }
+    }
+
+    private void pushStaff(CorpVO corpVO, List<CorpDeptVO> corpDeptVOList, CorpStaffVO corpStaffVO){
+        if(null == corpStaffVO.getRsqUserId()){
+            this.pushAndCreateStaff(corpVO, corpDeptVOList, corpStaffVO);
+        }else{
+            this.pushAndUpdateStaff(corpVO, corpDeptVOList, corpStaffVO);
         }
     }
 

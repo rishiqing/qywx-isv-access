@@ -1,9 +1,5 @@
 package com.rishiqing.qywx.service.callback.impl;
 
-import com.alibaba.fastjson.JSON;
-import com.rishiqing.common.exception.HttpException;
-import com.rishiqing.common.exception.RsqSyncException;
-import com.rishiqing.common.exception.RsqUpdateNotExistsException;
 import com.rishiqing.qywx.service.biz.rsq.RsqCorpService;
 import com.rishiqing.qywx.service.biz.rsq.RsqDeptService;
 import com.rishiqing.qywx.service.biz.rsq.RsqStaffService;
@@ -12,15 +8,10 @@ import com.rishiqing.qywx.service.common.corp.CorpDeptManageService;
 import com.rishiqing.qywx.service.common.corp.CorpManageService;
 import com.rishiqing.qywx.service.common.corp.CorpStaffManageService;
 import com.rishiqing.qywx.service.common.fail.CallbackFailService;
-import com.rishiqing.qywx.service.constant.CallbackChangeType;
-import com.rishiqing.qywx.service.constant.CallbackFailType;
-import com.rishiqing.qywx.service.constant.CallbackInfoType;
 import com.rishiqing.qywx.service.model.corp.CorpDeptVO;
 import com.rishiqing.qywx.service.model.corp.CorpStaffVO;
 import com.rishiqing.qywx.service.model.corp.CorpVO;
 import com.rishiqing.qywx.service.util.http.converter.Xml2BeanConverter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -52,9 +43,9 @@ public class PushCallbackHandlerImpl implements PushCallbackHandler {
      * 2  同步所有的corp、dept、staff
      * @param corpId
      */
-    public void handleCreateCorp(String corpId) {
+    public void handlePushCorp(String corpId) {
         CorpVO corpVO = corpManageService.getCorpByCorpId(corpId);
-        rsqCorpService.pushAndCreateCorpAll(corpVO);
+        rsqCorpService.pushCorpAll(corpVO);
     }
 
     /**

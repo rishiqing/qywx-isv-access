@@ -15,6 +15,12 @@ public class CorpDeptManageServiceImpl implements CorpDeptManageService {
     private CorpDeptDao corpDeptDao;
 
     @Override
+    public List<CorpDeptVO> listCorpDeptListByCorpId(String corpId){
+        List<CorpDeptDO> doList = corpDeptDao.listCorpDeptByCorpId(corpId);
+        return CorpDeptConverter.corpDeptDOList2CorpDeptVOList(doList);
+    }
+
+    @Override
     public List<CorpDeptVO> listCorpDeptListByCorpIdAndParentId(String corpId, Long parentId){
         List<CorpDeptDO> doList = corpDeptDao.listCorpDeptByCorpIdAndParentId(corpId, parentId);
         return CorpDeptConverter.corpDeptDOList2CorpDeptVOList(doList);

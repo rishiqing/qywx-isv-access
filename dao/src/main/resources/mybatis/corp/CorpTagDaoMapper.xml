@@ -87,6 +87,8 @@
         ) VALUES (
         now(),
         now(),
+        #{corpId},
+        #{tagId},
         #{userId}
         ) ON DUPLICATE KEY UPDATE
         last_updated = now(),
@@ -122,6 +124,8 @@
         ) VALUES (
         now(),
         now(),
+        #{corpId},
+        #{tagId},
         #{deptId}
         ) ON DUPLICATE KEY UPDATE
         last_updated = now(),

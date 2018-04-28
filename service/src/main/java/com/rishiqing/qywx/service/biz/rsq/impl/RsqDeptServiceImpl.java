@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,14 +36,68 @@ public class RsqDeptServiceImpl implements RsqDeptService {
     private RsqInfoManageService rsqInfoManageService;
 
     /**
-     * 找到corpVO中顶层的部门，调用pushAndCreateRecursiveDept方法进行递归创建
+     * 将corpVO企业中的所有部门同步到日事清。
+     * 由于用户在开通微应用的时候，选择的可见范围可能只有部分部门，因此push的时候可能看不到企业完整的部门树，这里采用这样的方案
+     * 1  读取corpVO下的所有部门
+     * 2  将所有部门按照父子关系重新建立组织结构，有父部门的按照父子关系建立；父部门没有获取到的统一放到根部门下面
+     * 3  针对新建立的树形结构，对其中的每个部门，递归同步：有rsqId的走更新，无rsqId的走新建
      * @param corpVO
      */
     @Override
-    public void pushAndCreateAllCorpDept(CorpVO corpVO) {
-        Long rootDeptId = 1L;
-        CorpDeptVO rootDept = corpDeptManageService.getCorpDeptByCorpIdAndDeptId(corpVO.getCorpId(), rootDeptId);
-        pushAndCreateRecursiveDept(corpVO, null, rootDept);
+    public void pushAllCorpDept(CorpVO corpVO) {
+        List<CorpDeptVO> treeList = this.makeDeptTree(corpVO);
+        for(CorpDeptVO deptVO : treeList){
+            pushAndCreateRecursiveDept(corpVO, null, deptVO);
+        }
+
+//        Long rootDeptId = 1L;
+//        CorpDeptVO rootDept = corpDeptManageService.getCorpDeptByCorpIdAndDeptId(corpVO.getCorpId(), rootDeptId);
+//        pushAndCreateRecursiveDept(corpVO, null, rootDept);
+    }
+
+    /**
+     * 将corpVO下的所有部门组合成一个列表，规则如下：
+     * 1  父部门不存在的，那么就直接放到list中
+     * 2  父部门存在的，放到父部门的childDept的list中
+     * @param corpVO
+     * @return
+     */
+    private List<CorpDeptVO> makeDeptTree(CorpVO corpVO){
+        List<CorpDeptVO> orgList = corpDeptManageService.listCorpDeptListByCorpId(corpVO.getCorpId());
+        List<CorpDeptVO> resultList = new ArrayList<>(orgList.size());
+
+        for(CorpDeptVO corpDeptVO : orgList){
+            CorpDeptVO parent = findByDeptId(orgList, corpDeptVO.getParentId());
+            if(parent == null){
+                resultList.add(corpDeptVO);
+            }else{
+                List<CorpDeptVO> childList = parent.getChildDept();
+                if(childList == null){
+                    childList = new ArrayList<>();
+                }
+                childList.add(corpDeptVO);
+                parent.setChildDept(childList);
+            }
+        }
+
+        return resultList;
+    }
+
+    /**
+     * 从list中返回deptId为deptId的CorpDeptVO对象
+     * @param list
+     * @return
+     */
+    private CorpDeptVO findByDeptId(List<CorpDeptVO> list, Long deptId){
+        if (deptId == null){
+            return null;
+        }
+        for(CorpDeptVO deptVO : list){
+            if(deptId.equals(deptVO.getDeptId())){
+                return deptVO;
+            }
+        }
+        return null;
     }
 
     /**
@@ -52,11 +107,23 @@ public class RsqDeptServiceImpl implements RsqDeptService {
      */
     private void pushAndCreateRecursiveDept(CorpVO corpVO, CorpDeptVO parentCorpDeptVO, CorpDeptVO corpDeptVO) {
 
-        pushAndCreateDept(corpVO, parentCorpDeptVO, corpDeptVO);
+        pushDept(corpVO, parentCorpDeptVO, corpDeptVO);
 
-        List<CorpDeptVO> list =  corpDeptManageService.listCorpDeptListByCorpIdAndParentId(corpDeptVO.getCorpId(), corpDeptVO.getDeptId());
+//        List<CorpDeptVO> list =  corpDeptManageService.listCorpDeptListByCorpIdAndParentId(corpDeptVO.getCorpId(), corpDeptVO.getDeptId());
+        List<CorpDeptVO> list = corpDeptVO.getChildDept();
+        if(null == list){
+            return;
+        }
         for (CorpDeptVO subDept : list) {
             pushAndCreateRecursiveDept(corpVO, corpDeptVO, subDept);
+        }
+    }
+
+    private void pushDept(CorpVO corpVO, CorpDeptVO parentCorpDeptVO, CorpDeptVO corpDeptVO){
+        if(null == corpDeptVO.getRsqId()){
+            this.pushAndCreateDept(corpVO, parentCorpDeptVO, corpDeptVO);
+        }else{
+            this.pushAndUpdateDept(corpVO, parentCorpDeptVO, corpDeptVO);
         }
     }
 
