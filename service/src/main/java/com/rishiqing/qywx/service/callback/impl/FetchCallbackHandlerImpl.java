@@ -3,6 +3,7 @@ package com.rishiqing.qywx.service.callback.impl;
 import com.rishiqing.qywx.service.biz.corp.CorpService;
 import com.rishiqing.qywx.service.biz.corp.DeptService;
 import com.rishiqing.qywx.service.biz.corp.StaffService;
+import com.rishiqing.qywx.service.biz.corp.TagService;
 import com.rishiqing.qywx.service.callback.FetchCallbackHandler;
 import com.rishiqing.qywx.service.common.corp.CorpAppManageService;
 import com.rishiqing.qywx.service.common.corp.CorpTokenManageService;
@@ -38,6 +39,8 @@ public class FetchCallbackHandlerImpl implements FetchCallbackHandler {
     @Autowired
     private StaffService staffService;
     @Autowired
+    private TagService tagService;
+    @Autowired
     private QueueService queueService;
     @Autowired
     private GlobalSuite suite;
@@ -68,10 +71,7 @@ public class FetchCallbackHandlerImpl implements FetchCallbackHandler {
             List<Long> allowTagList = privilegeVO.getAllowTag();
 
             for(Long partyId : allowPartyList){
-                CorpDeptVO corpDeptVO = new CorpDeptVO();
-                corpDeptVO.setDeptId(partyId);
-                deptService.fetchAndSaveDeptInfo(corpTokenVO, corpDeptVO);
-                staffService.fetchAndSaveStaffList(corpTokenVO, corpDeptVO);
+                deptService.fetchAndSaveDeptStaffList(corpTokenVO, partyId);
             }
 
             for(String userId : allowUserList){
@@ -79,10 +79,9 @@ public class FetchCallbackHandlerImpl implements FetchCallbackHandler {
             }
 
             for(Long tagId : allowTagList){
-
+                tagService.fetchAndSaveTagDetailList(corpTokenVO, tagId);
             }
         }
-
 
 //        //  获取部门相关信息
 //        deptService.fetchAndSaveDeptInfo(corpTokenVO, null);

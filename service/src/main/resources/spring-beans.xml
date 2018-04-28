@@ -14,6 +14,7 @@
     <bean id="corpManageService" class="com.rishiqing.qywx.service.common.corp.impl.CorpManageServiceImpl" />
     <bean id="corpDeptManageService" class="com.rishiqing.qywx.service.common.corp.impl.CorpDeptManageServiceImpl" />
     <bean id="corpStaffManageService" class="com.rishiqing.qywx.service.common.corp.impl.CorpStaffManageServiceImpl" />
+    <bean id="corpTagManageService" class="com.rishiqing.qywx.service.common.corp.impl.CorpTagManageServiceImpl" />
     <bean id="corpSuiteManageService" class="com.rishiqing.qywx.service.common.corp.impl.CorpSuiteManageServiceImpl" />
     <bean id="corpAppManageService" class="com.rishiqing.qywx.service.common.corp.impl.CorpAppManageServiceImpl" />
     <bean id="corpTokenManageService" class="com.rishiqing.qywx.service.common.corp.impl.CorpTokenManageServiceImpl" />
