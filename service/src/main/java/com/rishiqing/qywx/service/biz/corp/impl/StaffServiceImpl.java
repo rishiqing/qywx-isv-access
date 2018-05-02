@@ -60,8 +60,10 @@ public class StaffServiceImpl implements StaffService {
         }
         for(CorpStaffVO staff : staffList){
             CorpStaffVO dbStaff = corpStaffManageService.getCorpStaffByCorpIdAndUserId(staff.getCorpId(), staff.getUserId());
-            CorpStaffConverter.mergeCorpStaffVO(staff, dbStaff);
-            corpStaffManageService.saveOrUpdateCorpStaff(dbStaff);
+            if(null != dbStaff){
+                CorpStaffConverter.mergeCorpStaffVO(staff, dbStaff);
+                corpStaffManageService.saveOrUpdateCorpStaff(dbStaff);
+            }
         }
     }
 
