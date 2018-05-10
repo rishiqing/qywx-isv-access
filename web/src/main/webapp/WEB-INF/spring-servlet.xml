@@ -32,6 +32,7 @@
     <mvc:resources mapping="/checkpreload.html" location="/checkpreload.html" />
     <mvc:resources mapping="/jssdktest.html" location="/jssdktest.html" />
     <mvc:resources mapping="/error.html" location="/error.html" />
+    <mvc:resources mapping="/qywx-login-test.html" location="/qywx-login-test.html" />
 
     <!--interceptors-->
     <!--<bean id="callbackVerifyInterceptor" class="com.rishiqing.qywx.web.interceptor.CallbackVerifyInterceptor" />-->
