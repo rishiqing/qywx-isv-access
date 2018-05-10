@@ -16,4 +16,5 @@ public class RequestUrl {
     public static final String POST_SEND_MESSAGE = "https://qyapi.weixin.qq.com/cgi-bin/message/send";
 
     public static final String QYWX_WEB_INSTALL = "https://open.work.weixin.qq.com/3rdapp/install";
+    public static final String WEBSITE_LOGIN_INFO = "https://qyapi.weixin.qq.com/cgi-bin/service/get_login_info";
 }
