@@ -143,8 +143,12 @@ public class HttpUtilRsqSyncImpl implements HttpUtilRsqSync {
         params.put("password", rsqCommonUserVO.getPassword());
         params.put("realName", rsqCommonUserVO.getRealName());
         params.put("outerId", rsqCommonUserVO.getCorpId() + "--" + rsqCommonUserVO.getUserId());
-        params.put("teamId", rsqTeamVO.getId());
         params.put("unionId", rsqCommonUserVO.getUnionId());
+        if(null != rsqTeamVO){
+            params.put("teamId", rsqTeamVO.getId());
+        }else{
+            params.put("teamId", null);
+        }
 
         if(null != rsqCommonUserVO.getDepartment()){
             params.put("department", JSONArray.parse(rsqCommonUserVO.getDepartment()));

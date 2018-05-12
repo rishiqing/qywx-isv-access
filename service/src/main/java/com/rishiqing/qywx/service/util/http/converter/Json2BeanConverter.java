@@ -3,8 +3,11 @@ package com.rishiqing.qywx.service.util.http.converter;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.rishiqing.qywx.service.model.corp.*;
+import com.rishiqing.qywx.service.model.isv.IsvVO;
 import com.rishiqing.qywx.service.model.isv.SuitePreAuthCodeVO;
 import com.rishiqing.qywx.service.model.isv.SuiteTokenVO;
+import com.rishiqing.qywx.service.model.website.RegisterCodeVO;
+import com.rishiqing.qywx.service.model.website.WebsiteLoginInfoVO;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -102,7 +105,7 @@ public class Json2BeanConverter {
     private static CorpAuthPrivilegeVO generateCorpAuthPrivilegeVO(JSONObject json){
         CorpAuthPrivilegeVO privilegeVO = new CorpAuthPrivilegeVO();
         privilegeVO.setLevel(json.getLong("level"));
-        
+
         JSONArray allowPartyArray = json.getJSONArray("allow_party");
         JSONArray allowUserArray = json.getJSONArray("allow_user");
         JSONArray allowTagArray = json.getJSONArray("allow_tag");
@@ -115,7 +118,7 @@ public class Json2BeanConverter {
         List<Long> extraPartyList = new ArrayList<>(extraPartyArray.size());
         List<String> extraUserList = new ArrayList<>(extraUserArray.size());
         List<Long> extraTagList = new ArrayList<>(extraTagArray.size());
-        
+
         for(Object party : allowPartyArray){
             allowPartyList.add(((Integer) party).longValue());
         }
@@ -143,7 +146,7 @@ public class Json2BeanConverter {
         privilegeVO.setExtraParty(extraPartyList);
         privilegeVO.setExtraUser(extraUserList);
         privilegeVO.setExtraTag(extraTagList);
-        
+
         return privilegeVO;
     }
 
@@ -301,5 +304,37 @@ public class Json2BeanConverter {
         corpTagDetailVO.setPartyList(partyList);
 
         return corpTagDetailVO;
+    }
+
+    public static IsvVO generateProviderAccessToken(String corpId, JSONObject json){
+        IsvVO isvVO = new IsvVO();
+        isvVO.setCorpId(corpId);
+        isvVO.setProviderAccessToken(json.getString("provider_access_token"));
+        isvVO.setExpiresIn(json.getLong("expires_in"));
+        return isvVO;
+    }
+
+    public static WebsiteLoginInfoVO generateWebsiteLoginInfo(JSONObject json){
+        JSONObject jsonUser = json.getJSONObject("user_info");
+        JSONObject jsonCorp = json.getJSONObject("corp_info");
+        WebsiteLoginInfoVO loginInfoVO = new WebsiteLoginInfoVO();
+        CorpStaffVO corpStaffVO = new CorpStaffVO();
+        corpStaffVO.setUserId(jsonUser.getString("userid"));
+        corpStaffVO.setName(jsonUser.getString("name"));
+        corpStaffVO.setAvatar(jsonUser.getString("avatar"));
+        if(jsonUser.containsKey("email")){
+            corpStaffVO.setEmail(jsonUser.getString("email"));
+        }
+        corpStaffVO.setCorpId(jsonCorp.getString("corpid"));
+
+        loginInfoVO.setCorpStaffVO(corpStaffVO);
+        return loginInfoVO;
+    }
+
+    public static RegisterCodeVO generateRegisterCode(JSONObject json){
+        RegisterCodeVO code = new RegisterCodeVO();
+        code.setRegisterCode(json.getString("register_code"));
+        code.setExpiresIn(json.getLong("expires_in"));
+        return code;
     }
 }

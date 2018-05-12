@@ -6,6 +6,7 @@
     <!--全局缓存的suite-->
     <bean id="suite" class="com.rishiqing.qywx.service.common.isv.GlobalSuite" init-method="init"/>
     <!--基础service-->
+    <bean id="isvManageService" class="com.rishiqing.qywx.service.common.isv.impl.IsvManageServiceImpl" />
     <bean id="suiteManageService" class="com.rishiqing.qywx.service.common.isv.impl.SuiteManageServiceImpl" />
     <bean id="suiteTicketManageService" class="com.rishiqing.qywx.service.common.isv.impl.SuiteTicketManageServiceImpl" />
     <bean id="suiteTokenManageService" class="com.rishiqing.qywx.service.common.isv.impl.SuiteTokenManageServiceImpl" />
@@ -49,6 +50,8 @@
     <bean id="defaultRestHttpClient" class="com.rishiqing.common.util.http.client.impl.DefaultRestHttpClient" />
     <!--自动进行suiteCheck的httpClient-->
     <bean id="suiteCheckRestHttpClient" class="com.rishiqing.qywx.service.util.http.client.impl.SuiteCheckRestHttpClient" />
+    <!--自动进行isv的provider access token check的httpClient-->
+    <bean id="providerCheckRestHttpClient" class="com.rishiqing.qywx.service.util.http.client.impl.ProviderCheckRestHttpClient" />
 
     <!--isv相关的http请求工具-->
     <bean id="httpUtil" class="com.rishiqing.qywx.service.util.http.HttpUtil">
@@ -61,6 +64,9 @@
     <!--授权认证相关的http请求工具-->
     <bean id="httpUtilAuth" class="com.rishiqing.qywx.service.util.http.HttpUtilAuth">
         <constructor-arg ref="suiteCheckRestHttpClient" />
+    </bean>
+    <bean id="httpUtilIsv" class="com.rishiqing.qywx.service.util.http.HttpUtilIsv">
+        <constructor-arg ref="providerCheckRestHttpClient" />
     </bean>
     <!--日事清相关的请求-->
     <bean id="httpUtilRsqSync" class="com.rishiqing.common.util.http.impl.HttpUtilRsqSyncImpl">

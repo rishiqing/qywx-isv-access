@@ -96,7 +96,7 @@ public class SuiteCheckRestHttpClient implements RestHttpClient {
             throw new HttpException("http request exception: ", e);
         }
         if(resp.getStatus() > 200){
-            throw new HttpException("http post request getSuiteToken status error: " + resp.getStatus() + ", " + resp.getBody());
+            throw new HttpException("http post request status error: " + resp.getStatus() + ", " + resp.getBody());
         }
         JSONObject jsonResponse = JSON.parseObject(resp.getBody());
         logger.debug("{} post response: {}", path, jsonResponse);
@@ -144,7 +144,7 @@ public class SuiteCheckRestHttpClient implements RestHttpClient {
             throw new HttpException("http request exception: ", e);
         }
         if(resp.getStatus() > 200){
-            throw new HttpException("http get request getSuiteToken status error: " + resp.getStatus() + ", " + resp.getBody());
+            throw new HttpException("http get request status error: " + resp.getStatus() + ", " + resp.getBody());
         }
         JSONObject jsonResponse = JSON.parseObject(resp.getBody());
         logger.debug("{} post response: {}", path, jsonResponse);
