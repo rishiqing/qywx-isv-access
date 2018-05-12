@@ -113,7 +113,7 @@ public class CorpStaffConverter {
             user.setAdmin(corpStaffVO.getAdminType() != -1);
 
         //  关联属性
-        if(null != corpVO.getRsqId())
+        if(null != corpVO && null != corpVO.getRsqId())
             user.setTeamId(Long.valueOf(corpVO.getRsqId()));
         if(null != corpDeptVOList && corpDeptVOList.size() > 0){
             JSONArray idArrays = new JSONArray();

@@ -14,7 +14,9 @@ public enum CallbackInfoType {
     //  授权取消
     CANCEL_AUTH("cancel_auth"),
     //  通讯录变更
-    CHANGE_CONTACT("change_contact");
+    CHANGE_CONTACT("change_contact"),
+    //  定制化注册成功
+    REGISTER_CORP("register_corp");
 
     private final String key;
 

@@ -24,6 +24,7 @@
         <entry key="appCookieName" value="${isv.app.page.cookie.name}" />
         <entry key="isvAuthRedirectUri" value="${isv.app.page.auth.redirect}" />
         <entry key="isvAuthRedirectUriAfter" value="${isv.app.page.auth.redirect.after}" />
+        <entry key="isvRegisterTemplateId" value="${isv.app.register.template.id}" />
     </util:map>
 
     <!--数据库连接-->
@@ -40,6 +41,9 @@
     <import resource="spring-queue-listener.xml" />
 
     <!--web层需要用到的service-->
+    <bean id="websiteOauthService" class="com.rishiqing.qywx.web.service.website.impl.WebsiteOauthServiceImpl" />
+    <bean id="qywxRegisterService" class="com.rishiqing.qywx.web.service.website.impl.QywxRegisterServiceImpl" />
+    <bean id="qywxRegisterEventService" class="com.rishiqing.qywx.web.service.website.impl.QywxRegisterEventServiceImpl" />
     <bean id="callbackService" class="com.rishiqing.qywx.web.service.impl.CallbackServiceImpl" />
     <bean id="jsConfigService" class="com.rishiqing.qywx.web.service.impl.JsConfigServiceImpl" />
     <bean id="oauthService" class="com.rishiqing.qywx.web.service.impl.OauthServiceImpl" />

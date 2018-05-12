@@ -58,6 +58,9 @@ public class CorpConverter {
         return corpDO;
     }
     public static RsqTeamVO corpVO2RsqTeamVO(CorpVO corpVO){
+        if(corpVO == null){
+            return null;
+        }
         RsqTeamVO rsqTeamVO = new RsqTeamVO();
         rsqTeamVO.setCorpId(corpVO.getCorpId());
         rsqTeamVO.setName(corpVO.getCorpName());
