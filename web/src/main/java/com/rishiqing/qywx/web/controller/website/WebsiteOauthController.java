@@ -2,6 +2,8 @@ package com.rishiqing.qywx.web.controller.website;
 
 import com.rishiqing.common.exception.HttpException;
 import com.rishiqing.qywx.service.common.crypto.CryptoUtil;
+import com.rishiqing.qywx.service.common.isv.GlobalSuite;
+import com.rishiqing.qywx.service.constant.RequestUrl;
 import com.rishiqing.qywx.service.model.corp.CorpStaffVO;
 import com.rishiqing.qywx.web.service.website.WebsiteOauthService;
 import org.slf4j.Logger;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Date;
@@ -33,6 +36,15 @@ public class WebsiteOauthController {
     private CryptoUtil cryptoUtil;
     @Autowired
     private Map isvGlobal;
+    @Autowired
+    private GlobalSuite suite;
+
+    @RequestMapping(value = "/to", method = {RequestMethod.GET})
+    public String afterOauth(){
+        logger.info("----web websiteOauth----");
+        //  这里可以做一些额外的处理
+        return "redirect:" + makeWebsiteOauthUrl();
+    }
 
     @RequestMapping(value = "/afterLogin", method = {RequestMethod.GET})
     public String afterOauth(
@@ -58,6 +70,16 @@ public class WebsiteOauthController {
         }
     }
 
+    private String makeWebsiteOauthUrl(){
+        //  ?appid=wxec002534a59ea2e7&redirect_uri=&state=web_login@gyoss9&usertype=member
+        return RequestUrl.QYWX_WEB_OAUTH +
+                "?appid=" +
+                suite.getCorpId() +
+                "&redirect_uri=" +
+                "https%3A%2F%2Fqywx.rishiqing.com%2Fqywxbackauth%2FwebsiteOauth%2FafterLogin" +
+                "&state=STATE" +
+                "&usertype=member";
+    }
     private String makeLoginString(CorpStaffVO corpStaffVO){
         return String.valueOf(new Date().getTime()) +
                 "--" +
