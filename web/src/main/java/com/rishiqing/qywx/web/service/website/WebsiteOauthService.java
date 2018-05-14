@@ -1,9 +1,11 @@
 package com.rishiqing.qywx.web.service.website;
 
+import com.rishiqing.qywx.service.model.corp.CorpStaffVO;
+
 /**
  * @author Wallace Mao
  * Date: 2018-05-10 18:59
  */
 public interface WebsiteOauthService {
-    void registerLoginUser(String authCode, String appId);
+    CorpStaffVO registerLoginUser(String authCode, String appId);
 }

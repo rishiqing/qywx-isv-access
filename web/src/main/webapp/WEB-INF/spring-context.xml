@@ -25,6 +25,9 @@
         <entry key="isvAuthRedirectUri" value="${isv.app.page.auth.redirect}" />
         <entry key="isvAuthRedirectUriAfter" value="${isv.app.page.auth.redirect.after}" />
         <entry key="isvRegisterTemplateId" value="${isv.app.register.template.id}" />
+        <entry key="rsqUrlAuthRedirect" value="${isv.rsq.url.auth.redirect}" />
+        <entry key="rsqAesKey" value="${isv.rsq.aes.key}" />
+        <entry key="rsqAesInitVector" value="${isv.rsq.aes.init.vector}" />
     </util:map>
 
     <!--数据库连接-->
