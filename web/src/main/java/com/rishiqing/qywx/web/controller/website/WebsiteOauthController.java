@@ -1,6 +1,8 @@
 package com.rishiqing.qywx.web.controller.website;
 
 import com.rishiqing.common.exception.HttpException;
+import com.rishiqing.qywx.service.common.crypto.CryptoUtil;
+import com.rishiqing.qywx.service.model.corp.CorpStaffVO;
 import com.rishiqing.qywx.web.service.website.WebsiteOauthService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,6 +11,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.Date;
+import java.util.Map;
 
 /**
  * @author Wallace Mao
@@ -22,6 +29,10 @@ public class WebsiteOauthController {
     private static Logger logger = LoggerFactory.getLogger("WEB_OAUTH_LOGGER");
     @Autowired
     private WebsiteOauthService websiteOauthService;
+    @Autowired
+    private CryptoUtil cryptoUtil;
+    @Autowired
+    private Map isvGlobal;
 
     @RequestMapping(value = "/afterLogin", method = {RequestMethod.GET})
     public String afterOauth(
@@ -31,8 +42,13 @@ public class WebsiteOauthController {
     ){
         logger.info("----oauth after----authCode: {}, appId: {}, state: {}", authCode, corpId, state);
         try {
-            websiteOauthService.registerLoginUser(authCode, corpId);
-            return "redirect:/qywx-login-test.html";
+            CorpStaffVO corpStaffVO = websiteOauthService.registerLoginUser(authCode, corpId);
+            String loginStr = makeLoginString(corpStaffVO);
+            logger.info("----qywx login string---- {}", loginStr);
+            String loginToken = cryptoUtil.encrypt(loginStr);
+            logger.info("----qywx login string encoded---- {}", loginToken);
+            String redirectUrl = makeRedirectUrl(loginToken);
+            return "redirect:" + redirectUrl;
         } catch (HttpException e) {
             logger.error("/websiteOauth/afterLogin http exception: ", e);
             return "redirect:/error.html";
@@ -40,5 +56,18 @@ public class WebsiteOauthController {
             logger.error("/websiteOauth/afterLogin internal exception: ", e);
             return "redirect:/error.html";
         }
+    }
+
+    private String makeLoginString(CorpStaffVO corpStaffVO){
+        return String.valueOf(new Date().getTime()) +
+                "--" +
+                corpStaffVO.getCorpId() +
+                "--" +
+                corpStaffVO.getUserId();
+    }
+    private String makeRedirectUrl(String token) throws UnsupportedEncodingException {
+        return isvGlobal.get("rsqUrlAuthRedirect") +
+                "?token=" +
+                URLEncoder.encode(token, "UTF-8");
     }
 }

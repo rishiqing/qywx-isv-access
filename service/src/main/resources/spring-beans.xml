@@ -22,6 +22,7 @@
     <bean id="corpJsapiTicketManageService" class="com.rishiqing.qywx.service.common.corp.impl.CorpJsapiTicketManageServiceImpl" />
     <bean id="rsqInfoManageService" class="com.rishiqing.qywx.service.common.rsq.impl.RsqInfoManageServiceImpl" />
     <bean id="sendMessageService" class="com.rishiqing.qywx.service.common.message.impl.SendMessageServiceImpl" />
+    <bean id="cryptoUtil" class="com.rishiqing.qywx.service.common.crypto.CryptoUtil" />
 
     <!--业务service-->
     <bean id="corpService" class="com.rishiqing.qywx.service.biz.corp.impl.CorpServiceImpl" />
