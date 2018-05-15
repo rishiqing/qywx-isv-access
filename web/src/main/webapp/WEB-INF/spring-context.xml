@@ -26,6 +26,7 @@
         <entry key="isvAuthRedirectUriAfter" value="${isv.app.page.auth.redirect.after}" />
         <entry key="isvRegisterTemplateId" value="${isv.app.register.template.id}" />
         <entry key="rsqUrlAuthRedirect" value="${isv.rsq.url.auth.redirect}" />
+        <entry key="rsqUrlOauthRedirect" value="${isv.rsq.url.oauth.redirect}" />
         <entry key="rsqAesKey" value="${isv.rsq.aes.key}" />
         <entry key="rsqAesInitVector" value="${isv.rsq.aes.init.vector}" />
     </util:map>
@@ -39,6 +40,7 @@
     <!--service层的服务beans-->
     <import resource="classpath:spring-beans.xml" />
     <import resource="classpath:spring-queue.xml" />
+    <import resource="classpath:spring-redis.xml" />
 
     <!--queue listener层-->
     <import resource="spring-queue-listener.xml" />

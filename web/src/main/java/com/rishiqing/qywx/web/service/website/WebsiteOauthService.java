@@ -8,4 +8,8 @@ import com.rishiqing.qywx.service.model.corp.CorpStaffVO;
  */
 public interface WebsiteOauthService {
     CorpStaffVO registerLoginUser(String authCode, String appId);
+
+    String generateState();
+
+    Boolean checkState(String state);
 }
