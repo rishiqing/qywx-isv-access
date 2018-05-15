@@ -92,6 +92,12 @@
             <artifactId>commons-lang</artifactId>
         </dependency>
 
+        <!--redis-->
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+        </dependency>
+
         <!--slf4j-->
         <dependency>
             <groupId>org.slf4j</groupId>

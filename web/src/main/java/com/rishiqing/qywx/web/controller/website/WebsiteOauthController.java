@@ -43,17 +43,29 @@ public class WebsiteOauthController {
     public String afterOauth(){
         logger.info("----web websiteOauth----");
         //  这里可以做一些额外的处理
-        return "redirect:" + makeWebsiteOauthUrl();
+        try {
+            return "redirect:" + makeWebsiteOauthUrl();
+        } catch (Exception e) {
+            logger.error("/websiteOauth/to http exception: ", e);
+            return "redirect:/error.html";
+        }
     }
 
     @RequestMapping(value = "/afterLogin", method = {RequestMethod.GET})
     public String afterOauth(
             @RequestParam("auth_code") String authCode,
             @RequestParam("appid") String corpId,  //  这里的appid其实就是isv所在企业的corpId
-            @RequestParam(value = "state", required = false) String state
+            @RequestParam("state") String state,
+            HttpServletResponse response
     ){
         logger.info("----oauth after----authCode: {}, appId: {}, state: {}", authCode, corpId, state);
         try {
+            //  检查state
+            Boolean stateValid = websiteOauthService.checkState(state);
+            if(!stateValid){
+                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                return null;
+            }
             CorpStaffVO corpStaffVO = websiteOauthService.registerLoginUser(authCode, corpId);
             String loginStr = makeLoginString(corpStaffVO);
             logger.info("----qywx login string---- {}", loginStr);
@@ -70,14 +82,16 @@ public class WebsiteOauthController {
         }
     }
 
-    private String makeWebsiteOauthUrl(){
+    private String makeWebsiteOauthUrl() throws UnsupportedEncodingException {
         //  ?appid=wxec002534a59ea2e7&redirect_uri=&state=web_login@gyoss9&usertype=member
+        //  防止跨域攻击
         return RequestUrl.QYWX_WEB_OAUTH +
                 "?appid=" +
                 suite.getCorpId() +
                 "&redirect_uri=" +
-                "https%3A%2F%2Fqywx.rishiqing.com%2Fqywxbackauth%2FwebsiteOauth%2FafterLogin" +
-                "&state=STATE" +
+                URLEncoder.encode((String)isvGlobal.get("rsqUrlOauthRedirect"), "UTF-8") +
+                "&state=" +
+                websiteOauthService.generateState() +
                 "&usertype=member";
     }
     private String makeLoginString(CorpStaffVO corpStaffVO){
