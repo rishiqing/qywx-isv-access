@@ -34,6 +34,7 @@ public class WebsiteOauthServiceImpl implements WebsiteOauthService {
     private static final String WEBSITE_OAUTH_STATE_PREFIX = "weboauth__";
     private static final Integer WEBSITE_OAUTH_STATE_EXPIRE_SECOND = 600; //  state的超时时间，10分钟
     private static final String WEBSITE_OAUTH_STATE_VALUE = "1";
+    private static final Integer WEBSITE_OAUTH_STATE_LENGTH = 16;
 
     @Override
     public CorpStaffVO registerLoginUser(String authCode, String corpId){
@@ -56,7 +57,7 @@ public class WebsiteOauthServiceImpl implements WebsiteOauthService {
      */
     @Override
     public String generateState(){
-        String state = RandomStringUtils.randomAlphabetic(5);
+        String state = RandomStringUtils.randomAlphabetic(WEBSITE_OAUTH_STATE_LENGTH);
         String dbKey = this.addPrefix(state);
         baseRedisUtil.setKey(dbKey, WEBSITE_OAUTH_STATE_VALUE, WEBSITE_OAUTH_STATE_EXPIRE_SECOND);
         return state;
