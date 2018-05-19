@@ -7,7 +7,7 @@
     <groupId>com.rishiqing.qywx</groupId>
     <artifactId>qywx.isv.access</artifactId>
     <packaging>pom</packaging>
-    <version>0.1.0</version>
+    <version>0.1.1</version>
     <modules>
         <module>dao</module>
         <module>service</module>
@@ -23,12 +23,12 @@
             <dependency>
                 <groupId>com.rishiqing.qywx</groupId>
                 <artifactId>qywx.isv.access.dao</artifactId>
-                <version>0.1.0</version>
+                <version>0.1.1</version>
             </dependency>
             <dependency>
                 <groupId>com.rishiqing.qywx</groupId>
                 <artifactId>qywx.isv.access.service</artifactId>
-                <version>0.1.0</version>
+                <version>0.1.1</version>
             </dependency>
 
             <!--spring 相关-->
