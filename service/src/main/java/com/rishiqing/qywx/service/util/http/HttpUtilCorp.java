@@ -90,6 +90,34 @@ public class HttpUtilCorp {
         );
     }
 
+    public JSONObject getStaff(CorpTokenVO corpTokenVO, String userId){
+        Map<String, Object> options = new HashMap<String, Object>();
+        options.put("corpId", corpTokenVO.getCorpId());
+        Map<String, Object> queryMap = new HashMap<String, Object>();
+        queryMap.put("access_token", corpTokenVO.getCorpToken());
+        queryMap.put("userid", userId);
+
+        return restHttpClient.get(
+                RequestUrl.STAFF,
+                queryMap,
+                options
+        );
+    }
+
+    public JSONObject getTagDetail(CorpTokenVO corpTokenVO, Long tagId){
+        Map<String, Object> options = new HashMap<String, Object>();
+        options.put("corpId", corpTokenVO.getCorpId());
+        Map<String, Object> queryMap = new HashMap<String, Object>();
+        queryMap.put("access_token", corpTokenVO.getCorpToken());
+        queryMap.put("tagid", tagId);
+
+        return restHttpClient.get(
+                RequestUrl.TAG_DETAIL,
+                queryMap,
+                options
+        );
+    }
+
     public JSONObject postSendMessage(CorpTokenVO corpTokenVO, Map<String, Object> map) {
         Map<String, Object> queryMap = new HashMap<String, Object>();
         queryMap.put("access_token", corpTokenVO.getCorpToken());

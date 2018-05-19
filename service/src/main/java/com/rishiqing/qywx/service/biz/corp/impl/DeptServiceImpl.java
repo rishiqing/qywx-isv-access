@@ -3,6 +3,7 @@ package com.rishiqing.qywx.service.biz.corp.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.rishiqing.qywx.service.biz.corp.DeptService;
+import com.rishiqing.qywx.service.biz.corp.StaffService;
 import com.rishiqing.qywx.service.common.corp.CorpDeptManageService;
 import com.rishiqing.common.exception.HttpException;
 import com.rishiqing.qywx.service.exception.ObjectNotExistException;
@@ -28,6 +29,19 @@ public class DeptServiceImpl implements DeptService {
     private HttpUtilCorp httpUtilCorp;
     @Autowired
     private CorpDeptManageService corpDeptManageService;
+    @Autowired
+    private StaffService staffService;
+
+    @Override
+    public void fetchAndSaveDeptStaffList(CorpTokenVO corpTokenVO, @Nullable Long deptId){
+        CorpDeptVO corpDeptVO = null;
+        if(deptId != null){
+            corpDeptVO = new CorpDeptVO();
+            corpDeptVO.setDeptId(deptId);
+        }
+        this.fetchAndSaveDeptInfo(corpTokenVO, corpDeptVO);
+        staffService.fetchAndSaveStaffList(corpTokenVO, corpDeptVO);
+    }
 
     /**
      * 批量获取部门列表信息
@@ -36,8 +50,7 @@ public class DeptServiceImpl implements DeptService {
      * @throws HttpException
      * @throws UnirestException
      */
-    @Override
-    public void fetchAndSaveDeptInfo(CorpTokenVO corpTokenVO, @Nullable CorpDeptVO corpDeptVO) {
+    private void fetchAndSaveDeptInfo(CorpTokenVO corpTokenVO, @Nullable CorpDeptVO corpDeptVO) {
         JSONObject json = httpUtilCorp.getDepartmentList(corpTokenVO, corpDeptVO);
         String corpId = corpTokenVO.getCorpId();
         List<CorpDeptVO> deptList =

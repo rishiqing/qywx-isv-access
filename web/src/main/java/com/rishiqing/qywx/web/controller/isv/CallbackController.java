@@ -1,6 +1,7 @@
 package com.rishiqing.qywx.web.controller.isv;
 
 import com.rishiqing.common.exception.ActiveCorpException;
+import com.rishiqing.common.exception.ReauthCorpException;
 import com.rishiqing.qywx.web.service.CallbackService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +26,7 @@ public class CallbackController {
             @RequestParam(required = false, name = "echostr") String echoString,
             @RequestBody(required = false) String body
     ){
-        logger.info("callback params signature: {}, timestamp: {}, nonce: {}, echoStr: {}, body: {}",
+        logger.info("callback receive signature: {}, timestamp: {}, nonce: {}, echoStr: {}, body: {}",
                 msgSignature, timestamp, nonce, echoString, body);
 
         String resultStr = ""; //需要返回的明文
@@ -38,9 +39,14 @@ public class CallbackController {
                 //  走isv接受消息的流程
                 resultStr = callbackService.receiveMessage(msgSignature, timestamp, nonce, body);
             }
+            logger.info("callback receive response: {}", resultStr);
         } catch (ActiveCorpException e) {
             //激活应用失败
             logger.error("active corp error", e);
+            resultStr = "fail";
+        } catch (ReauthCorpException e) {
+            //更改应用授权失败
+            logger.error("reauth corp error", e);
             resultStr = "fail";
         } catch (Exception e) {
             //验证URL失败，错误原因请查看异常

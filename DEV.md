@@ -51,6 +51,14 @@ values (now(), now(), 'suite_name', 'suite_key', 'suite_secret', 'encoding_aes_k
 - suite_key为企业微信中的SuiteID
 - suite_token为任意值,该值将在首次获取token时更新
 
+3. 插入isv的初始信息:
+`insert into isv (date_created, last_updated, corp_id, provider_secret, encoding_aes_key, token, provider_access_token, expires_in, provider_token_update_time)
+ values(now(), now(), 'corp_id', 'provider_secret', 'encoding_aes_key', 'token', 'provider_access_token_xxxx', 7200, '1970-01-01 00:00:00')`
+ 其中:
+ - corp_id为服务商的企业的corpId
+ - provider_secret、encoding_aes_key和token均为“服务商后台”中“通用开发参数”中设置的
+ - provider_access_token设置为任意值，会在必要时由后台进行更新
+
 ### 4  校验
 在企业微信中校验回调url是否成功
 
@@ -154,3 +162,18 @@ CorpStaff的isLeaderInDepts这个字段目前有问题!
 
 ### 企业微信的newUserId问题
 企业微信的corp staff的userId可以修改……官方说法是由系统自动生成的userId可以由用户修改一次
+
+### 测试授权
+
+1. 新增授权
+- 成员
+- 部门
+- 标签
+- 成员、部门（无重复）
+- 成员、部门（有重复）
+- 成员、标签（无重复）
+- 成员、标签（有重复）
+- 部门、标签（无重复）
+- 部门、标签（有重复）　
+
+2. 变更授权

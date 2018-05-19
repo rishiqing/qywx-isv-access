@@ -1,6 +1,7 @@
 package com.rishiqing.qywx.service.model.corp;
 
 import java.util.Date;
+import java.util.List;
 
 public class CorpDeptVO {
     private Long id;
@@ -12,6 +13,8 @@ public class CorpDeptVO {
     private Long parentId;
 
     private String rsqId;
+
+    private List<CorpDeptVO> childDept;
 
     public Long getId() {
         return id;
@@ -67,6 +70,14 @@ public class CorpDeptVO {
 
     public void setRsqId(String rsqId) {
         this.rsqId = rsqId;
+    }
+
+    public List<CorpDeptVO> getChildDept() {
+        return childDept;
+    }
+
+    public void setChildDept(List<CorpDeptVO> childDept) {
+        this.childDept = childDept;
     }
 
     @Override

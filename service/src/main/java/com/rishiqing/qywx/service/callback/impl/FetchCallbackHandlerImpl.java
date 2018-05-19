@@ -3,6 +3,7 @@ package com.rishiqing.qywx.service.callback.impl;
 import com.rishiqing.qywx.service.biz.corp.CorpService;
 import com.rishiqing.qywx.service.biz.corp.DeptService;
 import com.rishiqing.qywx.service.biz.corp.StaffService;
+import com.rishiqing.qywx.service.biz.corp.TagService;
 import com.rishiqing.qywx.service.callback.FetchCallbackHandler;
 import com.rishiqing.qywx.service.common.corp.CorpAppManageService;
 import com.rishiqing.qywx.service.common.corp.CorpTokenManageService;
@@ -16,6 +17,7 @@ import com.rishiqing.qywx.service.model.isv.SuiteTokenVO;
 import com.rishiqing.qywx.service.util.http.converter.Xml2BeanConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -37,6 +39,8 @@ public class FetchCallbackHandlerImpl implements FetchCallbackHandler {
     @Autowired
     private StaffService staffService;
     @Autowired
+    private TagService tagService;
+    @Autowired
     private QueueService queueService;
     @Autowired
     private GlobalSuite suite;
@@ -57,14 +61,41 @@ public class FetchCallbackHandlerImpl implements FetchCallbackHandler {
         CorpAppVO corpAppVO = corpAppManageService.getCorpAppBySuiteKeyAndCorpId(suiteKey, corpId);
         CorpTokenVO corpTokenVO = corpTokenManageService.getCorpToken(suiteKey, corpId);
 
-        //  获取部门相关信息
-        deptService.fetchAndSaveDeptInfo(corpTokenVO, null);
-        //  获取员工相关信息
-        staffService.fetchAndSaveStaffList(corpTokenVO, null);
+        //TODO 根据获取到的授权信息获取用户
+        List<CorpAppVO> corpAppList = corpVO.getCorpAppVOList();
+        for(CorpAppVO appVO : corpAppList){
+            CorpAuthPrivilegeVO privilegeVO = appVO.getCorpAuthPrivilegeVO();
+            //  目前只处理allowParty/allowUser/allowTag三种授权方式
+            List<Long> allowPartyList = privilegeVO.getAllowParty();
+            List<String> allowUserList = privilegeVO.getAllowUser();
+            List<Long> allowTagList = privilegeVO.getAllowTag();
+
+            for(Long partyId : allowPartyList){
+                deptService.fetchAndSaveDeptStaffList(corpTokenVO, partyId);
+            }
+
+            for(String userId : allowUserList){
+                staffService.fetchAndSaveStaff(corpTokenVO, userId);
+            }
+
+            for(Long tagId : allowTagList){
+                tagService.fetchAndSaveTagDetailList(corpTokenVO, tagId);
+            }
+        }
+
         //  获取管理员相关信息
         staffService.fetchAndSaveAdminList(suiteTokenVO, corpAppVO);
         //  成功后通知同步日事清
         queueService.sendToPushCorpAuthCallback(corpVO, CallbackInfoType.CREATE_AUTH, null);
+
+//        //  获取部门相关信息
+//        deptService.fetchAndSaveDeptInfo(corpTokenVO, null);
+//        //  获取员工相关信息
+//        staffService.fetchAndSaveStaffList(corpTokenVO, null);
+//        //  获取管理员相关信息
+//        staffService.fetchAndSaveAdminList(suiteTokenVO, corpAppVO);
+//        //  成功后通知同步日事清
+//        queueService.sendToPushCorpAuthCallback(corpVO, CallbackInfoType.CREATE_AUTH, null);
     }
 
     /**

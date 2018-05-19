@@ -23,9 +23,9 @@ public class LogFailPushCallbackHandlerImpl implements PushCallbackHandler {
     private CallbackFailService callbackFailService;
 
     @Override
-    public void handleCreateCorp(String corpId) {
+    public void handlePushCorp(String corpId) {
         try {
-            pushCallbackHandler.handleCreateCorp(corpId);
+            pushCallbackHandler.handlePushCorp(corpId);
         } catch (Exception e) {
             //  做重试
             callbackFailService.save(corpId,

@@ -40,7 +40,7 @@ update `user` u set u.outer_id = null where u.team_id = @teamId;
          */
 
          String corpId = "wxec002534a59ea2e7";
-         pushCallbackHandlerImpl.handleCreateCorp(corpId);
+         pushCallbackHandlerImpl.handlePushCorp(corpId);
     }
 
     @Test

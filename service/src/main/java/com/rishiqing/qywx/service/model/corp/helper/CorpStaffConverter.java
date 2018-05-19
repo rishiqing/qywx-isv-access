@@ -113,12 +113,12 @@ public class CorpStaffConverter {
             user.setAdmin(corpStaffVO.getAdminType() != -1);
 
         //  关联属性
-        if(null != corpVO.getRsqId())
+        if(null != corpVO && null != corpVO.getRsqId())
             user.setTeamId(Long.valueOf(corpVO.getRsqId()));
         if(null != corpDeptVOList && corpDeptVOList.size() > 0){
             JSONArray idArrays = new JSONArray();
             for(CorpDeptVO corpDept : corpDeptVOList){
-                if(null != corpDept.getRsqId()){
+                if(null != corpDept && null != corpDept.getRsqId()){
                     idArrays.add(Long.valueOf(corpDept.getRsqId()));
                 }
             }
@@ -128,6 +128,9 @@ public class CorpStaffConverter {
     }
 
     public static void mergeCorpStaffVO(CorpStaffVO old, CorpStaffVO target) {
+        if(null == target || null == old){
+            return;
+        }
         if(null != old.getName())
             target.setName(old.getName());
         if(null != old.getAvatar())

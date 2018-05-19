@@ -3,6 +3,7 @@ package com.rishiqing.qywx.service.biz.corp;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.rishiqing.common.exception.ActiveCorpException;
 import com.rishiqing.common.exception.HttpException;
+import com.rishiqing.common.exception.ReauthCorpException;
 import com.rishiqing.qywx.service.model.corp.CorpJsapiTicketVO;
 import com.rishiqing.qywx.service.model.corp.CorpSuiteVO;
 import com.rishiqing.qywx.service.model.corp.CorpVO;
@@ -14,6 +15,13 @@ public interface CorpService {
      * @return
      */
     void activeCorp(String authCode) throws ActiveCorpException;
+
+    /**
+     * 当企业授权的可见范围发生变更时，会对企业进行重新授权
+     * @param corpId
+     * @throws ReauthCorpException
+     */
+    void reauthCorp(String corpId) throws ReauthCorpException;
 
     /**
      * 根据企业的永久授权码获取企业信息
@@ -30,7 +38,7 @@ public interface CorpService {
      * @throws UnirestException
      * @throws HttpException
      */
-    CorpVO fetchAndChangeCorpInfo(SuiteTokenVO suiteToken, CorpSuiteVO corpSuite);
+//    CorpVO fetchAndChangeCorpInfo(SuiteTokenVO suiteToken, CorpSuiteVO corpSuite);
 
     /**
      * 获取并保存jsapi ticket
