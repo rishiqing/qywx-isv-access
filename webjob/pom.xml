@@ -3,7 +3,7 @@
     <parent>
         <artifactId>qywx.isv.access</artifactId>
         <groupId>com.rishiqing.qywx</groupId>
-        <version>0.1.0</version>
+        <version>0.1.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>qywx.isv.access.webjob</artifactId>
@@ -11,7 +11,7 @@
     <name>web job server for qiye weixin</name>
     <url>https://www.rishiqing.com</url>
     <!--发布的时候修改这里来控制版本号-->
-    <version>0.1.0</version>
+    <version>0.1.1</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
