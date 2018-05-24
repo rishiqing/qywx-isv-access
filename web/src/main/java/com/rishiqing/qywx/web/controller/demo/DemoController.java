@@ -119,21 +119,22 @@ public class DemoController {
     @RequestMapping("/getToken")
     @ResponseBody
     public String getToken(
-            @RequestParam("outerId") String urlEncoded
+            @RequestParam("outerId") String outerId
     ){
         try {
-//            System.out.println("outerId: " + outerId);
-//            String cryptEncoded = cryptoUtil.encrypt(outerId);
-//            System.out.println("crypt Encoded is: " + cryptEncoded + ", length is " + cryptEncoded.length());
-//
-//            String urlEncoded = URLEncoder.encode(cryptEncoded, "UTF-8");
+            Date d = new Date();
+            String loginStr = d.getTime() + "--" + outerId;
+            String cryptEncoded = cryptoUtil.encrypt(loginStr);
+            System.out.println("crypt Encoded is: " + cryptEncoded + ", length is " + cryptEncoded.length());
+
+            String urlEncoded = URLEncoder.encode(cryptEncoded, "UTF-8");
             System.out.println("url Encoded url: " + urlEncoded);
 
             String urlDecoded = URLDecoder.decode(urlEncoded, "UTF-8");
             System.out.println("url Decoded url: " + urlDecoded);
 
             System.out.println("crypt Decoded is: " + cryptoUtil.decrypt(urlDecoded));
-            return "token is: " + urlDecoded;
+            return "token is: " + urlEncoded;
         } catch (Exception e) {
             e.printStackTrace();
             return "failed";
