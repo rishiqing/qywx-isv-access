@@ -21,6 +21,8 @@ public class CryptoUtil {
         try {
             final String KEY = (String)isvGlobal.get("rsqAesKey");
             final String INIT_VECTOR = (String)isvGlobal.get("rsqAesInitVector");
+            System.out.println("KEY: " + KEY);
+            System.out.println("INIT_VECTOR: " + INIT_VECTOR);
             IvParameterSpec iv = new IvParameterSpec(INIT_VECTOR.getBytes("UTF-8"));
             SecretKeySpec skeySpec = new SecretKeySpec(KEY.getBytes("UTF-8"), "AES");
 

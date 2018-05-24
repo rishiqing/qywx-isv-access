@@ -43,9 +43,9 @@ public class CorpController {
         try {
             CorpStaffVO corpStaffVO = corpStaffManageService.getCorpLoginStaffInfo(corpId, userId);
 
-//            String loginToken = rsqLoginService.generateLoginToken(corpStaffVO);
-//            logger.info("----qywx login string encoded---- {}", loginToken);
-//            corpStaffVO.setRsqLoginToken(loginToken);
+            String loginToken = rsqLoginService.generateLoginToken(corpStaffVO);
+            logger.info("----qywx login string encoded---- {}", loginToken);
+            corpStaffVO.setRsqLoginToken(loginToken);
 
             result.put("user", corpStaffVO);
             result.put("errcode", ResultCode.NO_ERROR);
