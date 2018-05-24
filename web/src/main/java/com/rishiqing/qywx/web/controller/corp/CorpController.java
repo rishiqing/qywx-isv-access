@@ -47,7 +47,7 @@ public class CorpController {
             String loginToken = rsqLoginService.generateLoginToken(corpStaffVO);
             logger.info("----qywx login string encoded---- {}", loginToken);
             //  如果是使用在url中，要使用UrlEncoder进行转移
-            corpStaffVO.setRsqLoginToken(URLEncoder.encode(loginToken, "UTF-8"));
+            corpStaffVO.setRsqLoginToken(loginToken);
 
             result.put("user", corpStaffVO);
             result.put("errcode", ResultCode.NO_ERROR);
