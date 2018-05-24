@@ -34,6 +34,7 @@ public class JsConfigServiceImpl implements JsConfigService {
     @Override
     public Map<String, Object> getJsapiSignature(String url, String corpId) {
         String suiteKey = (String)isvGlobal.get("suiteKey");
+        logger.debug("---debug suiteKey----{}", suiteKey);
         CorpJsapiTicketVO jsTicket = corpJsapiTicketManageService.getCorpJsapiTicket(suiteKey, corpId);
         String sig = "";
         String nonceStr = getRandomStr(16);
