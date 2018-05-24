@@ -49,10 +49,11 @@ public class JsConfigServiceImpl implements JsConfigService {
             throw new JsConfigException("NoSuchAlgorithmException or UnsupportedEncodingException internal error: ", e);
         }
         Map<String, Object> result = new HashMap<>();
+        result.put("suiteKey", suiteKey);
         result.put("signature", sig);
         result.put("nonceStr", nonceStr);
         result.put("timeStamp", timestamp);
-        result.put("appId", corpId);
+        result.put("corpId", corpId);
         return result;
     }
 
