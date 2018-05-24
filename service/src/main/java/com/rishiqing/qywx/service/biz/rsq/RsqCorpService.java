@@ -6,6 +6,6 @@ import com.rishiqing.common.exception.RsqUpdateNotExistsException;
 import com.rishiqing.qywx.service.model.corp.CorpVO;
 
 public interface RsqCorpService {
-    public CorpVO pushAndCreateCorp(CorpVO corpVO);
-    public void pushAndCreateCorpAll(CorpVO corpVO);
+    public CorpVO pushCorp(CorpVO corpVO);
+    public void pushCorpAll(CorpVO corpVO);
 }

@@ -12,6 +12,8 @@ import com.rishiqing.qywx.service.util.http.converter.Json2BeanConverter;
 import com.rishiqing.qywx.web.exception.JsConfigException;
 import com.rishiqing.qywx.web.service.JsConfigService;
 import com.rishiqing.qywx.web.util.codec.JsapiSignature;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.UnsupportedEncodingException;
@@ -19,6 +21,8 @@ import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 public class JsConfigServiceImpl implements JsConfigService {
+    private static Logger logger = LoggerFactory.getLogger("WEB_JS_CONFIG_LOGGER");
+
     @Autowired
     private Map isvGlobal;
     @Autowired
@@ -30,6 +34,7 @@ public class JsConfigServiceImpl implements JsConfigService {
     @Override
     public Map<String, Object> getJsapiSignature(String url, String corpId) {
         String suiteKey = (String)isvGlobal.get("suiteKey");
+        logger.debug("---debug suiteKey----{}", suiteKey);
         CorpJsapiTicketVO jsTicket = corpJsapiTicketManageService.getCorpJsapiTicket(suiteKey, corpId);
         String sig = "";
         String nonceStr = getRandomStr(16);
@@ -45,10 +50,11 @@ public class JsConfigServiceImpl implements JsConfigService {
             throw new JsConfigException("NoSuchAlgorithmException or UnsupportedEncodingException internal error: ", e);
         }
         Map<String, Object> result = new HashMap<>();
+        result.put("suiteKey", suiteKey);
         result.put("signature", sig);
         result.put("nonceStr", nonceStr);
         result.put("timeStamp", timestamp);
-        result.put("appId", corpId);
+        result.put("corpId", corpId);
         return result;
     }
 
@@ -64,9 +70,12 @@ public class JsConfigServiceImpl implements JsConfigService {
                 return;
             }
             //判断时间expire之后才进行获取新的ticket
-            long now = new Date().getTime() / 1000;
+            Date nowDate = new Date();
+            long now = nowDate.getTime() / 1000;
             long last = oldTicket.getUpdateTime().getTime() / 1000;
+            logger.debug("refresh ticket nowDate is {}, lastDate is {}, now is {}, last is {}", nowDate, oldTicket.getUpdateTime(), now, last);
             if(now - last >= oldTicket.getExpiresIn()){
+                logger.debug("js ticket expired");
                 fetchAndSaveTicket(corpTokenVO, oldTicket);
             }
         } catch (HttpException e) {

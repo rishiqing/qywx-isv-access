@@ -3,10 +3,8 @@ package com.rishiqing.qywx.service.util.http.converter;
 import com.alibaba.fastjson.JSONObject;
 import com.rishiqing.qywx.service.model.corp.CorpAppVO;
 import com.rishiqing.qywx.service.model.corp.CorpSuiteVO;
-import com.rishiqing.qywx.service.model.corp.CorpTokenVO;
-import com.rishiqing.qywx.service.model.isv.SuiteTicketVO;
-import com.rishiqing.qywx.service.model.isv.SuiteTokenVO;
-import com.rishiqing.qywx.service.model.isv.SuiteVO;
+import com.rishiqing.qywx.service.model.isv.*;
+import com.rishiqing.qywx.service.model.website.RegisterInfoVO;
 
 public class Bean2JsonConverter {
     /**
@@ -42,6 +40,37 @@ public class Bean2JsonConverter {
         JSONObject params = new JSONObject();
         params.put("auth_corpid", corpAppVO.getCorpId());
         params.put("agentid", corpAppVO.getAgentId());
+        return params;
+    }
+
+    public static JSONObject prepareProviderAccessToken(IsvVO isvVO){
+        JSONObject params = new JSONObject();
+        params.put("corpid", isvVO.getCorpId());
+        params.put("provider_secret", isvVO.getProviderSecret());
+        return params;
+    }
+
+    public static JSONObject prepareGetRegisterCode(RegisterInfoVO registerInfoVO){
+        JSONObject params = new JSONObject();
+        params.put("template_id", registerInfoVO.getTemplateId());
+        if(null != registerInfoVO.getCorpName()){
+            params.put("corp_name", registerInfoVO.getCorpName());
+        }
+        if(null != registerInfoVO.getAdminName()){
+            params.put("admin_name", registerInfoVO.getAdminName());
+        }
+        if(null != registerInfoVO.getAdminMobile()){
+            params.put("admin_mobile", registerInfoVO.getAdminMobile());
+        }
+        if(null != registerInfoVO.getState()){
+            params.put("state", registerInfoVO.getState());
+        }
+        return params;
+    }
+
+    public static JSONObject prepareGetWebsiteLoginInfo(String authCode){
+        JSONObject params = new JSONObject();
+        params.put("auth_code", authCode);
         return params;
     }
 }

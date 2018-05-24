@@ -13,6 +13,8 @@ public class CorpAppVO {
     private Long appId;
     private String corpId;
 
+    private CorpAuthPrivilegeVO corpAuthPrivilegeVO;
+
     public Long getId() {
         return id;
     }
@@ -75,6 +77,14 @@ public class CorpAppVO {
 
     public void setCorpId(String corpId) {
         this.corpId = corpId;
+    }
+
+    public CorpAuthPrivilegeVO getCorpAuthPrivilegeVO() {
+        return corpAuthPrivilegeVO;
+    }
+
+    public void setCorpAuthPrivilegeVO(CorpAuthPrivilegeVO corpAuthPrivilegeVO) {
+        this.corpAuthPrivilegeVO = corpAuthPrivilegeVO;
     }
 
     @Override

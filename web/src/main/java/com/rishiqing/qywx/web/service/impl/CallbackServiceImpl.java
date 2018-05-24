@@ -2,6 +2,7 @@ package com.rishiqing.qywx.web.service.impl;
 
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.rishiqing.common.exception.ActiveCorpException;
+import com.rishiqing.common.exception.ReauthCorpException;
 import com.rishiqing.qywx.service.biz.corp.CorpService;
 import com.rishiqing.qywx.service.biz.corp.DeptService;
 import com.rishiqing.qywx.service.biz.corp.StaffService;
@@ -14,7 +15,7 @@ import com.rishiqing.qywx.service.common.isv.SuiteTokenManageService;
 import com.rishiqing.common.exception.HttpException;
 import com.rishiqing.qywx.service.constant.CallbackChangeType;
 import com.rishiqing.qywx.service.constant.CallbackInfoType;
-import com.rishiqing.qywx.service.event.service.AsyncService;
+import com.rishiqing.qywx.service.event.service.QueueService;
 import com.rishiqing.qywx.service.model.corp.CorpSuiteVO;
 import com.rishiqing.qywx.service.model.corp.CorpVO;
 import com.rishiqing.qywx.service.model.isv.SuiteTicketVO;
@@ -53,7 +54,7 @@ public class CallbackServiceImpl implements CallbackService {
     @Autowired
     private StaffService staffService;
     @Autowired
-    private AsyncService asyncService;
+    private QueueService queueService;
     @Autowired
     private FetchCallbackHandler logFailFetchCallbackHandler;
 
@@ -74,7 +75,7 @@ public class CallbackServiceImpl implements CallbackService {
     }
 
     @Override
-    public String receiveMessage(String signature, String timestamp, String nonce, String body) throws ActiveCorpException {
+    public String receiveMessage(String signature, String timestamp, String nonce, String body) throws ActiveCorpException, ReauthCorpException {
         String token = suite.getToken();
         String suiteKey = suite.getSuiteKey();
         String encodingAesKey = suite.getEncodingAesKey();
@@ -161,13 +162,16 @@ public class CallbackServiceImpl implements CallbackService {
      * @throws UnirestException
      * @throws HttpException
      */
-    private void handleChangeAuth(Map params) {
+    private void handleChangeAuth(Map params) throws ReauthCorpException {
         String corpId = (String)params.get("AuthCorpId");
         assert corpId != null;
-        String suiteKey = suite.getSuiteKey();
-        SuiteTokenVO suiteTokenVO = suiteTokenManageService.getSuiteToken(suiteKey);
-        CorpSuiteVO corpSuiteVO = corpSuiteManageService.getCorpSuite(suiteKey, corpId);
-        corpService.fetchAndChangeCorpInfo(suiteTokenVO, corpSuiteVO);
+        //   授权变更方法内需要马上返回，耗时操作异步执行
+        corpService.reauthCorp(corpId);
+
+//        String suiteKey = suite.getSuiteKey();
+//        SuiteTokenVO suiteTokenVO = suiteTokenManageService.getSuiteToken(suiteKey);
+//        CorpSuiteVO corpSuiteVO = corpSuiteManageService.getCorpSuite(suiteKey, corpId);
+//        corpService.fetchAndChangeCorpInfo(suiteTokenVO, corpSuiteVO);
     }
 
     /**
@@ -221,6 +225,6 @@ public class CallbackServiceImpl implements CallbackService {
                 //  对于不识别的infoType，直接抛出异常
                 throw new CallbackException("contact change, changeType not handled: " + changeType);
         }
-        asyncService.sendToPushCorpCallback(corpVO, type, map);
+        queueService.sendToPushCorpCallback(corpVO, type, map);
     }
 }

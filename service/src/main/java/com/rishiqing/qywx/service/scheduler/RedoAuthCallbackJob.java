@@ -5,8 +5,6 @@ import com.rishiqing.qywx.service.callback.FetchCallbackHandler;
 import com.rishiqing.qywx.service.callback.PushCallbackHandler;
 import com.rishiqing.qywx.service.common.fail.CallbackFailService;
 import com.rishiqing.qywx.service.constant.CallbackFailType;
-import com.rishiqing.qywx.service.callback.impl.PushCallbackHandlerImpl;
-import com.rishiqing.qywx.service.exception.CallbackException;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
@@ -43,7 +41,7 @@ public class RedoAuthCallbackJob extends QuartzJobBean {
                         service.deleteFailAuthCallback(authFail.getId());
                         break;
                     case AUTH_CALLBACK_FAIL_PUSH_NEW_CORP:
-                        pushHandler.handleCreateCorp(authFail.getCorpId());
+                        pushHandler.handlePushCorp(authFail.getCorpId());
                         //  成功后删除
                         service.deleteFailAuthCallback(authFail.getId());
                         break;

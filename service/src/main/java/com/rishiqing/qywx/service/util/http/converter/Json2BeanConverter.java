@@ -2,10 +2,12 @@ package com.rishiqing.qywx.service.util.http.converter;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.rishiqing.qywx.dao.model.corp.CorpJsapiTicketDO;
-import com.rishiqing.qywx.dao.model.corp.CorpTokenDO;
 import com.rishiqing.qywx.service.model.corp.*;
+import com.rishiqing.qywx.service.model.isv.IsvVO;
+import com.rishiqing.qywx.service.model.isv.SuitePreAuthCodeVO;
 import com.rishiqing.qywx.service.model.isv.SuiteTokenVO;
+import com.rishiqing.qywx.service.model.website.RegisterCodeVO;
+import com.rishiqing.qywx.service.model.website.WebsiteLoginInfoVO;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -81,9 +83,8 @@ public class Json2BeanConverter {
         JSONArray jsonAgentArray = jsonAuth.getJSONArray("agent");
         List<CorpAppVO> result = new ArrayList<CorpAppVO>();
 
-        Iterator<Object> it = jsonAgentArray.iterator();
-        while(it.hasNext()){
-            JSONObject jsonAgent = (JSONObject) it.next();
+        for (Object aJsonAgentArray : jsonAgentArray) {
+            JSONObject jsonAgent = (JSONObject) aJsonAgentArray;
             CorpAppVO corpAppVO = new CorpAppVO();
             corpAppVO.setSuiteKey(suiteKey);
             corpAppVO.setCorpId(corpId);
@@ -92,11 +93,61 @@ public class Json2BeanConverter {
             corpAppVO.setRoundLogoUrl(jsonAgent.getString("round_logo_url"));
             corpAppVO.setSquareLogoUrl(jsonAgent.getString("square_logo_url"));
             corpAppVO.setAppId(jsonAgent.getLong("appid"));
-            //  暂时忽略掉privilege
-            //  jsonAgent.getJSONObject("privilege");
+
+            CorpAuthPrivilegeVO privilegeVO = generateCorpAuthPrivilegeVO(jsonAgent.getJSONObject("privilege"));
+            corpAppVO.setCorpAuthPrivilegeVO(privilegeVO);
+
             result.add(corpAppVO);
         }
         return result;
+    }
+
+    private static CorpAuthPrivilegeVO generateCorpAuthPrivilegeVO(JSONObject json){
+        CorpAuthPrivilegeVO privilegeVO = new CorpAuthPrivilegeVO();
+        privilegeVO.setLevel(json.getLong("level"));
+
+        JSONArray allowPartyArray = json.getJSONArray("allow_party");
+        JSONArray allowUserArray = json.getJSONArray("allow_user");
+        JSONArray allowTagArray = json.getJSONArray("allow_tag");
+        JSONArray extraPartyArray = json.getJSONArray("extra_party");
+        JSONArray extraUserArray = json.getJSONArray("extra_user");
+        JSONArray extraTagArray = json.getJSONArray("extra_tag");
+        List<Long> allowPartyList = new ArrayList<>(allowPartyArray.size());
+        List<String> allowUserList = new ArrayList<>(allowUserArray.size());
+        List<Long> allowTagList = new ArrayList<>(allowTagArray.size());
+        List<Long> extraPartyList = new ArrayList<>(extraPartyArray.size());
+        List<String> extraUserList = new ArrayList<>(extraUserArray.size());
+        List<Long> extraTagList = new ArrayList<>(extraTagArray.size());
+
+        for(Object party : allowPartyArray){
+            allowPartyList.add(((Integer) party).longValue());
+        }
+        for(Object user : allowUserArray){
+            allowUserList.add((String)user);
+        }
+        for(Object tag : allowTagArray){
+            allowTagList.add(((Integer)tag).longValue());
+        }
+
+        for(Object party : extraPartyArray){
+            extraPartyList.add(((Integer)party).longValue());
+        }
+        for(Object user : extraUserArray){
+            extraUserList.add((String)user);
+        }
+        for(Object tag : extraTagArray){
+            extraTagList.add(((Integer)tag).longValue());
+        }
+
+        privilegeVO.setAllowParty(allowPartyList);
+        privilegeVO.setAllowUser(allowUserList);
+        privilegeVO.setAllowTag(allowTagList);
+
+        privilegeVO.setExtraParty(extraPartyList);
+        privilegeVO.setExtraUser(extraUserList);
+        privilegeVO.setExtraTag(extraTagList);
+
+        return privilegeVO;
     }
 
     public static CorpTokenVO generateCorpToken(String suiteKey, String corpId, JSONObject json){
@@ -141,30 +192,33 @@ public class Json2BeanConverter {
         }
         JSONArray jsonStaffList = json.getJSONArray("userlist");
         List<CorpStaffVO> list = new ArrayList<CorpStaffVO>(jsonStaffList.size());
-        Iterator<Object> it = jsonStaffList.iterator();
-        while (it.hasNext()){
-            JSONObject jsonStaff = (JSONObject)it.next();
-            CorpStaffVO staffVO = new CorpStaffVO();
-            staffVO.setCorpId(corpId);
-            staffVO.setUserId(jsonStaff.getString("userid"));
-            staffVO.setName(jsonStaff.getString("name"));
-            staffVO.setDepartment(jsonStaff.getJSONArray("department").toString());
-            staffVO.setOrderInDepts(jsonStaff.getJSONArray("order").toString());
-            staffVO.setPosition(jsonStaff.getString("position"));
-            staffVO.setMobile(jsonStaff.getString("mobile"));
-            staffVO.setGender(jsonStaff.getString("gender"));
-            staffVO.setEmail(jsonStaff.getString("email"));
-            staffVO.setIsLeaderInDepts(String.valueOf(jsonStaff.getLong("isleader")));
-            staffVO.setAvatar(jsonStaff.getString("avatar"));
-            staffVO.setTel(jsonStaff.getString("telephone"));
-            staffVO.setEnglishName(jsonStaff.getString("english_name"));
-            staffVO.setStatus(jsonStaff.getLong("status"));
-            if(jsonStaff.containsKey("extattr")){
-                staffVO.setExtattr(jsonStaff.getJSONObject("extattr").toString());
-            }
-            list.add(staffVO);
+        for (Object aJsonStaffList : jsonStaffList) {
+            JSONObject jsonStaff = (JSONObject) aJsonStaffList;
+            list.add(generateCorpStaff(corpId, jsonStaff));
         }
         return list;
+    }
+
+    public static CorpStaffVO generateCorpStaff(String corpId, JSONObject jsonStaff){
+        CorpStaffVO staffVO = new CorpStaffVO();
+        staffVO.setCorpId(corpId);
+        staffVO.setUserId(jsonStaff.getString("userid"));
+        staffVO.setName(jsonStaff.getString("name"));
+        staffVO.setDepartment(jsonStaff.getJSONArray("department").toString());
+        staffVO.setOrderInDepts(jsonStaff.getJSONArray("order").toString());
+        staffVO.setPosition(jsonStaff.getString("position"));
+        staffVO.setMobile(jsonStaff.getString("mobile"));
+        staffVO.setGender(jsonStaff.getString("gender"));
+        staffVO.setEmail(jsonStaff.getString("email"));
+        staffVO.setIsLeaderInDepts(String.valueOf(jsonStaff.getLong("isleader")));
+        staffVO.setAvatar(jsonStaff.getString("avatar"));
+        staffVO.setTel(jsonStaff.getString("telephone"));
+        staffVO.setEnglishName(jsonStaff.getString("english_name"));
+        staffVO.setStatus(jsonStaff.getLong("status"));
+        if(jsonStaff.containsKey("extattr")){
+            staffVO.setExtattr(jsonStaff.getJSONObject("extattr").toString());
+        }
+        return staffVO;
     }
 
     public static CorpJsapiTicketVO generateCorpJsapiTicket(String suiteKey, String corpId, JSONObject json){
@@ -211,5 +265,76 @@ public class Json2BeanConverter {
             list.add(staffVO);
         }
         return list;
+    }
+
+    public static SuitePreAuthCodeVO generateSuitePreAuthCode(JSONObject json){
+        if(null == json){
+            return null;
+        }
+        SuitePreAuthCodeVO suitePreAuthCodeVO = new SuitePreAuthCodeVO();
+        suitePreAuthCodeVO.setSuitePreAuthCode(json.getString("pre_auth_code"));
+        suitePreAuthCodeVO.setExpiresIn(json.getLong("expires_in"));
+        return suitePreAuthCodeVO;
+    }
+
+    public static CorpTagDetailVO generateCorpTagDetail(String corpId, Long tagId, JSONObject json){
+        if(null == json){
+            return null;
+        }
+
+        JSONArray userArray = json.getJSONArray("userlist");
+        List<String> userList = new ArrayList<>(userArray.size());
+        JSONArray partyArray = json.getJSONArray("partylist");
+        List<Long> partyList = new ArrayList<>(partyArray.size());
+
+        for(Object obj : userArray){
+            JSONObject userObj = (JSONObject)obj;
+            userList.add(userObj.getString("userid"));
+        }
+
+        for(Object obj : partyArray){
+            partyList.add(((Integer)obj).longValue());
+        }
+
+        CorpTagDetailVO corpTagDetailVO = new CorpTagDetailVO();
+        corpTagDetailVO.setCorpId(corpId);
+        corpTagDetailVO.setTagId(tagId);
+        corpTagDetailVO.setTagName(json.getString("tagname"));
+        corpTagDetailVO.setUserList(userList);
+        corpTagDetailVO.setPartyList(partyList);
+
+        return corpTagDetailVO;
+    }
+
+    public static IsvVO generateProviderAccessToken(String corpId, JSONObject json){
+        IsvVO isvVO = new IsvVO();
+        isvVO.setCorpId(corpId);
+        isvVO.setProviderAccessToken(json.getString("provider_access_token"));
+        isvVO.setExpiresIn(json.getLong("expires_in"));
+        return isvVO;
+    }
+
+    public static WebsiteLoginInfoVO generateWebsiteLoginInfo(JSONObject json){
+        JSONObject jsonUser = json.getJSONObject("user_info");
+        JSONObject jsonCorp = json.getJSONObject("corp_info");
+        WebsiteLoginInfoVO loginInfoVO = new WebsiteLoginInfoVO();
+        CorpStaffVO corpStaffVO = new CorpStaffVO();
+        corpStaffVO.setUserId(jsonUser.getString("userid"));
+        corpStaffVO.setName(jsonUser.getString("name"));
+        corpStaffVO.setAvatar(jsonUser.getString("avatar"));
+        if(jsonUser.containsKey("email")){
+            corpStaffVO.setEmail(jsonUser.getString("email"));
+        }
+        corpStaffVO.setCorpId(jsonCorp.getString("corpid"));
+
+        loginInfoVO.setCorpStaffVO(corpStaffVO);
+        return loginInfoVO;
+    }
+
+    public static RegisterCodeVO generateRegisterCode(JSONObject json){
+        RegisterCodeVO code = new RegisterCodeVO();
+        code.setRegisterCode(json.getString("register_code"));
+        code.setExpiresIn(json.getLong("expires_in"));
+        return code;
     }
 }

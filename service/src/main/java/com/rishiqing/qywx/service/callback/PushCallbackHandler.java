@@ -7,7 +7,7 @@ import java.util.Map;
  * Date: 2018-03-01 18:35
  */
 public interface PushCallbackHandler {
-    public void handleCreateCorp(String corpId);
+    public void handlePushCorp(String corpId);
     public void handleCreateDept(String corpId, Map contentMap);
     public void handleUpdateDept(String corpId, Map contentMap);
     public void handleDeleteDept(String corpId, Map contentMap);

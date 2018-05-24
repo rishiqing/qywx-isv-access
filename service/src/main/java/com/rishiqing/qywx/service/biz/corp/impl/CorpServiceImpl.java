@@ -1,9 +1,8 @@
 package com.rishiqing.qywx.service.biz.corp.impl;
 
 import com.alibaba.fastjson.JSONObject;
-import com.google.common.eventbus.AsyncEventBus;
-import com.mashape.unirest.http.exceptions.UnirestException;
 import com.rishiqing.common.exception.ActiveCorpException;
+import com.rishiqing.common.exception.ReauthCorpException;
 import com.rishiqing.qywx.service.biz.corp.CorpService;
 import com.rishiqing.qywx.service.common.corp.CorpAppManageService;
 import com.rishiqing.qywx.service.common.corp.CorpManageService;
@@ -13,7 +12,7 @@ import com.rishiqing.qywx.service.common.fail.CallbackFailService;
 import com.rishiqing.qywx.service.common.isv.GlobalSuite;
 import com.rishiqing.qywx.service.common.isv.SuiteTokenManageService;
 import com.rishiqing.qywx.service.constant.ServiceConstant;
-import com.rishiqing.qywx.service.event.service.AsyncService;
+import com.rishiqing.qywx.service.event.service.EventBusService;
 import com.rishiqing.qywx.service.model.corp.*;
 import com.rishiqing.qywx.service.model.isv.SuiteTokenVO;
 import com.rishiqing.qywx.service.util.http.HttpUtil;
@@ -40,7 +39,7 @@ public class CorpServiceImpl implements CorpService {
     @Autowired
     private HttpUtil httpUtil;
     @Autowired
-    private AsyncService asyncService;
+    private EventBusService eventBusService;
     @Autowired
     private CallbackFailService callbackFailService;
     @Autowired
@@ -55,13 +54,29 @@ public class CorpServiceImpl implements CorpService {
             JSONObject json = httpUtil.getPermanentCode(suiteToken, authCode);
             CorpSuiteVO corpSuiteVO = Json2BeanConverter.generateCorpSuite(suiteKey, null, json);
             //  异步获取企业的组织架构
-            asyncService.sendToFetchCorpAll(corpSuiteVO.getCorpId(), corpSuiteVO.getPermanentCode());
+            eventBusService.sendToFetchCorpAll(corpSuiteVO.getCorpId(), corpSuiteVO.getPermanentCode());
             activeLogger.debug("----end active corp----authCode: {}", authCode);
         } catch (Exception e) {
             //  致命错误，将导致无法获知用户已经开通应用
             throw new ActiveCorpException("active corp error", e);
         }
     }
+
+    @Override
+    public void reauthCorp(String corpId) throws ReauthCorpException {
+        try {
+            activeLogger.debug("----begin to reauth corp----authCode: {}", corpId);
+            String suiteKey = suite.getSuiteKey();
+            CorpSuiteVO corpSuiteVO = corpSuiteManageService.getCorpSuite(suiteKey, corpId);
+            //  异步获取企业的组织架构
+            eventBusService.sendToFetchCorpAll(corpSuiteVO.getCorpId(), corpSuiteVO.getPermanentCode());
+            activeLogger.debug("----end reauth corp----authCode: {}", corpId);
+        } catch (Exception e) {
+            //  致命错误，将导致无法获知用户已经开通应用
+            throw new ReauthCorpException("reauth corp error", e);
+        }
+    }
+
 
     @Override
     public CorpVO fetchAndSaveCorpInfo(SuiteTokenVO suiteToken, CorpSuiteVO corpSuite){
@@ -80,6 +95,7 @@ public class CorpServiceImpl implements CorpService {
         CorpSuiteVO corpSuiteVO = Json2BeanConverter.generateCorpSuite(suiteKey, corpId, json);
         corpSuiteVO.setPermanentCode(permanentCode);
         corpSuiteManageService.saveCorpSuite(corpSuiteVO);
+        corpVO.setCorpSuiteVO(corpSuiteVO);
 
         //3. 保存corpApp信息
         //3.1  corpApp信息的问题
@@ -92,16 +108,18 @@ public class CorpServiceImpl implements CorpService {
         for(CorpAppVO corpAppVO : list){
             corpAppManageService.saveCorpApp(corpAppVO);
         }
+        corpVO.setCorpAppVOList(list);
 
         //4. 获取并保存corpToken信息
         JSONObject jsonToken = httpUtil.getCorpAccessToken(suiteToken, corpSuite);
         CorpTokenVO corpTokenVO = Json2BeanConverter.generateCorpToken(suiteKey, corpId, jsonToken);
         corpTokenManageService.saveCorpToken(corpTokenVO);
+        corpVO.setCorpTokenVO(corpTokenVO);
+
         return corpVO;
     }
 
-    @Override
-    public CorpVO fetchAndChangeCorpInfo(SuiteTokenVO suiteToken, CorpSuiteVO corpSuite){
+    private CorpVO fetchAndChangeCorpInfo(SuiteTokenVO suiteToken, CorpSuiteVO corpSuite){
         JSONObject json = httpUtil.getCorpAuthInfo(suiteToken, corpSuite);
         String suiteKey = suiteToken.getSuiteKey();
         //1. 保存corp信息

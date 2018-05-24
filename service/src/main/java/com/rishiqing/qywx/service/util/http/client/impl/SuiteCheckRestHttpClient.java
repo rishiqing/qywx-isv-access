@@ -78,6 +78,7 @@ public class SuiteCheckRestHttpClient implements RestHttpClient {
      */
     @Override
     public JSONObject post(String path, Map<String, Object> queryMap, Map<String, Object> fieldMap, String body, Map<String, Object> options) {
+        logger.debug("path: {}, queryMap: {}, fieldMap: {}, body: {}, options: {}", path, queryMap, fieldMap, body, options);
         HttpRequestWithBody request = Unirest.post(path);
         if(queryMap != null && !queryMap.isEmpty()){
             request.queryString(queryMap);
@@ -95,7 +96,7 @@ public class SuiteCheckRestHttpClient implements RestHttpClient {
             throw new HttpException("http request exception: ", e);
         }
         if(resp.getStatus() > 200){
-            throw new HttpException("http post request getSuiteToken status error: " + resp.getStatus() + ", " + resp.getBody());
+            throw new HttpException("http post request status error: " + resp.getStatus() + ", " + resp.getBody());
         }
         JSONObject jsonResponse = JSON.parseObject(resp.getBody());
         logger.debug("{} post response: {}", path, jsonResponse);
@@ -131,6 +132,7 @@ public class SuiteCheckRestHttpClient implements RestHttpClient {
      */
     @Override
     public JSONObject get(String path, Map<String, Object> queryMap, Map<String, Object> options) {
+        logger.debug("path: {}, queryMap: {}, options: {}", path, queryMap, options);
         GetRequest request = Unirest.get(path);
         if(queryMap != null && !queryMap.isEmpty()){
             request.queryString(queryMap);
@@ -142,7 +144,7 @@ public class SuiteCheckRestHttpClient implements RestHttpClient {
             throw new HttpException("http request exception: ", e);
         }
         if(resp.getStatus() > 200){
-            throw new HttpException("http get request getSuiteToken status error: " + resp.getStatus() + ", " + resp.getBody());
+            throw new HttpException("http get request status error: " + resp.getStatus() + ", " + resp.getBody());
         }
         JSONObject jsonResponse = JSON.parseObject(resp.getBody());
         logger.debug("{} post response: {}", path, jsonResponse);

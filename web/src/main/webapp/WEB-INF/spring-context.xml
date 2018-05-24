@@ -22,18 +22,14 @@
         <entry key="appId" value="${isv.app.id}" />
         <entry key="appMobileIndexPage" value="${isv.app.page.mobile.index}" />
         <entry key="appCookieName" value="${isv.app.page.cookie.name}" />
+        <entry key="isvAuthRedirectUri" value="${isv.app.page.auth.redirect}" />
+        <entry key="isvAuthRedirectUriAfter" value="${isv.app.page.auth.redirect.after}" />
+        <entry key="isvRegisterTemplateId" value="${isv.app.register.template.id}" />
+        <entry key="rsqUrlAuthRedirect" value="${isv.rsq.url.auth.redirect}" />
+        <entry key="rsqUrlOauthRedirect" value="${isv.rsq.url.oauth.redirect}" />
+        <entry key="rsqAesKey" value="${isv.rsq.aes.key}" />
+        <entry key="rsqAesInitVector" value="${isv.rsq.aes.init.vector}" />
     </util:map>
-
-    <!--web层需要用到的service-->
-    <bean id="callbackService" class="com.rishiqing.qywx.web.service.impl.CallbackServiceImpl" />
-    <bean id="jsConfigService" class="com.rishiqing.qywx.web.service.impl.JsConfigServiceImpl" />
-    <bean id="oauthService" class="com.rishiqing.qywx.web.service.impl.OauthServiceImpl" />
-
-    <!--service层的服务beans-->
-    <import resource="classpath:spring-beans.xml" />
-
-    <!--service层的计时任务-->
-    <import resource="classpath:spring-quartz.xml" />
 
     <!--数据库连接-->
     <import resource="classpath:spring-jdbc.xml" />
@@ -41,6 +37,22 @@
     <!--dao层dao-->
     <import resource="classpath:spring-dao.xml" />
 
-    <!--queue层-->
+    <!--service层的服务beans-->
+    <import resource="classpath:spring-beans.xml" />
     <import resource="classpath:spring-queue.xml" />
+    <import resource="classpath:spring-redis.xml" />
+
+    <!--queue listener层-->
+    <import resource="spring-queue-listener.xml" />
+
+    <!--web层需要用到的service-->
+    <bean id="websiteOauthService" class="com.rishiqing.qywx.web.service.website.impl.WebsiteOauthServiceImpl" />
+    <bean id="qywxRegisterService" class="com.rishiqing.qywx.web.service.website.impl.QywxRegisterServiceImpl" />
+    <bean id="qywxRegisterEventService" class="com.rishiqing.qywx.web.service.website.impl.QywxRegisterEventServiceImpl" />
+    <bean id="callbackService" class="com.rishiqing.qywx.web.service.impl.CallbackServiceImpl" />
+    <bean id="jsConfigService" class="com.rishiqing.qywx.web.service.impl.JsConfigServiceImpl" />
+    <bean id="oauthService" class="com.rishiqing.qywx.web.service.impl.OauthServiceImpl" />
+    <bean id="isvAuthService" class="com.rishiqing.qywx.web.service.impl.IsvAuthServiceImpl" />
+    <bean id="rsqLoginService" class="com.rishiqing.qywx.web.service.impl.RsqLoginServiceImpl" />
+    <bean id="demoService" class="com.rishiqing.qywx.web.demo.DemoServiceImpl" />
 </beans>

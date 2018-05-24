@@ -1,16 +1,12 @@
 package com.rishiqing.qywx.service.event.listener.mq;
 
 import com.rishiqing.qywx.service.event.message.mq.DemoMessage;
-import com.rishiqing.qywx.service.event.service.AsyncService;
+import com.rishiqing.qywx.service.event.service.QueueService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.jms.core.JmsTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import javax.jms.Queue;
 
 /**
  * @author Wallace Mao
@@ -20,14 +16,14 @@ import javax.jms.Queue;
 @ContextConfiguration("classpath:service-test-spring-context.xml")
 public class DemoMqListenerTest {
     @Autowired
-    private AsyncService asyncService;
+    private QueueService queueService;
 
     @Test
     public void test_sendEvent(){
         System.out.println("=======begin");
         int max = 1;
         for(int i = 0; i < max; i++ ){
-            asyncService.sendToDemo(new DemoMessage("xxxxxx-" + i, "hello mq message"));
+            queueService.sendToDemo(new DemoMessage("xxxxxx-" + i, "hello mq message"));
         }
         try {
             Thread.sleep(20000);

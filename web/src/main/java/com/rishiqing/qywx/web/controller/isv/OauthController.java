@@ -15,6 +15,9 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
+/**
+ * 企业微信端webview中进行登录
+ */
 @Controller
 @RequestMapping("/oauth")
 public class OauthController {

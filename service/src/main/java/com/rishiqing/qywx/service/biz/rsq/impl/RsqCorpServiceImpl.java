@@ -1,8 +1,5 @@
 package com.rishiqing.qywx.service.biz.rsq.impl;
 
-import com.rishiqing.common.exception.HttpException;
-import com.rishiqing.common.exception.RsqSyncException;
-import com.rishiqing.common.exception.RsqUpdateNotExistsException;
 import com.rishiqing.common.model.RsqTeamVO;
 import com.rishiqing.common.util.http.HttpUtilRsqSync;
 import com.rishiqing.qywx.service.biz.rsq.RsqCorpService;
@@ -13,8 +10,6 @@ import com.rishiqing.qywx.service.common.isv.GlobalSuite;
 import com.rishiqing.qywx.service.common.rsq.RsqInfoManageService;
 import com.rishiqing.qywx.service.model.corp.CorpVO;
 import com.rishiqing.qywx.service.model.corp.helper.CorpConverter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -42,7 +37,7 @@ public class RsqCorpServiceImpl implements RsqCorpService {
      * @return
      */
     @Override
-    public CorpVO pushAndCreateCorp(CorpVO corpVO) {
+    public CorpVO pushCorp(CorpVO corpVO) {
         //  如果rsqId存在，那么将不做任何处理
         if(null != corpVO.getRsqId()){
             return corpVO;
@@ -55,17 +50,19 @@ public class RsqCorpServiceImpl implements RsqCorpService {
     }
 
     /**
-     * 将corpVO所有的组织结构和人员信息都同步到日事清，用于在企业首次开通时的同步
+     * 将corpVO所有的组织结构和人员信息都同步到日事清，在企业首次授权和授权变更时都会进行一次同步
+     * 这里需要注意的是：由于用户在可见范围选择的时候可能选择的只是部分部门和部分用户，因此这里需要做兼容处理
+     * 具体的同步方案参照rsqDeptService.pushAllCorpDept和rsqStaffService.pushAllCorpStaff方法中的说明
      * @param corpVO
      */
     @Override
-    public void pushAndCreateCorpAll(CorpVO corpVO) {
+    public void pushCorpAll(CorpVO corpVO) {
 
-        //  1  创建日事清企业
-        pushAndCreateCorp(corpVO);
+        //  1  创建或更新日事清企业
+        pushCorp(corpVO);
         //  2  创建企业部门
-        rsqDeptService.pushAndCreateAllCorpDept(corpVO);
+        rsqDeptService.pushAllCorpDept(corpVO);
         //  3  创建企业部门成员，同时会更新管理员状态
-        rsqStaffService.pushAndCreateAllCorpStaff(corpVO);
+        rsqStaffService.pushAllCorpStaff(corpVO);
     }
 }

@@ -1,6 +1,7 @@
 package com.rishiqing.qywx.service.model.corp;
 
 import java.util.Date;
+import java.util.List;
 
 public class CorpVO {
     private Long id;
@@ -23,6 +24,10 @@ public class CorpVO {
     private Boolean authCanceled;
 
     private String rsqId;
+
+    private CorpSuiteVO corpSuiteVO;
+    private List<CorpAppVO> corpAppVOList;
+    private CorpTokenVO corpTokenVO;
 
     public Long getId() {
         return id;
@@ -166,6 +171,30 @@ public class CorpVO {
 
     public void setRsqId(String rsqId) {
         this.rsqId = rsqId;
+    }
+
+    public CorpSuiteVO getCorpSuiteVO() {
+        return corpSuiteVO;
+    }
+
+    public void setCorpSuiteVO(CorpSuiteVO corpSuiteVO) {
+        this.corpSuiteVO = corpSuiteVO;
+    }
+
+    public List<CorpAppVO> getCorpAppVOList() {
+        return corpAppVOList;
+    }
+
+    public void setCorpAppVOList(List<CorpAppVO> corpAppVOList) {
+        this.corpAppVOList = corpAppVOList;
+    }
+
+    public CorpTokenVO getCorpTokenVO() {
+        return corpTokenVO;
+    }
+
+    public void setCorpTokenVO(CorpTokenVO corpTokenVO) {
+        this.corpTokenVO = corpTokenVO;
     }
 
     @Override

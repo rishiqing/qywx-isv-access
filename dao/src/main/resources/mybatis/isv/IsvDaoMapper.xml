@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rishiqing.qywx.dao.mapper.isv.IsvDao">
+    <resultMap id="isvMap" type="com.rishiqing.qywx.dao.model.isv.IsvDO">
+        <id property="id" column="id" />
+        <result property="dateCreated" column="date_created" />
+        <result property="lastUpdated" column="last_updated" />
+        <result property="providerSecret" column="provider_secret" />
+        <result property="encodingAesKey" column="encoding_aes_key" />
+        <result property="token" column="token" />
+        <result property="corpId" column="corp_id" />
+        <result property="providerAccessToken" column="provider_access_token" />
+        <result property="expiresIn" column="expires_in" />
+        <result property="providerTokenUpdateTime" column="provider_token_update_time" />
+    </resultMap>
+
+    <sql id="selectAllFields">
+        id, date_created, last_updated, provider_secret, encoding_aes_key, token, corp_id, provider_access_token, expires_in, provider_token_update_time
+    </sql>
+
+    <select id="getIsvByCorpId" resultMap="isvMap">
+        SELECT <include refid="selectAllFields" /> FROM isv
+        <![CDATA[
+            WHERE corp_id = #{corpId}
+        ]]>
+    </select>
+
+    <insert id="saveOrUpdateIsv" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO isv (
+            date_created,
+            last_updated,
+            provider_secret,
+            encoding_aes_key,
+            token,
+            corp_id,
+            provider_access_token,
+            expires_in,
+            provider_token_update_time
+        ) VALUES (
+            now(),
+            now(),
+            #{providerSecret},
+            #{encodingAesKey},
+            #{token},
+            #{corpId},
+            #{providerAccessToken},
+            #{expiresIn},
+            now()
+        ) ON DUPLICATE KEY UPDATE
+            last_updated = now(),
+            provider_access_token = #{providerAccessToken},
+            expires_in = #{expiresIn},
+            provider_token_update_time = now()
+    </insert>
+
+    <delete id="removeIsv">
+        DELETE FROM isv WHERE corp_id = #{corpId}
+    </delete>
+</mapper>

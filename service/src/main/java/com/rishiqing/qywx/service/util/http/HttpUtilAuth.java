@@ -6,6 +6,7 @@ import com.rishiqing.qywx.service.constant.RequestUrl;
 import com.rishiqing.common.exception.HttpException;
 import com.rishiqing.qywx.service.model.corp.CorpTokenVO;
 import com.rishiqing.common.util.http.client.RestHttpClient;
+import com.rishiqing.qywx.service.model.isv.SuiteTokenVO;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,23 +19,36 @@ public class HttpUtilAuth {
     }
 
     /**
-     * 参考https://work.weixin.qq.com/api/doc#10028/获取code
-     * @param corpTokenVO
+     * 参考https://work.weixin.qq.com/api/doc#10975/%E7%BD%91%E9%A1%B5%E6%8E%88%E6%9D%83%E7%99%BB%E5%BD%95%E7%AC%AC%E4%B8%89%E6%96%B9获取code
+     * @param suiteTokenVO
      * @param code
      * @return
      * @throws HttpException
      * @throws UnirestException
      */
-    public JSONObject getLoginUser(CorpTokenVO corpTokenVO, String code) {
-        Map<String, Object> options = new HashMap<String, Object>();
-        options.put("corpId", corpTokenVO.getCorpId());
+    public JSONObject getLoginUser(SuiteTokenVO suiteTokenVO, String code) {
         Map<String, Object> queryMap = new HashMap<String, Object>();
-        queryMap.put("access_token", corpTokenVO.getCorpToken());
+        queryMap.put("access_token", suiteTokenVO.getSuiteToken());
         queryMap.put("code", code);
         return restHttpClient.get(
                 RequestUrl.AUTH_LOGIN_USER,
                 queryMap,
-                options
+                null
+        );
+    }
+
+    /**
+     * 获取预授权码
+     * @param suiteTokenVO
+     * @return
+     */
+    public JSONObject getPreAuthCode(SuiteTokenVO suiteTokenVO){
+        Map<String, Object> queryMap = new HashMap<String, Object>();
+        queryMap.put("suite_access_token", suiteTokenVO.getSuiteToken());
+        return restHttpClient.get(
+                RequestUrl.GET_PRE_AUTH_CODE,
+                queryMap,
+                null
         );
     }
 

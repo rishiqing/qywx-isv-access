@@ -60,9 +60,20 @@ public class StaffServiceImpl implements StaffService {
         }
         for(CorpStaffVO staff : staffList){
             CorpStaffVO dbStaff = corpStaffManageService.getCorpStaffByCorpIdAndUserId(staff.getCorpId(), staff.getUserId());
-            CorpStaffConverter.mergeCorpStaffVO(staff, dbStaff);
-            corpStaffManageService.saveOrUpdateCorpStaff(dbStaff);
+            if(null != dbStaff){
+                CorpStaffConverter.mergeCorpStaffVO(staff, dbStaff);
+                corpStaffManageService.saveOrUpdateCorpStaff(dbStaff);
+            }
         }
+    }
+
+    @Override
+    public void fetchAndSaveStaff(CorpTokenVO corpTokenVO, String userId) {
+        JSONObject json = httpUtilCorp.getStaff(corpTokenVO, userId);
+        String corpId = corpTokenVO.getCorpId();
+        CorpStaffVO staff =
+                Json2BeanConverter.generateCorpStaff(corpId, json);
+        corpStaffManageService.saveOrUpdateCorpStaff(staff);
     }
 
     @Override

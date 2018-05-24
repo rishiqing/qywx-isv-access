@@ -51,6 +51,14 @@ values (now(), now(), 'suite_name', 'suite_key', 'suite_secret', 'encoding_aes_k
 - suite_key为企业微信中的SuiteID
 - suite_token为任意值,该值将在首次获取token时更新
 
+3. 插入isv的初始信息:
+`insert into isv (date_created, last_updated, corp_id, provider_secret, encoding_aes_key, token, provider_access_token, expires_in, provider_token_update_time)
+ values(now(), now(), 'corp_id', 'provider_secret', 'encoding_aes_key', 'token', 'provider_access_token_xxxx', 7200, '1970-01-01 00:00:00')`
+ 其中:
+ - corp_id为服务商的企业的corpId
+ - provider_secret、encoding_aes_key和token均为“服务商后台”中“通用开发参数”中设置的
+ - provider_access_token设置为任意值，会在必要时由后台进行更新
+
 ### 4  校验
 在企业微信中校验回调url是否成功
 
@@ -112,6 +120,19 @@ spring-mybatis会扫描`*Dao`文件，并生成相关的bean
   2. typeName取值包括：corp/scheduler等,一般跟包名相关
   3. functionName，可以是callback/request等，一般跟具体功能相关
   
+## 打包说明  
+
+目前的应用需要生成同时三个子应用：
+- main主应用，用来提供基础服务
+- job应用，用来做重试等定期任务
+- alert应用，提醒服务器，如果用户设置了提醒，那么使用此服务器来保存并发送提醒
+
+因此，使用maven的maven-assembly-plugin同时打包成三个应用。执行：
+`clean package -Dmaven.test.skip=true -Denv=beta`
+
+- maven.test.skip: 是否跳过测试
+- env: 用来处理日志文件。例如指定了`env=beta`，那么在打包的时候将会使用`webapp/WEB-INF/log4j2.beta.xml`作为配置文件
+
 ## 测试
 
 ### 引入xml配置文件
@@ -141,3 +162,18 @@ CorpStaff的isLeaderInDepts这个字段目前有问题!
 
 ### 企业微信的newUserId问题
 企业微信的corp staff的userId可以修改……官方说法是由系统自动生成的userId可以由用户修改一次
+
+### 测试授权
+
+1. 新增授权
+- 成员
+- 部门
+- 标签
+- 成员、部门（无重复）
+- 成员、部门（有重复）
+- 成员、标签（无重复）
+- 成员、标签（有重复）
+- 部门、标签（无重复）
+- 部门、标签（有重复）　
+
+2. 变更授权

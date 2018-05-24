@@ -10,7 +10,7 @@ public interface DeptService {
     /**
      * 获取department list列表
      */
-    void fetchAndSaveDeptInfo(CorpTokenVO corpTokenVO, CorpDeptVO corpDeptVO);
+    void fetchAndSaveDeptStaffList(CorpTokenVO corpTokenVO, Long deptId);
 
     /**
      * 获取部门，corpDeptVO中至少需要提供corpId和deptId

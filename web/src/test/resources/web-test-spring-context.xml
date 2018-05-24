@@ -30,7 +30,7 @@
     <import resource="classpath:spring-beans.xml" />
 
     <!--service层的计时任务-->
-    <import resource="classpath:spring-quartz.xml" />
+    <import resource="classpath:main/spring-quartz.xml" />
 
     <!--数据库连接-->
     <import resource="classpath:spring-jdbc.xml" />
@@ -39,5 +39,5 @@
     <import resource="classpath:spring-dao.xml" />
 
     <!--queue层-->
-    <import resource="classpath:spring-queue.xml" />
+    <import resource="classpath:WEB-INF/spring-queue.xml" />
 </beans>

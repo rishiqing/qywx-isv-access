@@ -17,8 +17,8 @@ public class RedoFailPushCallbackHandlerImpl implements PushCallbackHandler {
     private CallbackFailService callbackFailService;
 
     @Override
-    public void handleCreateCorp(String corpId) {
-        pushCallbackHandler.handleCreateCorp(corpId);
+    public void handlePushCorp(String corpId) {
+        pushCallbackHandler.handlePushCorp(corpId);
     }
 
     @Override
