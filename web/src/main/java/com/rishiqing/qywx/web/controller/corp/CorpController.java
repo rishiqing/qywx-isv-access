@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,7 +46,8 @@ public class CorpController {
 
             String loginToken = rsqLoginService.generateLoginToken(corpStaffVO);
             logger.info("----qywx login string encoded---- {}", loginToken);
-            corpStaffVO.setRsqLoginToken(loginToken);
+            //  如果是使用在url中，要使用UrlEncoder进行转移
+            corpStaffVO.setRsqLoginToken(URLEncoder.encode(loginToken, "UTF-8"));
 
             result.put("user", corpStaffVO);
             result.put("errcode", ResultCode.NO_ERROR);
