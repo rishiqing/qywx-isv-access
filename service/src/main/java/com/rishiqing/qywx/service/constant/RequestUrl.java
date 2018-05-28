@@ -12,7 +12,7 @@ public class RequestUrl {
     public static final String DEPARTMENT_STAFF_LIST = "https://qyapi.weixin.qq.com/cgi-bin/user/list";
     public static final String STAFF = "https://qyapi.weixin.qq.com/cgi-bin/user/get";
     public static final String TAG_DETAIL = "https://qyapi.weixin.qq.com/cgi-bin/tag/get";
-    public static final String AUTH_LOGIN_USER = "https://qyapi.weixin.qq.com/cgi-bin/user/getuserinfo";
+    public static final String AUTH_LOGIN_USER = "https://qyapi.weixin.qq.com/cgi-bin/service/getuserinfo3rd";
     public static final String GET_APP_ADMIN_LIST = "https://qyapi.weixin.qq.com/cgi-bin/service/get_admin_list";
     public static final String GET_PRE_AUTH_CODE = "https://qyapi.weixin.qq.com/cgi-bin/service/get_pre_auth_code";
     public static final String POST_SEND_MESSAGE = "https://qyapi.weixin.qq.com/cgi-bin/message/send";

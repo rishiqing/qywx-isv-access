@@ -1,5 +1,6 @@
 package com.rishiqing.qywx.web.controller.demo;
 
+import com.rishiqing.qywx.service.common.crypto.CryptoUtil;
 import com.rishiqing.qywx.web.demo.DemoService;
 import com.rishiqing.qywx.service.common.isv.SuiteManageService;
 import com.rishiqing.qywx.service.event.message.mq.DemoMessage;
@@ -13,11 +14,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.Date;
 import java.util.Map;
 
@@ -35,6 +39,8 @@ public class DemoController {
     private DemoService demoService;
     @Autowired
     private QueueService queueService;
+    @Autowired
+    private CryptoUtil cryptoUtil;
 
     @RequestMapping("/encode")
     @ResponseBody
@@ -108,5 +114,50 @@ public class DemoController {
     public String sendString(){
         Date d = new Date();
         return "success: " + d;
+    }
+
+    @RequestMapping("/getToken")
+    @ResponseBody
+    public String getToken(
+            @RequestParam("outerId") String outerId
+    ){
+        try {
+            Date d = new Date();
+            String loginStr = d.getTime() + "--" + outerId;
+            String cryptEncoded = cryptoUtil.encrypt(loginStr);
+            System.out.println("crypt Encoded is: " + cryptEncoded + ", length is " + cryptEncoded.length());
+
+            String urlEncoded = URLEncoder.encode(cryptEncoded, "UTF-8");
+            System.out.println("url Encoded url: " + urlEncoded);
+
+            String urlDecoded = URLDecoder.decode(urlEncoded, "UTF-8");
+            System.out.println("url Decoded url: " + urlDecoded);
+
+            System.out.println("crypt Decoded is: " + cryptoUtil.decrypt(urlDecoded));
+            return "token is: " + urlEncoded;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "failed";
+        }
+    }
+
+    public static void main(String[] args) {
+        try {
+            String org = "XuCp4LccwE6t8uCnZLy26BBntvqHQEPB0H0Gnn9a5+8=";
+//            String encoded = URLEncoder.encode(org, "UTF-8");
+//            System.out.println("encoded: " + encoded);
+//
+//            String decoded = URLDecoder.decode(encoded, "UTF-8");
+//            System.out.println("decoded: " + decoded);
+
+            String encodedUrl = URLEncoder.encode(org, "UTF-8");
+            System.out.println("after encoded url: " + encodedUrl);
+
+            String decodedUrl = URLDecoder.decode(encodedUrl, "UTF-8");
+            System.out.println("after decoded url: " + decodedUrl);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

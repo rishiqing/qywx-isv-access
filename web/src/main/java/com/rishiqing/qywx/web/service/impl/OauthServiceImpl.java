@@ -4,8 +4,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.rishiqing.qywx.service.common.corp.CorpTokenManageService;
 import com.rishiqing.common.exception.HttpException;
+import com.rishiqing.qywx.service.common.isv.SuiteTokenManageService;
 import com.rishiqing.qywx.service.model.corp.CorpTokenVO;
 import com.rishiqing.qywx.service.model.corp.LoginUserVO;
+import com.rishiqing.qywx.service.model.isv.SuiteTokenVO;
 import com.rishiqing.qywx.service.util.http.HttpUtilAuth;
 import com.rishiqing.qywx.service.util.http.converter.Json2BeanConverter;
 import com.rishiqing.qywx.web.service.OauthService;
@@ -17,14 +19,15 @@ public class OauthServiceImpl implements OauthService {
     @Autowired
     private HttpUtilAuth httpUtilAuth;
     @Autowired
-    private CorpTokenManageService corpTokenManageService;
+    private SuiteTokenManageService suiteTokenManageService;
     @Autowired
     private Map isvGlobal;
     @Override
     public LoginUserVO getLoginUserByCode(String corpId, String code) {
         String suiteKey = (String)isvGlobal.get("suiteKey");
-        CorpTokenVO corpTokenVO = corpTokenManageService.getCorpToken(suiteKey, corpId);
-        JSONObject json = httpUtilAuth.getLoginUser(corpTokenVO, code);
+
+        SuiteTokenVO suiteTokenVO = suiteTokenManageService.getSuiteToken(suiteKey);
+        JSONObject json = httpUtilAuth.getLoginUser(suiteTokenVO, code);
         LoginUserVO loginUserVO = Json2BeanConverter.generateLoginUser(corpId, json);
         return loginUserVO;
     }

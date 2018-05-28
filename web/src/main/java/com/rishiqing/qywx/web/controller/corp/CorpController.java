@@ -8,6 +8,7 @@ import com.rishiqing.qywx.service.common.isv.AppManageService;
 import com.rishiqing.qywx.service.model.corp.CorpStaffVO;
 import com.rishiqing.qywx.service.model.isv.AppVO;
 import com.rishiqing.qywx.web.constant.ResultCode;
+import com.rishiqing.qywx.web.service.RsqLoginService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +29,8 @@ public class CorpController {
     private static final Logger logger = LoggerFactory.getLogger("WEB_CALLBACK_LOGGER");
     @Autowired
     private CorpStaffManageService corpStaffManageService;
+    @Autowired
+    private RsqLoginService rsqLoginService;
 
     @RequestMapping(value = "/staff", method = {RequestMethod.GET})
     @ResponseBody
@@ -39,6 +43,12 @@ public class CorpController {
         Map<String, Object> result = new HashMap<String, Object>();
         try {
             CorpStaffVO corpStaffVO = corpStaffManageService.getCorpLoginStaffInfo(corpId, userId);
+
+            String loginToken = rsqLoginService.generateLoginToken(corpStaffVO);
+            logger.info("----qywx login string encoded---- {}", loginToken);
+            //  如果是使用在url中，要使用UrlEncoder进行转移
+            corpStaffVO.setRsqLoginToken(loginToken);
+
             result.put("user", corpStaffVO);
             result.put("errcode", ResultCode.NO_ERROR);
             result.put("errmsg", ResultCode.NO_ERROR_MSG);
