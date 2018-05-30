@@ -49,7 +49,34 @@ public class MessageController {
             result.put("errcode", ResultCode.NO_ERROR);
             result.put("errmsg", ResultCode.NO_ERROR_MSG);
         } catch (Exception e) {
-            logger.error("/corp/staff error: ", e);
+            logger.error("/corp/sendNotification error: ", e);
+            result.put("errcode", ResultCode.SYS_ERROR);
+            result.put("errmsg", ResultCode.SYS_ERROR_MSG);
+        }
+        return result;
+    }
+
+    /**
+     * 给公司中的相关人员发送消息，消息存储在数据库中
+     * @param corpId
+     * @param messageKey
+     * @return
+     */
+    @RequestMapping(value = "/sendCorpMessage", method = {RequestMethod.POST})
+    @ResponseBody
+    public Map sendMessage(
+            @RequestParam("corpId") String corpId,
+            @RequestParam("messageKey") String messageKey
+    ){
+        logger.debug("/msg/sendCorpMessage: corpid: {}, appid: {}, json: {}", corpId, messageKey);
+        Map<String, Object> result = new HashMap<String, Object>();
+
+        try {
+            sendMessageService.sendDatabaseMessageByCorpId(corpId, messageKey);
+            result.put("errcode", ResultCode.NO_ERROR);
+            result.put("errmsg", ResultCode.NO_ERROR_MSG);
+        } catch (Exception e) {
+            logger.error("/corp/sendCorpMessage error: ", e);
             result.put("errcode", ResultCode.SYS_ERROR);
             result.put("errmsg", ResultCode.SYS_ERROR_MSG);
         }

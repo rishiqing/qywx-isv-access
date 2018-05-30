@@ -10,4 +10,6 @@ import java.util.Map;
  */
 public interface SendMessageService {
     public void sendCorpMessage(String corpId, Map map);
+
+    void sendDatabaseMessageByCorpId(String corpId, String messageKey);
 }
