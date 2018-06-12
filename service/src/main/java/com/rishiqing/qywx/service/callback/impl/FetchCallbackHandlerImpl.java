@@ -10,6 +10,7 @@ import com.rishiqing.qywx.service.common.corp.CorpTokenManageService;
 import com.rishiqing.qywx.service.common.fail.CallbackFailService;
 import com.rishiqing.qywx.service.common.isv.GlobalSuite;
 import com.rishiqing.qywx.service.common.isv.SuiteTokenManageService;
+import com.rishiqing.qywx.service.common.message.SendMessageService;
 import com.rishiqing.qywx.service.constant.CallbackInfoType;
 import com.rishiqing.qywx.service.event.service.QueueService;
 import com.rishiqing.qywx.service.model.corp.*;
@@ -46,6 +47,8 @@ public class FetchCallbackHandlerImpl implements FetchCallbackHandler {
     private GlobalSuite suite;
     @Autowired
     private CallbackFailService callbackFailService;
+    @Autowired
+    private SendMessageService sendMessageService;
 
     public void handleFetchCorp(String corpId, String permanentCode){
         String suiteKey = suite.getSuiteKey();
@@ -87,6 +90,8 @@ public class FetchCallbackHandlerImpl implements FetchCallbackHandler {
         staffService.fetchAndSaveAdminList(suiteTokenVO, corpAppVO);
         //  成功后通知同步日事清
         queueService.sendToPushCorpAuthCallback(corpVO, CallbackInfoType.CREATE_AUTH, null);
+        //  注册成功后，跟团队的每个人发送消息
+        sendMessageService.sendDatabaseMessageByCorpId(corpId, "CORP_ACTIVE_MESSAGE");
 
 //        //  获取部门相关信息
 //        deptService.fetchAndSaveDeptInfo(corpTokenVO, null);

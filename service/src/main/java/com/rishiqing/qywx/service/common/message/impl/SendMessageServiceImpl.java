@@ -1,6 +1,8 @@
 package com.rishiqing.qywx.service.common.message.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.rishiqing.qywx.dao.mapper.message.IsvMessageDao;
+import com.rishiqing.qywx.dao.model.message.IsvMessage;
 import com.rishiqing.qywx.service.common.corp.CorpAppManageService;
 import com.rishiqing.qywx.service.common.corp.CorpTokenManageService;
 import com.rishiqing.qywx.service.common.isv.GlobalSuite;
@@ -8,6 +10,7 @@ import com.rishiqing.qywx.service.common.message.SendMessageService;
 import com.rishiqing.qywx.service.model.corp.CorpAppVO;
 import com.rishiqing.qywx.service.model.corp.CorpTokenVO;
 import com.rishiqing.qywx.service.util.http.HttpUtilCorp;
+import com.rishiqing.qywx.service.util.http.converter.Json2MapConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.HashMap;
@@ -26,6 +29,8 @@ public class SendMessageServiceImpl implements SendMessageService {
     private CorpAppManageService corpAppManageService;
     @Autowired
     private CorpTokenManageService corpTokenManageService;
+    @Autowired
+    private IsvMessageDao isvMessageDao;
     /**
      * 发送文本卡片信息给指定的toUser
      * @param corpId，corpId
@@ -38,5 +43,16 @@ public class SendMessageServiceImpl implements SendMessageService {
         CorpTokenVO corpTokenVO = corpTokenManageService.getCorpToken(suiteKey, corpId);
         map.put("agentid", corpAppVO.getAgentId());
         httpUtilCorp.postSendMessage(corpTokenVO, map);
+    }
+
+    @Override
+    public void sendDatabaseMessageByCorpId(String corpId, String messageKey){
+        //  默认使用news发送消息
+        IsvMessage message = isvMessageDao.getIsvMessageByKey(messageKey);
+        if(null != message){
+            JSONObject json = JSONObject.parseObject(message.getJsonContent());
+            Map map = Json2MapConverter.generateSendMessageMap(message.getMessageType(), json);
+            sendCorpMessage(corpId, map);
+        }
     }
 }

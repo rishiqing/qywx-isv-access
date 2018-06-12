@@ -20,6 +20,9 @@ public class CorpDO {
     private Long verifiedEndTime;
     private Long subjectType;
     private String corpWxqrcode;
+    private String corpScale;
+    private String corpIndustry;
+    private String corpSubIndustry;
     private String authEmail;
     private String authMobile;
     private String authUserId;
@@ -133,6 +136,30 @@ public class CorpDO {
         this.corpWxqrcode = corpWxqrcode;
     }
 
+    public String getCorpScale() {
+        return corpScale;
+    }
+
+    public void setCorpScale(String corpScale) {
+        this.corpScale = corpScale;
+    }
+
+    public String getCorpIndustry() {
+        return corpIndustry;
+    }
+
+    public void setCorpIndustry(String corpIndustry) {
+        this.corpIndustry = corpIndustry;
+    }
+
+    public String getCorpSubIndustry() {
+        return corpSubIndustry;
+    }
+
+    public void setCorpSubIndustry(String corpSubIndustry) {
+        this.corpSubIndustry = corpSubIndustry;
+    }
+
     public String getAuthEmail() {
         return authEmail;
     }
@@ -205,6 +232,9 @@ public class CorpDO {
                 ", verifiedEndTime=" + verifiedEndTime +
                 ", subjectType=" + subjectType +
                 ", corpWxqrcode='" + corpWxqrcode + '\'' +
+                ", corpScale='" + corpScale + '\'' +
+                ", corpIndustry='" + corpIndustry + '\'' +
+                ", corpSubIndustry='" + corpSubIndustry + '\'' +
                 ", authEmail='" + authEmail + '\'' +
                 ", authMobile='" + authMobile + '\'' +
                 ", authUserId='" + authUserId + '\'' +

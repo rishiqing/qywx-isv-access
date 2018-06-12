@@ -2,6 +2,7 @@ package com.rishiqing.qywx.web.service.website.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.rishiqing.qywx.service.biz.rsq.RsqStaffService;
+import com.rishiqing.qywx.service.common.isv.GlobalSuite;
 import com.rishiqing.qywx.service.common.isv.IsvManageService;
 import com.rishiqing.qywx.service.common.redis.RedisUtil;
 import com.rishiqing.qywx.service.model.corp.CorpStaffVO;
@@ -30,6 +31,8 @@ public class WebsiteOauthServiceImpl implements WebsiteOauthService {
     private RsqStaffService rsqStaffService;
     @Autowired
     private RedisUtil baseRedisUtil;
+    @Autowired
+    private GlobalSuite suite;
 
     private static final String WEBSITE_OAUTH_STATE_PREFIX = "weboauth__";
     private static final Integer WEBSITE_OAUTH_STATE_EXPIRE_SECOND = 600; //  state的超时时间，10分钟
@@ -38,17 +41,26 @@ public class WebsiteOauthServiceImpl implements WebsiteOauthService {
 
     @Override
     public CorpStaffVO registerLoginUser(String authCode, String corpId){
-        //  根据authCode获取当前登录用户的信息
-        IsvVO isv = isvManageService.getIsv(corpId);
-        JSONObject jsonLogin = httpUtilIsv.getWebsiteLoginInfo(isv, authCode);
-        logger.debug("====jsonLogin===={}", jsonLogin);
-        WebsiteLoginInfoVO loginInfoVO = Json2BeanConverter.generateWebsiteLoginInfo(jsonLogin);
 
+
+        WebsiteLoginInfoVO loginInfoVO = getWebsiteLoginInfo(authCode, corpId);
         logger.debug("====loginInfoVO===={}", loginInfoVO);
         //  将用户信息自动注册到日事清
         rsqStaffService.pushAndCreateStaff(null, null, loginInfoVO.getCorpStaffVO());
 
         return loginInfoVO.getCorpStaffVO();
+    }
+
+    @Override
+    public WebsiteLoginInfoVO getWebsiteLoginInfo(String authCode, String corpId){
+        //  根据authCode获取当前登录用户的信息
+        if(corpId == null){
+            corpId = suite.getCorpId();
+        }
+        IsvVO isv = isvManageService.getIsv(corpId);
+        JSONObject jsonLogin = httpUtilIsv.getWebsiteLoginInfo(isv, authCode);
+        logger.debug("====jsonLogin===={}", jsonLogin);
+        return Json2BeanConverter.generateWebsiteLoginInfo(jsonLogin);
     }
 
     /**

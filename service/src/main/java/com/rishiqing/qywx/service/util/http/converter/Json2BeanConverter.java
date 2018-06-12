@@ -48,6 +48,9 @@ public class Json2BeanConverter {
         corpVO.setVerifiedEndTime(jsonCorp.getLong("verified_end_time"));
         corpVO.setSubjectType(jsonCorp.getLong("subject_type"));
         corpVO.setCorpWxqrcode(jsonCorp.getString("corp_wxqrcode"));
+        corpVO.setCorpScale(jsonCorp.getString("corp_scale"));
+        corpVO.setCorpIndustry(jsonCorp.getString("corp_industry"));
+        corpVO.setCorpSubIndustry(jsonCorp.getString("corp_sub_industry"));
 
         //  如果有auth_user_info信息，即授权管理员信息，那么加上
         if(json.containsKey("auth_user_info")){

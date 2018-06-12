@@ -28,6 +28,9 @@ public class CorpConverter {
         corpVO.setVerifiedEndTime(corpDO.getVerifiedEndTime());
         corpVO.setAuthCanceled(corpDO.getAuthCanceled());
         corpVO.setRsqId(corpDO.getRsqId());
+        corpVO.setCorpScale(corpDO.getCorpScale());
+        corpVO.setCorpIndustry(corpDO.getCorpIndustry());
+        corpVO.setCorpSubIndustry(corpDO.getCorpSubIndustry());
 
         return corpVO;
     }
@@ -54,6 +57,9 @@ public class CorpConverter {
         corpDO.setVerifiedEndTime(corpVO.getVerifiedEndTime());
         corpDO.setAuthCanceled(corpVO.getAuthCanceled());
         corpDO.setRsqId(corpVO.getRsqId());
+        corpDO.setCorpScale(corpVO.getCorpScale());
+        corpDO.setCorpIndustry(corpVO.getCorpIndustry());
+        corpDO.setCorpSubIndustry(corpVO.getCorpSubIndustry());
 
         return corpDO;
     }

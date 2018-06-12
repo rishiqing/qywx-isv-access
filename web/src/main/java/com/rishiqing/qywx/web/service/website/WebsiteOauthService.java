@@ -1,6 +1,7 @@
 package com.rishiqing.qywx.web.service.website;
 
 import com.rishiqing.qywx.service.model.corp.CorpStaffVO;
+import com.rishiqing.qywx.service.model.website.WebsiteLoginInfoVO;
 
 /**
  * @author Wallace Mao
@@ -8,6 +9,8 @@ import com.rishiqing.qywx.service.model.corp.CorpStaffVO;
  */
 public interface WebsiteOauthService {
     CorpStaffVO registerLoginUser(String authCode, String appId);
+
+    WebsiteLoginInfoVO getWebsiteLoginInfo(String authCode, String corpId);
 
     String generateState();
 

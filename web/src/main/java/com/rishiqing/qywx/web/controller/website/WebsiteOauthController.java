@@ -5,6 +5,7 @@ import com.rishiqing.qywx.service.common.crypto.CryptoUtil;
 import com.rishiqing.qywx.service.common.isv.GlobalSuite;
 import com.rishiqing.qywx.service.constant.RequestUrl;
 import com.rishiqing.qywx.service.model.corp.CorpStaffVO;
+import com.rishiqing.qywx.web.service.RsqLoginService;
 import com.rishiqing.qywx.web.service.website.WebsiteOauthService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +34,7 @@ public class WebsiteOauthController {
     @Autowired
     private WebsiteOauthService websiteOauthService;
     @Autowired
-    private CryptoUtil cryptoUtil;
+    private RsqLoginService rsqLoginService;
     @Autowired
     private Map isvGlobal;
     @Autowired
@@ -67,9 +68,7 @@ public class WebsiteOauthController {
                 return null;
             }
             CorpStaffVO corpStaffVO = websiteOauthService.registerLoginUser(authCode, corpId);
-            String loginStr = makeLoginString(corpStaffVO);
-            logger.info("----qywx login string---- {}", loginStr);
-            String loginToken = cryptoUtil.encrypt(loginStr);
+            String loginToken = rsqLoginService.generateLoginToken(corpStaffVO);
             logger.info("----qywx login string encoded---- {}", loginToken);
             String redirectUrl = makeRedirectUrl(loginToken);
             return "redirect:" + redirectUrl;
@@ -93,13 +92,6 @@ public class WebsiteOauthController {
                 "&state=" +
                 websiteOauthService.generateState() +
                 "&usertype=member";
-    }
-    private String makeLoginString(CorpStaffVO corpStaffVO){
-        return String.valueOf(new Date().getTime()) +
-                "--" +
-                corpStaffVO.getCorpId() +
-                "--" +
-                corpStaffVO.getUserId();
     }
     private String makeRedirectUrl(String token) throws UnsupportedEncodingException {
         return isvGlobal.get("rsqUrlAuthRedirect") +

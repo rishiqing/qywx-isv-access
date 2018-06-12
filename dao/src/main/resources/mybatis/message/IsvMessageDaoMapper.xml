@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rishiqing.qywx.dao.mapper.message.IsvMessageDao">
+    <resultMap id="isvMessageMap" type="com.rishiqing.qywx.dao.model.message.IsvMessage">
+        <id property="id" column="id" />
+        <result property="dateCreated" column="date_created" />
+        <result property="lastUpdated" column="last_updated" />
+        <result property="messageKey" column="message_key" />
+        <result property="messageType" column="message_type" />
+        <result property="jsonContent" column="json_content" />
+    </resultMap>
+
+    <sql id="selectAllFields">
+        id, date_created, last_updated, message_key, message_type, json_content
+    </sql>
+
+    <select id="getIsvMessageByKey" resultMap="isvMessageMap">
+        SELECT <include refid="selectAllFields" /> FROM isv_message
+        <![CDATA[
+            WHERE message_key = #{messageKey}
+        ]]>
+    </select>
+</mapper>
