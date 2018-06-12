@@ -464,3 +464,9 @@ CREATE TABLE `isv_message` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `u_isv_message_key` (`message_key`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COMMENT='服务商发送消息的表';
+
+# add isv_corp columns
+
+ALTER TABLE `isv_corp` ADD COLUMN `corp_scale`  varchar(255) NULL COMMENT '企业规模';
+ALTER TABLE `isv_corp` ADD COLUMN `corp_industry`  varchar(255) NULL COMMENT '企业所属行业';
+ALTER TABLE `isv_corp` ADD COLUMN `corp_sub_industry`  varchar(255) NULL COMMENT '企业所属子行业';

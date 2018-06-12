@@ -26,6 +26,7 @@
         <entry key="isvAuthRedirectUriAfter" value="${isv.app.page.auth.redirect.after}" />
         <entry key="isvRegisterTemplateId" value="${isv.app.register.template.id}" />
         <entry key="rsqUrlAuthRedirect" value="${isv.rsq.url.auth.redirect}" />
+        <entry key="rsqUrlBizCorpBack" value="${isv.rsq.url.biz.corp.back}" />
         <entry key="rsqUrlOauthRedirect" value="${isv.rsq.url.oauth.redirect}" />
         <entry key="rsqAesKey" value="${isv.rsq.aes.key}" />
         <entry key="rsqAesInitVector" value="${isv.rsq.aes.init.vector}" />

@@ -15,6 +15,9 @@
         <result property="verifiedEndTime" column="verified_end_time" />
         <result property="subjectType" column="subject_type" />
         <result property="corpWxqrcode" column="corp_wxqrcode" />
+        <result property="corpScale" column="corp_scale" />
+        <result property="corpIndustry" column="corp_industry" />
+        <result property="corpSubIndustry" column="corp_sub_industry" />
         <result property="authEmail" column="auth_email" />
         <result property="authMobile" column="auth_mobile" />
         <result property="authUserId" column="auth_user_id" />
@@ -27,7 +30,8 @@
     <sql id="selectAllFields">
         id, date_created, last_updated, corp_id, corp_name, corp_type, corp_square_logo_url, corp_user_max, corp_agent_max,
         corp_full_name, verified_end_time, subject_type, corp_wxqrcode,
-        auth_email, auth_mobile, auth_user_id, auth_name, auth_avatar, is_auth_canceled, rsq_id
+        auth_email, auth_mobile, auth_user_id, auth_name, auth_avatar, is_auth_canceled, rsq_id,
+        corp_scale, corp_industry, corp_sub_industry
     </sql>
 
     <select id="getCorpByCorpId" resultMap="corpMap">
@@ -56,7 +60,10 @@
             auth_user_id,
             auth_name,
             auth_avatar,
-            is_auth_canceled
+            is_auth_canceled,
+            corp_scale,
+            corp_industry,
+            corp_sub_industry
         ) VALUES (
             now(),
             now(),
@@ -75,7 +82,10 @@
             #{authUserId},
             #{authName},
             #{authAvatar},
-            0
+            0,
+            #{corpScale},
+            #{corpIndustry},
+            #{corpSubIndustry}
         ) ON DUPLICATE KEY UPDATE
             last_updated = now(),
             corp_name = #{corpName},
@@ -83,6 +93,9 @@
             corp_user_max = #{corpUserMax},
             corp_agent_max = #{corpAgentMax},
             corp_full_name = #{corpFullName},
+            corp_scale = #{corpScale},
+            corp_industry = #{corpIndustry},
+            corp_sub_industry = #{corpSubIndustry},
             verified_end_time = #{verifiedEndTime},
             subject_type = #{subjectType},
             is_auth_canceled = 0
