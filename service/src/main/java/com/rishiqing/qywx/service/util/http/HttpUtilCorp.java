@@ -133,6 +133,20 @@ public class HttpUtilCorp {
         );
     }
 
+    public JSONObject getCorpLoginUserInfo(CorpTokenVO corpTokenVO, String code){
+        Map<String, Object> options = new HashMap<String, Object>();
+        options.put("corpId", corpTokenVO.getCorpId());
+        Map<String, Object> queryMap = new HashMap<String, Object>();
+        queryMap.put("access_token", corpTokenVO.getCorpToken());
+        queryMap.put("code", code);
+
+        return restHttpClient.get(
+                RequestUrl.CORP_LOGIN_USER_INFO,
+                queryMap,
+                options
+        );
+    }
+
     public RestHttpClient getRestHttpClient() {
         return restHttpClient;
     }

@@ -47,18 +47,15 @@ public class OauthController {
         logger.info("----oauth after----corpId: {}, agentId: {}, code: {}, state: {}", corpId, agentId, code, state);
         try {
             LoginUserVO loginUserVO = oauthService.getLoginUserByCode(corpId, code);
-            String cookieNameTemplate = (String)isvGlobal.get("appCookieName");
+
+            Cookie cookie = oauthService.generateClientUserCookie(agentId, corpId, loginUserVO);
+            response.addCookie(cookie);
+
             String mainPageTemplate = (String)isvGlobal.get("appMobileIndexPage");
-            String cookieName = cookieNameTemplate
-                    .replaceAll("\\$AGENTID\\$", agentId)
-                    .replaceAll("\\$CORPID\\$", corpId);
             String mainPage = mainPageTemplate
                     .replaceAll("\\$AGENTID\\$", agentId)
                     .replaceAll("\\$CORPID\\$", corpId);
-            Cookie cookie = new Cookie(cookieName,loginUserVO.getUserId());
-            cookie.setPath("/");
-            cookie.setMaxAge(60 * 60 * 24 * 365);
-            response.addCookie(cookie);
+
             return "redirect:" + mainPage;
         } catch (HttpException e) {
             logger.error("/oauth/after http exception: ", e);
