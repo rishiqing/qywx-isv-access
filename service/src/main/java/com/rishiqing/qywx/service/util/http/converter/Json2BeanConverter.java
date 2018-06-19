@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.rishiqing.qywx.service.model.corp.*;
 import com.rishiqing.qywx.service.model.isv.IsvVO;
+import com.rishiqing.qywx.service.model.isv.PhoneCallInfoVO;
 import com.rishiqing.qywx.service.model.isv.SuitePreAuthCodeVO;
 import com.rishiqing.qywx.service.model.isv.SuiteTokenVO;
 import com.rishiqing.qywx.service.model.website.RegisterCodeVO;
@@ -339,5 +340,14 @@ public class Json2BeanConverter {
         code.setRegisterCode(json.getString("register_code"));
         code.setExpiresIn(json.getLong("expires_in"));
         return code;
+    }
+
+    public static PhoneCallInfoVO generatePhoneCallInfo(JSONObject json){
+        PhoneCallInfoVO phoneCallInfoVO = new PhoneCallInfoVO();
+        phoneCallInfoVO.setCallerUserId(json.getString("caller"));
+        phoneCallInfoVO.setCalleeUserId(json.getString("callee"));
+        phoneCallInfoVO.setCalleeCorpId(json.getString("corpId"));
+        
+        return phoneCallInfoVO;
     }
 }

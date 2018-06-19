@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.rishiqing.common.util.http.client.RestHttpClient;
 import com.rishiqing.qywx.service.constant.RequestUrl;
 import com.rishiqing.qywx.service.model.isv.IsvVO;
+import com.rishiqing.qywx.service.model.isv.PhoneCallInfoVO;
 import com.rishiqing.qywx.service.model.website.RegisterInfoVO;
 import com.rishiqing.qywx.service.util.http.converter.Bean2JsonConverter;
 
@@ -38,6 +39,20 @@ public class HttpUtilIsv {
 
         return restHttpClient.post(
                 RequestUrl.WEBSITE_LOGIN_INFO,
+                queryMap,
+                null,
+                JSONObject.toJSONString(params),
+                null
+        );
+    }
+
+    public JSONObject postCall(IsvVO isvVO, PhoneCallInfoVO phoneCallInfoVO){
+        JSONObject params = Bean2JsonConverter.preparePhoneCall(phoneCallInfoVO);
+        Map<String, Object> queryMap = new HashMap<String, Object>();
+        queryMap.put("provider_access_token", isvVO.getProviderAccessToken());
+
+        return restHttpClient.post(
+                RequestUrl.QYWX_PHONE_CALL,
                 queryMap,
                 null,
                 JSONObject.toJSONString(params),

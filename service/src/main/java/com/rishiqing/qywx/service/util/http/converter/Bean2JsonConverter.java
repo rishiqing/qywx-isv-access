@@ -73,4 +73,12 @@ public class Bean2JsonConverter {
         params.put("auth_code", authCode);
         return params;
     }
+
+    public static JSONObject preparePhoneCall(PhoneCallInfoVO phoneCallInfoVO){
+        JSONObject params = new JSONObject();
+        params.put("caller", phoneCallInfoVO.getCallerUserId());
+        params.put("callee", phoneCallInfoVO.getCalleeUserId());
+        params.put("auth_corpid", phoneCallInfoVO.getCalleeCorpId());
+        return params;
+    }
 }
