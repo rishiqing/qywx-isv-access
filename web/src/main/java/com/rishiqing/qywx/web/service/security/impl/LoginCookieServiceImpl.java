@@ -1,19 +1,21 @@
 package com.rishiqing.qywx.web.service.security.impl;
 
+import com.rishiqing.common.util.http.HttpUtilRsqAuth;
 import com.rishiqing.qywx.service.common.isv.GlobalSuite;
+import com.rishiqing.qywx.service.model.corp.CorpStaffVO;
 import com.rishiqing.qywx.web.exception.MessageSignException;
+import com.rishiqing.qywx.web.service.RsqLoginService;
 import com.rishiqing.qywx.web.service.security.LoginCookieService;
 import com.rishiqing.qywx.web.util.codec.AesException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.servlet.http.Cookie;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author Wallace Mao
@@ -24,6 +26,10 @@ public class LoginCookieServiceImpl implements LoginCookieService {
 
     @Autowired
     private GlobalSuite suite;
+    @Autowired
+    private HttpUtilRsqAuth httpUtilRsqAuth;
+    @Autowired
+    private RsqLoginService rsqLoginService;
 
     @Override
     public Boolean checkSignature(String signature, Long type, String code, String corpId, Long timestamp, String nonce){
@@ -46,6 +52,22 @@ public class LoginCookieServiceImpl implements LoginCookieService {
         logger.debug("new Sign is: {}, old sign is: {}, should be EQUAL!", newSign, signature);
 
         return newSign.equals(signature);
+    }
+
+    @Override
+    public List<Cookie> tokenLoginToRsq(String corpId, String userId){
+        CorpStaffVO corpStaffVO = new CorpStaffVO();
+        corpStaffVO.setCorpId(corpId);
+        corpStaffVO.setUserId(userId);
+        String token = rsqLoginService.generateLoginToken(corpStaffVO);
+        logger.debug("tokenLoginToRsq token is: {}", token);
+        Map<String, String> cookieMap = httpUtilRsqAuth.tokenLogin(token);
+        List<Cookie> list = new ArrayList<>();
+
+        for(Map.Entry<String, String> entry : cookieMap.entrySet()){
+            list.add(new Cookie(entry.getKey(), entry.getValue()));
+        }
+        return list;
     }
 
     private String concatOrderedString(List<String> orgList){

@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -62,21 +64,44 @@ public class LoginCookieController {
 
         try {
             LoginUserVO loginUserVO = oauthService.getCorpLoginUserByCode(corpId, code);
-
             CorpAppVO corpAppVO = corpAppManageService.getCorpAppBySuiteKeyAndCorpId(suiteId, corpId);
 
             //  设置企业微信server的cookie
             Cookie cookie = oauthService.generateClientUserCookie(corpAppVO.getAgentId().toString(), corpId, loginUserVO);
             response.addCookie(cookie);
             //  自动登录到日事清后台，并获取session id的cookie，添加到cookie中
+            List<Cookie> cookieList = loginCookieService.tokenLoginToRsq(corpId, loginUserVO.getUserId());
+            for(Cookie c : cookieList){
+                response.addCookie(c);
+            }
 
             //  返回cookie
+            String strCookie = makeCookieString(cookieList);
+            logger.debug("response cookie is: {}", strCookie);
+
+            map.put("cookie", strCookie);
+            map.put("expires_in", 14400);
 
             return map;
         } catch (Exception e) {
             logger.error("internal error in cookie login: request body is " + jsonBody, e);
             throw new InternalServerErrorException();
         }
+    }
+
+    private String makeCookieString(List<Cookie> cookies){
+        StringBuilder sb = new StringBuilder();
+        int len = cookies.size();
+        for(int i = 0; i < len; i++){
+            Cookie c = cookies.get(i);
+            sb.append(c.getName())
+                    .append("=")
+                    .append(c.getValue());
+            if(i != len - 1){
+                sb.append("; ");
+            }
+        }
+        return sb.toString();
     }
 
 }

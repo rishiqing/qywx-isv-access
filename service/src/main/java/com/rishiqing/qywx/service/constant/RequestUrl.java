@@ -23,4 +23,5 @@ public class RequestUrl {
     public static final String QYWX_WEB_OAUTH = "https://open.work.weixin.qq.com/wwopen/sso/3rd_qrConnect";
     public static final String WEBSITE_LOGIN_INFO = "https://qyapi.weixin.qq.com/cgi-bin/service/get_login_info";
     public static final String WEBSITE_REGISTER_CODE = "https://qyapi.weixin.qq.com/cgi-bin/service/get_register_code";
+    public static final String QYWX_PHONE_CALL = "https://qyapi.weixin.qq.com/cgi-bin/service/dial";
 }

@@ -1,9 +1,5 @@
 package com.rishiqing.qywx.web.controller.demo;
 
-import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.Unirest;
-import com.mashape.unirest.http.exceptions.UnirestException;
-import com.mashape.unirest.request.GetRequest;
 import com.rishiqing.qywx.service.common.crypto.CryptoUtil;
 import com.rishiqing.qywx.service.model.corp.CorpStaffVO;
 import com.rishiqing.qywx.web.demo.DemoService;
@@ -15,8 +11,15 @@ import com.rishiqing.qywx.web.service.RsqLoginService;
 import com.rishiqing.qywx.web.util.codec.AesException;
 import com.rishiqing.qywx.web.util.codec.WXBizMsgCrypt;
 import com.rishiqing.qywx.web.util.common.XmlUtil;
+import org.apache.http.HttpEntity;
 import org.apache.http.client.CookieStore;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.impl.client.BasicCookieStore;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,11 +31,10 @@ import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.net.URI;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 @Controller
@@ -159,46 +161,65 @@ public class DemoController {
             @RequestParam("corpId") String corpId,
             @RequestParam("userId") String userId
     ){
-        CookieStore cookieStore = new BasicCookieStore();
-        Unirest.setHttpClient(org.apache.http.impl.client.HttpClients.custom()
-                .setDefaultCookieStore(cookieStore)
-                .build());
-
-        CorpStaffVO corpStaffVO = new CorpStaffVO();
-        corpStaffVO.setCorpId(corpId);
-        corpStaffVO.setUserId(userId);
-        String orgToken = "HaTify+mKHb2fumR1s1YPgHf7C68euZ9FR8Ltuywxm2SXf6oG1BzPXWSlQ1S9cuu";
-        String newToken = null;
+        String result;
+        CloseableHttpClient httpClient = null;
         try {
-            newToken = URLEncoder.encode(
+            CorpStaffVO corpStaffVO = new CorpStaffVO();
+            corpStaffVO.setCorpId(corpId);
+            corpStaffVO.setUserId(userId);
+            String orgToken = "HaTify+mKHb2fumR1s1YPgHf7C68euZ9FR8Ltuywxm2SXf6oG1BzPXWSlQ1S9cuu";
+            String newToken = URLEncoder.encode(
                     "HaTify+mKHb2fumR1s1YPgHf7C68euZ9FR8Ltuywxm2SXf6oG1BzPXWSlQ1S9cuu",
                     "UTF-8"
             );
-        } catch (UnsupportedEncodingException e) {
+            String token = orgToken;
+
+            CookieStore cookieStore = new BasicCookieStore();
+            httpClient = HttpClients.custom()
+                    .setDefaultCookieStore(cookieStore)
+                    .build();
+
+            System.out.println("token is: " + token);
+
+//        String path = "https://www.rishiqing.com/task/qywxOauth/tokenLogin";
+
+            URI uri = null;
+            URIBuilder builder = new URIBuilder("https://www.rishiqing.com/task/qywxOauth/tokenLogin");
+            uri = builder.setParameter("token", token).build();
+
+            HttpGet httpGet = new HttpGet(uri);
+            CloseableHttpResponse httpResponse = null;
+            try {
+                httpResponse = httpClient.execute(httpGet);
+                HttpEntity entity = httpResponse.getEntity();
+                String respBody = EntityUtils.toString(entity);
+
+                System.out.println("cookieStore: " + cookieStore.getCookies());
+                System.out.println("status line: " + httpResponse.getStatusLine());
+                System.out.println("entity: " + respBody);
+
+                result = respBody;
+            } catch (IOException e) {
+                e.printStackTrace();
+                result = "fail";
+            } finally {
+                if(httpResponse != null){
+                    httpResponse.close();
+                }
+            }
+        } catch (Exception e) {
+            result = "fail";
             e.printStackTrace();
+        } finally {
+            if(httpClient != null){
+                try {
+                    httpClient.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
-        String token = orgToken;
-
-        System.out.println("token is: " + token);
-
-        String path = "https://www.rishiqing.com/task/qywxOauth/tokenLogin";
-        Map<String, Object> queryMap = new HashMap<>();
-        queryMap.put("token", token);
-
-
-        GetRequest request = Unirest.get(path);
-        request.queryString(queryMap);
-        try {
-            HttpResponse<String> resp = request.asString();
-            System.out.println("cookieStore: " + cookieStore.getCookies());
-            System.out.println("resp status: " + resp.getStatus());
-            System.out.println("resp: " + resp.getBody());
-            return resp.getBody();
-        } catch (UnirestException e) {
-            e.printStackTrace();
-            return "fail";
-        }
-
+        return result;
     }
 
     public static void main(String[] args) {
