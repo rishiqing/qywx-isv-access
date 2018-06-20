@@ -55,5 +55,6 @@
     <bean id="oauthService" class="com.rishiqing.qywx.web.service.impl.OauthServiceImpl" />
     <bean id="isvAuthService" class="com.rishiqing.qywx.web.service.impl.IsvAuthServiceImpl" />
     <bean id="rsqLoginService" class="com.rishiqing.qywx.web.service.impl.RsqLoginServiceImpl" />
+    <bean id="loginCookieService" class="com.rishiqing.qywx.web.service.security.impl.LoginCookieServiceImpl" />
     <bean id="demoService" class="com.rishiqing.qywx.web.demo.DemoServiceImpl" />
 </beans>

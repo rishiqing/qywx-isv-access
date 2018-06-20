@@ -74,6 +74,10 @@
         <constructor-arg index="0" value="${isv.rsq.url.root}"/>
         <constructor-arg index="1" ref="defaultRestHttpClient"/>
     </bean>
+    <!--日事清相关的请求-->
+    <bean id="httpUtilRsqAuth" class="com.rishiqing.common.util.http.impl.HttpUtilRsqAuthImpl">
+        <constructor-arg index="0" value="${isv.rsq.url.root}"/>
+    </bean>
 
     <!--==========================eventBus相关==============================-->
     <!--AsyncEventBus-->
