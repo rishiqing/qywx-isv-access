@@ -73,6 +73,13 @@ public class Json2BeanConverter {
         corpSuiteVO.setCorpId(corpId);
         corpSuiteVO.setSuiteKey(suiteKey);
         corpSuiteVO.setPermanentCode(json.getString("permanent_code"));
+
+        if(json.containsKey("auth_user_info")){
+            JSONObject jsonAuthUser = json.getJSONObject("auth_user_info");
+            corpSuiteVO.setAuthUserId(jsonAuthUser.getString("userid"));
+            corpSuiteVO.setAuthUserName(jsonAuthUser.getString("name"));
+            corpSuiteVO.setAuthUserAvatar(jsonAuthUser.getString("avatar"));
+        }
         return corpSuiteVO;
     }
 

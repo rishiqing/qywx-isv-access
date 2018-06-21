@@ -470,3 +470,8 @@ CREATE TABLE `isv_message` (
 ALTER TABLE `isv_corp` ADD COLUMN `corp_scale`  varchar(255) NULL COMMENT '企业规模';
 ALTER TABLE `isv_corp` ADD COLUMN `corp_industry`  varchar(255) NULL COMMENT '企业所属行业';
 ALTER TABLE `isv_corp` ADD COLUMN `corp_sub_industry`  varchar(255) NULL COMMENT '企业所属子行业';
+
+# 授权开通应用的管理员信息
+ALTER TABLE `isv_corp_suite` ADD COLUMN `auth_user_id`  varchar(255) NULL COMMENT '授权开通应用的管理员id';
+ALTER TABLE `isv_corp_suite` ADD COLUMN `auth_user_name`  varchar(255) NULL COMMENT '授权开通应用的管理员的名称';
+ALTER TABLE `isv_corp_suite` ADD COLUMN `auth_user_avatar`  varchar(255) NULL COMMENT '授权开通应用的管理员的头像';

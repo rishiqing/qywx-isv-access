@@ -26,6 +26,11 @@ public class RsqResponseConverter {
         if(json.containsKey("fromApp"))
             rsqTeamVO.setFromApp(json.getString("fromApp"));
 
+        if(json.containsKey("creator")){
+            RsqCommonUserVO creator = Json2RsqCommonUserVO(json.getJSONObject("creator"));
+            rsqTeamVO.setCreator(creator);
+        }
+
         return rsqTeamVO;
     }
 
