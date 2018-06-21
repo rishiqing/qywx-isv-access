@@ -70,7 +70,7 @@ public class HttpUtilRsqAuthImpl implements HttpUtilRsqAuth {
                 List<Cookie> cookieList = cookieStore.getCookies();
                 for(Cookie c : cookieList){
                     if(SESSION_ID_NAME.equals(c.getName())){
-                        result.put(SESSION_ID_NAME, c.getName());
+                        result.put(c.getName(), c.getValue());
                     }
                 }
 //                HttpEntity entity = httpResponse.getEntity();
