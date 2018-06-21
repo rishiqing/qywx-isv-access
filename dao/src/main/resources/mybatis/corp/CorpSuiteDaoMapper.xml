@@ -39,9 +39,9 @@
             now(),
             #{corpId},
             #{suiteKey},
-            #{permanentCode}
-            #{authUserId}
-            #{authUserName}
+            #{permanentCode},
+            #{authUserId},
+            #{authUserName},
             #{authUserAvatar}
         ) ON DUPLICATE KEY UPDATE
             last_updated = now(),
