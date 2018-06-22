@@ -30,7 +30,7 @@ public class RsqRequestConverter {
         jsonCreator.put("username", userVO.getUsername());
         jsonCreator.put("password", userVO.getPassword());
         jsonCreator.put("realName", userVO.getRealName());
-        jsonCreator.put("outerId", userVO.getOuterId());
+        jsonCreator.put("outerId", userVO.getCorpId() + "--" + userVO.getUserId());
         jsonCreator.put("unionId", userVO.getUnionId());
 
         return jsonCreator;
