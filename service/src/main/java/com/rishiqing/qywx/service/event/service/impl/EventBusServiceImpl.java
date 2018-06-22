@@ -13,10 +13,9 @@ public class EventBusServiceImpl implements EventBusService {
     @Autowired
     private AsyncEventBus asyncFetchDeptAndStaffEventBus;
     @Override
-    public void sendToFetchCorpAll(String corpId, String permanentCode) {
+    public void sendToFetchCorpAll(String corpId) {
         CorpSuiteMessage msg = new CorpSuiteMessage();
         msg.setCorpId(corpId);
-        msg.setPermanentCode(permanentCode);
         asyncFetchDeptAndStaffEventBus.post(msg);
     }
 }

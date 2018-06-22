@@ -24,16 +24,16 @@ public class LogFailFetchCallbackHandlerImpl implements FetchCallbackHandler {
     private CallbackFailService callbackFailService;
 
     @Override
-    public void handleFetchCorp(String corpId, String permanentCode) {
+    public void handleFetchCorp(String corpId) {
         try {
-            fetchCallbackHandler.handleFetchCorp(corpId, permanentCode);
+            fetchCallbackHandler.handleFetchCorp(corpId);
         } catch (Exception e) {
             //  加入重试
             callbackFailService.save(corpId,
                     CallbackFailType.AUTH_CALLBACK_FAIL_SAVE_NEW_CORP,
                     CallbackInfoType.CREATE_AUTH,
                     null,
-                    permanentCode);
+                    null);
             throw new CallbackException(e);
         }
     }

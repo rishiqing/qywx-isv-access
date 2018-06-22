@@ -22,7 +22,7 @@ public class FetchCorpAllListenerTest {
         try {
             String corpId = "wxec002534a59ea2e7";
             String permanentCode = "b7RpWT6KvD1k7-W5ernJI0cUE0yyQwMZ5FCaGsWDwME";
-            logFailFetchCallbackHandler.handleFetchCorp(corpId, permanentCode);
+            logFailFetchCallbackHandler.handleFetchCorp(corpId);
         } catch (Exception e){
             e.printStackTrace();
         }

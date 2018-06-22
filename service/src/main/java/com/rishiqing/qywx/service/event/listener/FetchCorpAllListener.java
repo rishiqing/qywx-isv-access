@@ -18,8 +18,8 @@ public class FetchCorpAllListener implements EventListener {
     public void listenFetchDeptAndStaff(CorpSuiteMessage msg){
         try {
             String corpId = msg.getCorpId();
-            String permanentCode = msg.getPermanentCode();
-            logFailFetchCallbackHandler.handleFetchCorp(corpId, permanentCode);
+//            String permanentCode = msg.getPermanentCode();
+            logFailFetchCallbackHandler.handleFetchCorp(corpId);
         } catch (Exception e) {
             logger.error("fetchCorpAllError", e);
         }

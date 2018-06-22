@@ -47,16 +47,19 @@ public class CorpServiceImpl implements CorpService {
 
     @Override
     public void activeCorp(String authCode) throws ActiveCorpException {
+        CorpSuiteVO corpSuiteVO = null;
         try {
             activeLogger.debug("----begin to active corp----authCode: {}", authCode);
-            String suiteKey = suite.getSuiteKey();
-            SuiteTokenVO suiteToken = suiteTokenManageService.getSuiteToken(suiteKey);
-            JSONObject json = httpUtil.getPermanentCode(suiteToken, authCode);
-            CorpSuiteVO corpSuiteVO = Json2BeanConverter.generateCorpSuite(suiteKey, null, json);
+//            String suiteKey = suite.getSuiteKey();
+//            SuiteTokenVO suiteToken = suiteTokenManageService.getSuiteToken(suiteKey);
+//            JSONObject json = httpUtil.getPermanentCode(suiteToken, authCode);
+//            CorpSuiteVO corpSuiteVO = Json2BeanConverter.generateCorpSuite(suiteKey, null, json);
+            corpSuiteVO = fetchAndSaveCorpAuth(authCode);
             //  异步获取企业的组织架构
-            eventBusService.sendToFetchCorpAll(corpSuiteVO.getCorpId(), corpSuiteVO.getPermanentCode());
+            eventBusService.sendToFetchCorpAll(corpSuiteVO.getCorpId());
             activeLogger.debug("----end active corp----authCode: {}", authCode);
         } catch (Exception e) {
+            activeLogger.error("active error, active auth info is {}, auth code is: {}", corpSuiteVO, authCode);
             //  致命错误，将导致无法获知用户已经开通应用
             throw new ActiveCorpException("active corp error", e);
         }
@@ -66,10 +69,8 @@ public class CorpServiceImpl implements CorpService {
     public void reauthCorp(String corpId) throws ReauthCorpException {
         try {
             activeLogger.debug("----begin to reauth corp----authCode: {}", corpId);
-            String suiteKey = suite.getSuiteKey();
-            CorpSuiteVO corpSuiteVO = corpSuiteManageService.getCorpSuite(suiteKey, corpId);
             //  异步获取企业的组织架构
-            eventBusService.sendToFetchCorpAll(corpSuiteVO.getCorpId(), corpSuiteVO.getPermanentCode());
+            eventBusService.sendToFetchCorpAll(corpId);
             activeLogger.debug("----end reauth corp----authCode: {}", corpId);
         } catch (Exception e) {
             //  致命错误，将导致无法获知用户已经开通应用
@@ -91,11 +92,12 @@ public class CorpServiceImpl implements CorpService {
         String corpId = corpVO.getCorpId();
         corpManageService.saveOrUpdateCorp(corpVO);
 
-        //2. 保存corpSuite信息
-        CorpSuiteVO corpSuiteVO = Json2BeanConverter.generateCorpSuite(suiteKey, corpId, json);
-        corpSuiteVO.setPermanentCode(permanentCode);
-        corpSuiteManageService.saveCorpSuite(corpSuiteVO);
-        corpVO.setCorpSuiteVO(corpSuiteVO);
+        //2. 保存corpSuite信息，corpSuite信息移动到activeCorp激活引用的时候进行保存
+//        CorpSuiteVO corpSuiteVO = Json2BeanConverter.generateCorpSuite(suiteKey, corpId, json);
+//        corpSuiteVO.setPermanentCode(permanentCode);
+//        corpSuiteManageService.saveCorpSuite(corpSuiteVO);
+//        corpVO.setCorpSuiteVO(corpSuiteVO);
+        corpVO.setCorpSuiteVO(corpSuite);
 
         //3. 保存corpApp信息
         //3.1  corpApp信息的问题
@@ -157,5 +159,21 @@ public class CorpServiceImpl implements CorpService {
     @Override
     public CorpJsapiTicketVO fetchAndSaveCorpJsapiTicket(CorpSuiteVO corpSuiteVO) {
         return null;
+    }
+
+    /**
+     * 根据临时授权码获取永久授权码以及授权管理员信息，并保存到数据库
+     * 该方法需要保证很强的可靠性，一旦失败，将导致获取不到用户的永久授权码
+     * @param tempAuthCode
+     * @return
+     */
+    private CorpSuiteVO fetchAndSaveCorpAuth(String tempAuthCode){
+        String suiteKey = suite.getSuiteKey();
+        SuiteTokenVO suiteToken = suiteTokenManageService.getSuiteToken(suiteKey);
+        JSONObject json = httpUtil.getPermanentCode(suiteToken, tempAuthCode);
+        CorpSuiteVO corpSuiteVO = Json2BeanConverter.generateCorpSuite(suiteKey, json);
+
+        corpSuiteManageService.saveCorpSuite(corpSuiteVO);
+        return corpSuiteVO;
     }
 }

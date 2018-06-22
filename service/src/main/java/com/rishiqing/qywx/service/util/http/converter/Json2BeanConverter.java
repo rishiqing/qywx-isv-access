@@ -65,11 +65,13 @@ public class Json2BeanConverter {
         return corpVO;
     }
 
-    public static CorpSuiteVO generateCorpSuite(String suiteKey, String corpId, JSONObject json){
-        CorpSuiteVO corpSuiteVO = new CorpSuiteVO();
-        if(null == corpId && json.containsKey("auth_corp_info")){
-            corpId = json.getJSONObject("auth_corp_info").getString("corpid");
+    public static CorpSuiteVO generateCorpSuite(String suiteKey, JSONObject json){
+        if(json == null){
+            return null;
         }
+        CorpSuiteVO corpSuiteVO = new CorpSuiteVO();
+
+        String corpId = json.getJSONObject("auth_corp_info").getString("corpid");
         corpSuiteVO.setCorpId(corpId);
         corpSuiteVO.setSuiteKey(suiteKey);
         corpSuiteVO.setPermanentCode(json.getString("permanent_code"));

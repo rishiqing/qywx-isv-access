@@ -36,7 +36,7 @@ public class RedoAuthCallbackJob extends QuartzJobBean {
                 CallbackFailType type = CallbackFailType.getCallbackFailType(authFail.getFailType());
                 switch(type){
                     case AUTH_CALLBACK_FAIL_SAVE_NEW_CORP:
-                        fetchHandler.handleFetchCorp(authFail.getCorpId(), authFail.getFailNote());
+                        fetchHandler.handleFetchCorp(authFail.getCorpId());
                         //  成功后删除
                         service.deleteFailAuthCallback(authFail.getId());
                         break;
