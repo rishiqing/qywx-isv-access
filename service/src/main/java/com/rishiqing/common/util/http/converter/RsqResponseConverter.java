@@ -11,6 +11,9 @@ import com.rishiqing.common.model.RsqTeamVO;
  */
 public class RsqResponseConverter {
     public static RsqTeamVO Json2RsqTeamVO(JSONObject json){
+        if(json == null){
+            return null;
+        }
         RsqTeamVO rsqTeamVO = new RsqTeamVO();
 
         if(json.containsKey("id"))
@@ -35,6 +38,9 @@ public class RsqResponseConverter {
     }
 
     public static RsqDepartmentVO Json2RsqDepartmentVO(JSONObject json){
+        if(json == null){
+            return null;
+        }
         RsqDepartmentVO rsqDepartmentVO = new RsqDepartmentVO();
 
         if(json.containsKey("id"))
@@ -54,6 +60,9 @@ public class RsqResponseConverter {
     }
 
     public static RsqCommonUserVO Json2RsqCommonUserVO(JSONObject json){
+        if(json == null){
+            return null;
+        }
         RsqCommonUserVO rsqCommonUserVO = new RsqCommonUserVO();
 
         if(json.containsKey("id"))
