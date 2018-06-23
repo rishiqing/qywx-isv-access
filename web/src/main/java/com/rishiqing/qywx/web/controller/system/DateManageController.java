@@ -40,17 +40,15 @@ public class DateManageController {
     /**
      * 获取企业微信的授权信息，并更新到本地
      * @param corpId
-     * @param permanentCode
      * @return
      */
     @RequestMapping("/fetchCorpInfo")
     @ResponseBody
     public String fetchCorpInfo(
-            @RequestParam("corpId") String corpId,
-            @RequestParam("permanentCode") String permanentCode
+            @RequestParam("corpId") String corpId
     ){
         try {
-            fetchCallbackHandler.handleFetchCorp(corpId, permanentCode);
+            fetchCallbackHandler.handleFetchCorp(corpId);
             return "success";
         } catch (Exception e) {
             webLogger.error("/manage/fetchCorpInfo error: ", e);

@@ -16,6 +16,7 @@ import com.rishiqing.qywx.service.model.corp.CorpStaffVO;
 import com.rishiqing.qywx.service.model.corp.CorpVO;
 import com.rishiqing.qywx.service.model.corp.helper.CorpConverter;
 import com.rishiqing.qywx.service.model.corp.helper.CorpStaffConverter;
+import com.rishiqing.qywx.service.util.rsq.UserGenerator;
 import org.apache.commons.lang.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -93,8 +94,8 @@ public class RsqStaffServiceImpl implements RsqStaffService {
         RsqTeamVO team = CorpConverter.corpVO2RsqTeamVO(corpVO);
         RsqCommonUserVO user = CorpStaffConverter.corpStaffVO2RsqCommonUserVO(corpVO, corpDeptVOList, corpStaffVO);
         //  自动生成用户名和密码
-        String password = generateRsqPassword(suite.getRsqAppName());
-        user.setUsername(generateRsqUsername(suite.getRsqAppName()));
+        String password = UserGenerator.generateRsqPassword(suite.getRsqAppName());
+        user.setUsername(UserGenerator.generateRsqUsername(suite.getRsqAppName()));
         user.setPassword(password);
 
         user = httpUtilRsqSync.createUser(suite.getRsqAppName(), suite.getRsqAppToken(), team, user);
@@ -159,20 +160,5 @@ public class RsqStaffServiceImpl implements RsqStaffService {
         }
         httpUtilRsqSync.setUserAdmin(suite.getRsqAppName(), suite.getRsqAppToken(), team, user);
         return corpStaffVO;
-    }
-
-    private String generateRsqUsername(String appName){
-        StringBuffer sb = new StringBuffer();
-        sb.append(RandomStringUtils.randomAlphabetic(5))
-                .append("_")
-                .append(new Date().getTime())
-                .append("@")
-                .append(appName)
-                .append(".rishiqing.com");
-        return  sb.toString();
-    }
-
-    private String generateRsqPassword(String username){
-        return RandomStringUtils.randomAlphabetic(6);
     }
 }

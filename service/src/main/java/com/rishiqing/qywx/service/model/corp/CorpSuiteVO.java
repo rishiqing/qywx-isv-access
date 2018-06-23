@@ -9,6 +9,11 @@ public class CorpSuiteVO {
     private String suiteKey;
     private String permanentCode;
 
+    //  授权开通应用的管理员的基本信息
+    private String authUserId;
+    private String authUserName;
+    private String authUserAvatar;
+
     public Long getId() {
         return id;
     }
@@ -41,6 +46,30 @@ public class CorpSuiteVO {
         this.permanentCode = permanentCode;
     }
 
+    public String getAuthUserId() {
+        return authUserId;
+    }
+
+    public void setAuthUserId(String authUserId) {
+        this.authUserId = authUserId;
+    }
+
+    public String getAuthUserName() {
+        return authUserName;
+    }
+
+    public void setAuthUserName(String authUserName) {
+        this.authUserName = authUserName;
+    }
+
+    public String getAuthUserAvatar() {
+        return authUserAvatar;
+    }
+
+    public void setAuthUserAvatar(String authUserAvatar) {
+        this.authUserAvatar = authUserAvatar;
+    }
+
     @Override
     public String toString() {
         return "CorpSuiteVO{" +
@@ -48,6 +77,9 @@ public class CorpSuiteVO {
                 ", corpId='" + corpId + '\'' +
                 ", suiteKey='" + suiteKey + '\'' +
                 ", permanentCode='" + permanentCode + '\'' +
+                ", authUserId='" + authUserId + '\'' +
+                ", authUserName='" + authUserName + '\'' +
+                ", authUserAvatar='" + authUserAvatar + '\'' +
                 '}';
     }
 }

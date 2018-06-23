@@ -15,6 +15,8 @@ public class RsqTeamVO {
 
     private String corpId;  //  本地的corpId
 
+    private RsqCommonUserVO creator;
+
     public Long getId() {
         return id;
     }
@@ -69,6 +71,14 @@ public class RsqTeamVO {
 
     public void setCorpId(String corpId) {
         this.corpId = corpId;
+    }
+
+    public RsqCommonUserVO getCreator() {
+        return creator;
+    }
+
+    public void setCreator(RsqCommonUserVO creator) {
+        this.creator = creator;
     }
 
     @Override

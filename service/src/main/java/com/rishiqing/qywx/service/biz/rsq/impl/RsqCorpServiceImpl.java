@@ -1,15 +1,22 @@
 package com.rishiqing.qywx.service.biz.rsq.impl;
 
+import com.rishiqing.common.model.RsqCommonUserVO;
 import com.rishiqing.common.model.RsqTeamVO;
 import com.rishiqing.common.util.http.HttpUtilRsqSync;
 import com.rishiqing.qywx.service.biz.rsq.RsqCorpService;
 import com.rishiqing.qywx.service.biz.rsq.RsqDeptService;
 import com.rishiqing.qywx.service.biz.rsq.RsqStaffService;
 import com.rishiqing.qywx.service.common.corp.CorpManageService;
+import com.rishiqing.qywx.service.common.corp.CorpStaffManageService;
+import com.rishiqing.qywx.service.common.corp.CorpSuiteManageService;
 import com.rishiqing.qywx.service.common.isv.GlobalSuite;
 import com.rishiqing.qywx.service.common.rsq.RsqInfoManageService;
+import com.rishiqing.qywx.service.model.corp.CorpStaffVO;
+import com.rishiqing.qywx.service.model.corp.CorpSuiteVO;
 import com.rishiqing.qywx.service.model.corp.CorpVO;
 import com.rishiqing.qywx.service.model.corp.helper.CorpConverter;
+import com.rishiqing.qywx.service.model.corp.helper.CorpStaffConverter;
+import com.rishiqing.qywx.service.util.rsq.UserGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -23,7 +30,9 @@ public class RsqCorpServiceImpl implements RsqCorpService {
     @Autowired
     private HttpUtilRsqSync httpUtilRsqSync;
     @Autowired
-    private CorpManageService corpManageService;
+    private CorpSuiteManageService corpSuiteManageService;
+    @Autowired
+    private CorpStaffManageService corpStaffManageService;
     @Autowired
     private RsqInfoManageService rsqInfoManageService;
     @Autowired
@@ -42,10 +51,43 @@ public class RsqCorpServiceImpl implements RsqCorpService {
         if(null != corpVO.getRsqId()){
             return corpVO;
         }
+
+        //  当有授权管理员时，将授权管理作为创建者传入到日事清后台接口中
+        String suiteKey = suite.getSuiteKey();
+        CorpSuiteVO corpSuiteVO = corpSuiteManageService.getCorpSuite(suiteKey, corpVO.getCorpId());
+        CorpStaffVO creator = null;
+        RsqCommonUserVO rsqCreator = null;
+        if(corpSuiteVO.getAuthUserId() != null){
+            creator = corpStaffManageService.getCorpStaffByCorpIdAndUserId(
+                    corpVO.getCorpId(),
+                    corpSuiteVO.getAuthUserId());
+            if(creator != null){
+                rsqCreator = CorpStaffConverter.corpStaffVO2RsqCommonUserVO(corpVO, null, creator);
+                //  自动生成用户名和密码
+                String password = UserGenerator.generateRsqPassword(suite.getRsqAppName());
+                rsqCreator.setUsername(UserGenerator.generateRsqUsername(suite.getRsqAppName()));
+                rsqCreator.setPassword(password);
+            }
+        }
+
         RsqTeamVO rsqTeamVO = CorpConverter.corpVO2RsqTeamVO(corpVO);
+        rsqTeamVO.setCreator(rsqCreator);
+
         RsqTeamVO team = httpUtilRsqSync.createCorp(suite.getRsqAppName(), suite.getRsqAppToken(), rsqTeamVO);
+
         corpVO.setRsqId(String.valueOf(team.getId()));
         rsqInfoManageService.updateCorpRsqInfo(corpVO);
+
+        //  当有授权管理员时，需要同时更新授权管理员的用户信息
+        RsqCommonUserVO rsqResultCreator = team.getCreator();
+        if(creator != null
+                && rsqResultCreator != null
+                && UserGenerator.generateUserOuterId(creator.getCorpId(), creator.getUserId()).equals(rsqResultCreator.getOuterId())){
+            creator.setRsqUserId(String.valueOf(rsqResultCreator.getId()));
+            creator.setRsqUsername(rsqCreator.getUsername());
+            creator.setRsqPassword(rsqCreator.getPassword());
+            rsqInfoManageService.updateCorpStaffRsqInfo(creator);
+        }
         return corpVO;
     }
 

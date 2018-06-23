@@ -8,10 +8,13 @@
         <result property="corpId" column="corp_id" />
         <result property="suiteKey" column="suite_key" />
         <result property="permanentCode" column="permanent_code" />
+        <result property="authUserId" column="auth_user_id" />
+        <result property="authUserName" column="auth_user_name" />
+        <result property="authUserAvatar" column="auth_user_avatar" />
     </resultMap>
 
     <sql id="selectAllFields">
-        id, date_created, last_updated, corp_id, suite_key, permanent_code
+        id, date_created, last_updated, corp_id, suite_key, permanent_code, auth_user_id, auth_user_name, auth_user_avatar
     </sql>
 
     <select id="getCorpSuiteBySuiteKeyAndCorpId" resultMap="corpSuiteMap">
@@ -27,13 +30,19 @@
             last_updated,
             corp_id,
             suite_key,
-            permanent_code
+            permanent_code,
+            auth_user_id,
+            auth_user_name,
+            auth_user_avatar
         ) VALUES (
             now(),
             now(),
             #{corpId},
             #{suiteKey},
-            #{permanentCode}
+            #{permanentCode},
+            #{authUserId},
+            #{authUserName},
+            #{authUserAvatar}
         ) ON DUPLICATE KEY UPDATE
             last_updated = now(),
             permanent_code = #{permanentCode}
