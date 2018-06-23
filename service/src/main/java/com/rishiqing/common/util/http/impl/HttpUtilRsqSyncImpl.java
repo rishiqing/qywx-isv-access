@@ -11,6 +11,7 @@ import com.rishiqing.common.util.http.HttpUtilRsqSync;
 import com.rishiqing.common.util.http.client.RestHttpClient;
 import com.rishiqing.common.util.http.converter.RsqRequestConverter;
 import com.rishiqing.common.util.http.converter.RsqResponseConverter;
+import com.rishiqing.qywx.service.util.rsq.UserGenerator;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -138,7 +139,7 @@ public class HttpUtilRsqSyncImpl implements HttpUtilRsqSync {
         params.put("username", rsqCommonUserVO.getUsername());
         params.put("password", rsqCommonUserVO.getPassword());
         params.put("realName", rsqCommonUserVO.getRealName());
-        params.put("outerId", rsqCommonUserVO.getCorpId() + "--" + rsqCommonUserVO.getUserId());
+        params.put("outerId", UserGenerator.generateUserOuterId(rsqCommonUserVO.getCorpId(), rsqCommonUserVO.getUserId()));
         params.put("unionId", rsqCommonUserVO.getUnionId());
         if(null != rsqTeamVO){
             params.put("teamId", rsqTeamVO.getId());

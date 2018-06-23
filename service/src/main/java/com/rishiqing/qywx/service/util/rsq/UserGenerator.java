@@ -23,4 +23,8 @@ public class UserGenerator {
     public static String generateRsqPassword(String appName){
         return RandomStringUtils.randomAlphabetic(6);
     }
+
+    public static String generateUserOuterId(String corpId, String userId){
+        return corpId + "--" + userId;
+    }
 }

@@ -79,8 +79,10 @@ public class RsqCorpServiceImpl implements RsqCorpService {
         rsqInfoManageService.updateCorpRsqInfo(corpVO);
 
         //  当有授权管理员时，需要同时更新授权管理员的用户信息
-        if(creator != null && team.getCreator() != null){
-            RsqCommonUserVO rsqResultCreator = team.getCreator();
+        RsqCommonUserVO rsqResultCreator = team.getCreator();
+        if(creator != null
+                && rsqResultCreator != null
+                && UserGenerator.generateUserOuterId(creator.getCorpId(), creator.getUserId()).equals(rsqResultCreator.getOuterId())){
             creator.setRsqUserId(String.valueOf(rsqResultCreator.getId()));
             creator.setRsqUsername(rsqCreator.getUsername());
             creator.setRsqPassword(rsqCreator.getPassword());

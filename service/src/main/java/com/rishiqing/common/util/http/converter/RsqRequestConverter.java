@@ -3,6 +3,7 @@ package com.rishiqing.common.util.http.converter;
 import com.alibaba.fastjson.JSONObject;
 import com.rishiqing.common.model.RsqCommonUserVO;
 import com.rishiqing.common.model.RsqTeamVO;
+import com.rishiqing.qywx.service.util.rsq.UserGenerator;
 
 /**
  * @author Wallace Mao
@@ -30,7 +31,7 @@ public class RsqRequestConverter {
         jsonCreator.put("username", userVO.getUsername());
         jsonCreator.put("password", userVO.getPassword());
         jsonCreator.put("realName", userVO.getRealName());
-        jsonCreator.put("outerId", userVO.getCorpId() + "--" + userVO.getUserId());
+        jsonCreator.put("outerId", UserGenerator.generateUserOuterId(userVO.getCorpId(), userVO.getUserId()));
         jsonCreator.put("unionId", userVO.getUnionId());
 
         return jsonCreator;
