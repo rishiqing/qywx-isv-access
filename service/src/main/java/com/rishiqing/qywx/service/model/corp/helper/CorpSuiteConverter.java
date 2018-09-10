@@ -13,6 +13,9 @@ public class CorpSuiteConverter {
         corpSuiteVO.setSuiteKey(corpSuiteDO.getSuiteKey());
         corpSuiteVO.setCorpId(corpSuiteDO.getCorpId());
         corpSuiteVO.setPermanentCode(corpSuiteDO.getPermanentCode());
+        corpSuiteVO.setAuthUserId(corpSuiteDO.getAuthUserId());
+        corpSuiteVO.setAuthUserName(corpSuiteDO.getAuthUserName());
+        corpSuiteVO.setAuthUserAvatar(corpSuiteDO.getAuthUserAvatar());
         return corpSuiteVO;
     }
 
@@ -25,6 +28,9 @@ public class CorpSuiteConverter {
         corpSuiteDO.setSuiteKey(corpSuiteVO.getSuiteKey());
         corpSuiteDO.setCorpId(corpSuiteVO.getCorpId());
         corpSuiteDO.setPermanentCode(corpSuiteVO.getPermanentCode());
+        corpSuiteDO.setAuthUserId(corpSuiteVO.getAuthUserId());
+        corpSuiteDO.setAuthUserName(corpSuiteVO.getAuthUserName());
+        corpSuiteDO.setAuthUserAvatar(corpSuiteVO.getAuthUserAvatar());
         return corpSuiteDO;
     }
 }

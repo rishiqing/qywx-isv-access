@@ -46,34 +46,36 @@ public class LoginCookieController {
             @RequestBody String jsonBody
     ) {
         logger.info("--cookieLogin-- body: {}", jsonBody);
-        JSONObject json = JSON.parseObject(jsonBody);
-        Long type = json.getLong("type");
-        String code = json.getString("code");
-        String corpId = json.getString("corpid");
-        String suiteId = json.getString("suiteid");
-        Long timestamp = json.getLong("timestamp");
-        String nonce = json.getString("nonce");
-        String sign = json.getString("sign");
-
-        //  验证来源是否是企业微信
-        if(!loginCookieService.checkSignature(sign, type, code, corpId, timestamp, nonce)){
-            throw new ForbiddenException();
-        }
-
-        Map<String, Object> map = new HashMap<String, Object>();
-
         try {
+            JSONObject json = JSON.parseObject(jsonBody);
+            Long type = json.getLong("type");
+            String code = json.getString("code");
+            String corpId = json.getString("corpid");
+            String suiteId = json.getString("suiteid");
+            Long timestamp = json.getLong("timestamp");
+            String nonce = json.getString("nonce");
+            String sign = json.getString("sign");
+
+            //  验证来源是否是企业微信
+            if(!loginCookieService.checkSignature(sign, type, code, corpId, timestamp, nonce)){
+                throw new ForbiddenException();
+            }
+
+            Map<String, Object> map = new HashMap<String, Object>();
+
             LoginUserVO loginUserVO = oauthService.getCorpLoginUserByCode(corpId, code);
             CorpAppVO corpAppVO = corpAppManageService.getCorpAppBySuiteKeyAndCorpId(suiteId, corpId);
 
             //  设置企业微信server的cookie
-            Cookie cookie = oauthService.generateClientUserCookie(corpAppVO.getAgentId().toString(), corpId, loginUserVO);
-            response.addCookie(cookie);
+            Cookie qywxCookie = oauthService.generateClientUserCookie(corpAppVO.getAgentId().toString(), corpId, loginUserVO);
+//            response.addCookie(cookie);
             //  自动登录到日事清后台，并获取session id的cookie，添加到cookie中
             List<Cookie> cookieList = loginCookieService.tokenLoginToRsq(corpId, loginUserVO.getUserId());
-            for(Cookie c : cookieList){
-                response.addCookie(c);
-            }
+//            for(Cookie c : cookieList){
+//                response.addCookie(c);
+//            }
+
+            cookieList.add(qywxCookie);
 
             //  返回cookie
             String strCookie = makeCookieString(cookieList);

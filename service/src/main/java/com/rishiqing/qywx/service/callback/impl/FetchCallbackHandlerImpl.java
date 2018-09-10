@@ -6,12 +6,14 @@ import com.rishiqing.qywx.service.biz.corp.StaffService;
 import com.rishiqing.qywx.service.biz.corp.TagService;
 import com.rishiqing.qywx.service.callback.FetchCallbackHandler;
 import com.rishiqing.qywx.service.common.corp.CorpAppManageService;
+import com.rishiqing.qywx.service.common.corp.CorpSuiteManageService;
 import com.rishiqing.qywx.service.common.corp.CorpTokenManageService;
 import com.rishiqing.qywx.service.common.fail.CallbackFailService;
 import com.rishiqing.qywx.service.common.isv.GlobalSuite;
 import com.rishiqing.qywx.service.common.isv.SuiteTokenManageService;
 import com.rishiqing.qywx.service.common.message.SendMessageService;
 import com.rishiqing.qywx.service.constant.CallbackInfoType;
+import com.rishiqing.qywx.service.event.message.CorpSuiteMessage;
 import com.rishiqing.qywx.service.event.service.QueueService;
 import com.rishiqing.qywx.service.model.corp.*;
 import com.rishiqing.qywx.service.model.isv.SuiteTokenVO;
@@ -34,6 +36,8 @@ public class FetchCallbackHandlerImpl implements FetchCallbackHandler {
     @Autowired
     private CorpTokenManageService corpTokenManageService;
     @Autowired
+    private CorpSuiteManageService corpSuiteManageService;
+    @Autowired
     private CorpService corpService;
     @Autowired
     private DeptService deptService;
@@ -50,15 +54,14 @@ public class FetchCallbackHandlerImpl implements FetchCallbackHandler {
     @Autowired
     private SendMessageService sendMessageService;
 
-    public void handleFetchCorp(String corpId, String permanentCode){
+    @Override
+    public void handleFetchCorp(String corpId){
         String suiteKey = suite.getSuiteKey();
         SuiteTokenVO suiteTokenVO = suiteTokenManageService.getSuiteToken(suiteKey);
 
         //  首先获取corp相关信息
-        CorpSuiteVO permanentCodeCorpSuite = new CorpSuiteVO();
-        permanentCodeCorpSuite.setCorpId(corpId);
-        permanentCodeCorpSuite.setPermanentCode(permanentCode);
-        CorpVO corpVO = corpService.fetchAndSaveCorpInfo(suiteTokenVO, permanentCodeCorpSuite);
+        CorpSuiteVO corpSuiteVO = corpSuiteManageService.getCorpSuite(suiteKey, corpId);
+        CorpVO corpVO = corpService.fetchAndSaveCorpInfo(suiteTokenVO, corpSuiteVO);
 
         corpId = corpVO.getCorpId();
         CorpAppVO corpAppVO = corpAppManageService.getCorpAppBySuiteKeyAndCorpId(suiteKey, corpId);
