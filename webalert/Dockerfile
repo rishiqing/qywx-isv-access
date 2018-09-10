@@ -1,4 +1,4 @@
-FROM registry-internal.cn-beijing.aliyuncs.com/rsq-public/tomcat:8.0.50-jre8
+FROM registry-vpc.cn-beijing.aliyuncs.com/rsq-public/tomcat:8.0.50-jre8
 
 LABEL name="qywx-isv-access-alert" \
        description="alert server rishiqing and qywx(enterprise version of WeChat)" \
