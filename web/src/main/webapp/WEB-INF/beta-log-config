@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="WARN" monitorInterval="60">
     <Properties>
-        <Property name="baseDir">$${sys:user.home}/qywx/logs/</Property>
+        <Property name="baseDir">$${sys:user.home}/qywx/</Property>
         <Property name="globalLevel">debug</Property>
     </Properties>
     <Appenders>

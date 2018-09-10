@@ -55,7 +55,7 @@ public class IdMapController {
             @RequestParam("corpid") String corpId,
             @RequestBody String jsonBody
     ) {
-        logger.info("--userId2RsqId--, corpid: {}, body: {}", corpId, jsonBody);
+        logger.info("--rsqid2userid--, corpid: {}, body: {}", corpId, jsonBody);
         Map<String, Object> map = new HashMap<String, Object>();
         try{
             JSONArray arr = JSON.parseArray(jsonBody);
