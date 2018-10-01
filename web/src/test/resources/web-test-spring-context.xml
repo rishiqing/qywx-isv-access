@@ -7,6 +7,7 @@
        http://www.springframework.org/schema/util
        http://www.springframework.org/schema/util/spring-util.xsd">
 
+
     <bean id="propertyPlaceholderConfigurer"
           class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="ignoreUnresolvablePlaceholders" value="true" />
@@ -17,9 +18,21 @@
         </property>
     </bean>
 
+    <bean id="cryptoUtil" class="com.rishiqing.qywx.service.common.crypto.CryptoUtil" />
+
     <util:map id="isvGlobal">
         <entry key="suiteKey" value="${isv.suite.key}" />
         <entry key="appId" value="${isv.app.id}" />
+        <entry key="appMobileIndexPage" value="${isv.app.page.mobile.index}" />
+        <entry key="appCookieName" value="${isv.app.page.cookie.name}" />
+        <entry key="isvAuthRedirectUri" value="${isv.app.page.auth.redirect}" />
+        <entry key="isvAuthRedirectUriAfter" value="${isv.app.page.auth.redirect.after}" />
+        <entry key="isvRegisterTemplateId" value="${isv.app.register.template.id}" />
+        <entry key="rsqUrlAuthRedirect" value="${isv.rsq.url.auth.redirect}" />
+        <entry key="rsqUrlBizCorpBack" value="${isv.rsq.url.biz.corp.back}" />
+        <entry key="rsqUrlOauthRedirect" value="${isv.rsq.url.oauth.redirect}" />
+        <entry key="rsqAesKey" value="${isv.rsq.aes.key}" />
+        <entry key="rsqAesInitVector" value="${isv.rsq.aes.init.vector}" />
     </util:map>
 
     <!--web层需要用到的service-->

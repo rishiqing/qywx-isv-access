@@ -31,6 +31,7 @@ import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
@@ -150,6 +151,28 @@ public class DemoController {
             System.out.println("crypt Decoded is: " + cryptoUtil.decrypt(urlDecoded));
             return "token is: " + urlEncoded;
         } catch (Exception e) {
+            e.printStackTrace();
+            return "failed";
+        }
+    }
+
+    @RequestMapping("/decode")
+    @ResponseBody
+    public String decode(
+            @RequestParam("token") String token
+    ) {
+//        String String1 = "EGHCDxV4SgJ+2jd6K9C6A2YcecQmDwSR7CLCj0Mm3Gm1nBpUJtcqxvhzTusYkFzo";
+//        String orgString = "0kNQ0If4IuJsktuLjL3rKLKp0fTJmbnGyZR Mw30p72sDB/WLGtE8rH2R3z80pgT";
+
+        try {
+            System.out.println("url Decoded url: " + token);
+            String orgString = URLDecoder.decode(token, "UTF-8");
+            System.out.println("decode function is: " + orgString + ", length is " + orgString.length());
+
+            String decoded = cryptoUtil.decrypt(orgString);
+            System.out.println("decoded is: " + decoded);
+            return decoded;
+        } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
             return "failed";
         }
