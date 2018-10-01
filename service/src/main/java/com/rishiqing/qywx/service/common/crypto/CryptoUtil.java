@@ -30,10 +30,12 @@ public class CryptoUtil {
             cipher.init(Cipher.ENCRYPT_MODE, skeySpec, iv);
 
             byte[] encrypted = cipher.doFinal(value.getBytes());
-            System.out.println("encrypted string: "
-                    + Base64.encodeBase64String(encrypted));
+            String base64String = Base64.encodeBase64URLSafeString(encrypted);
 
-            return Base64.encodeBase64String(encrypted);
+            System.out.println("encrypted string: "
+                    + base64String);
+
+            return base64String;
         } catch (Exception ex) {
             throw new ApplicationException("encrypt exception: value is " + value, ex);
         }
