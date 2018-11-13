@@ -20,6 +20,7 @@ public class AlertJob implements Job {
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         try {
+            return;
             JobDetail detail  = jobExecutionContext.getJobDetail();
             Trigger trigger = jobExecutionContext.getTrigger();
             JobKey key = detail.getKey();
