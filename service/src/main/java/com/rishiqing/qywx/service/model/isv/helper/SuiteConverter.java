@@ -4,7 +4,7 @@ import com.rishiqing.qywx.dao.model.isv.SuiteDO;
 import com.rishiqing.qywx.service.model.isv.SuiteVO;
 
 public class SuiteConverter {
-    public static SuiteVO suiteVO2SuiteDO(SuiteDO suiteDO){
+    public static SuiteVO suiteDO2SuiteVO(SuiteDO suiteDO){
         if(suiteDO == null){
             return null;
         }

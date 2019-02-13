@@ -12,6 +12,6 @@ public class SuiteManageServiceImpl implements SuiteManageService {
     private SuiteDao suiteDao;
 
     public SuiteVO getSuiteInfoByKey(String key) {
-        return SuiteConverter.suiteVO2SuiteDO(suiteDao.getSuiteBySuiteKey(key));
+        return SuiteConverter.suiteDO2SuiteVO(suiteDao.getSuiteBySuiteKey(key));
     }
 }
