@@ -117,11 +117,13 @@ public class OrderServiceImpl implements OrderService {
         orderManageService.saveOrUpdateQywxOrder(qywxOrder);
 
         // 开始走充值流程
-        chargeByQywxOrder(qywxOrder);
+        Boolean isSuccess = chargeByQywxOrder(qywxOrder);
 
-        qywxOrder.setChargeStatus(OrderConstant.ORDER_PUSH_STATUS_SUCCESS);
-        qywxOrder.setChargeTime(new Date());
-        orderManageService.saveOrUpdateQywxOrder(qywxOrder);
+        if (isSuccess) {
+            qywxOrder.setChargeStatus(OrderConstant.ORDER_PUSH_STATUS_SUCCESS);
+            qywxOrder.setChargeTime(new Date());
+            orderManageService.saveOrUpdateQywxOrder(qywxOrder);
+        }
     }
 
     /**
@@ -149,23 +151,26 @@ public class OrderServiceImpl implements OrderService {
 
         // 查找新的服务到期时间，如果有上一条付款记录，那么就按照上一条付款记录的到期时间，否则到期时间就是现在时间
         QywxOrderDO lastOrder = orderManageService.getLastChargedQywxOrderByCorpIdAndExcludeId(corpId, refundOrder.getId());
+        Boolean isSuccess;
         if (lastOrder != null) {
-            chargeByQywxOrder(lastOrder);
+            isSuccess = chargeByQywxOrder(lastOrder);
         } else {
-            rollbackToFreeVersion(refundOrder);
+            isSuccess = rollbackToFreeVersion(refundOrder);
         }
 
-        refundOrder.setChargeStatus(OrderConstant.ORDER_PUSH_STATUS_SUCCESS_REFUND);
-        refundOrder.setChargeTime(null);
-        orderManageService.saveOrUpdateQywxOrder(refundOrder);
+        if (isSuccess) {
+            refundOrder.setChargeStatus(OrderConstant.ORDER_PUSH_STATUS_SUCCESS_REFUND);
+            refundOrder.setChargeTime(null);
+            orderManageService.saveOrUpdateQywxOrder(refundOrder);
+        }
     }
 
-    private void chargeByQywxOrder(QywxOrderDO order) {
+    private Boolean chargeByQywxOrder(QywxOrderDO order) {
         // 读取corp
         CorpVO corp = corpManageService.getCorpByCorpId(order.getPaidCorpid());
         //  如果corp不存在，或者corp的rsqId不存在，那么说明没有同步完成，这种情况下暂时先不充值，等corp同步成功之后再做补偿
         if(corp == null || corp.getRsqId() == null){
-            return;
+            return false;
         }
         // 从企业微信获取最新的订单消息，免去自己计算公司购买的人数和到期时间的麻烦
         CorpEditionVO corpEdition = fetchCurrentCorpEdition(corp);
@@ -196,6 +201,8 @@ public class OrderServiceImpl implements OrderService {
         // 计算当前人数，先暂时指定公司总人数为1，保证不超员，以后改为每天查人数来更新这个字段
         corpChargeStatusDO.setTotalQuantity(1L);
         orderManageService.saveOrUpdateCorpChargeStatus(corpChargeStatusDO);
+
+        return true;
     }
 
     private CorpEditionVO fetchCurrentCorpEdition(CorpVO corp) {
@@ -205,10 +212,15 @@ public class OrderServiceImpl implements OrderService {
         return Json2BeanConverter.generateCorpEdition(json);
     }
 
-    private void rollbackToFreeVersion(QywxOrderDO refundOrder) {
+    /**
+     * 返回值表示是否充值成功
+     * @param refundOrder
+     * @return
+     */
+    private Boolean rollbackToFreeVersion(QywxOrderDO refundOrder) {
         CorpVO corp = corpManageService.getCorpByCorpId(refundOrder.getPaidCorpid());
         if(corp == null || corp.getRsqId() == null){
-            return;
+            return false;
         }
 
         Long serviceStopTime = new Date().getTime();
@@ -236,6 +248,8 @@ public class OrderServiceImpl implements OrderService {
                 refundOrder, serviceStopTime, userCount);
         corpChargeStatusDO.setStatus(OrderConstant.ORDER_CORP_CHARGE_STATUS_OK);
         orderManageService.saveOrUpdateCorpChargeStatus(corpChargeStatusDO);
+
+        return true;
     }
 
     private OrderRsqPushEventDO qywxOrder2OrderRsqPushEvent(QywxOrderDO qywxOrderDO, CorpEditionVO corpEdition) {
