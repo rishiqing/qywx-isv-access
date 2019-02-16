@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rishiqing.qywx.dao.mapper.order.OrderSpecItemDao">
+
+    <resultMap type="com.rishiqing.qywx.dao.model.order.OrderSpecItemDO" id="orderSpecItemMap">
+        <id property="id" column="id" />
+        <result property="dateCreated" column="date_created" />
+        <result property="lastUpdated" column="last_updated" />
+        <result property="suiteKey" column="suite_key" />
+        <result property="goodsCode" column="goods_code" />
+        <result property="itemCode" column="item_code" />
+        <result property="itemName" column="item_name" />
+        <result property="innerKey" column="inner_key" />
+        <result property="rsqProductName" column="rsq_product_name" />
+    </resultMap>
+
+    <sql id="select-all-fields">
+        id,
+        date_created,
+        last_updated,
+        suite_key,
+        goods_code,
+        item_code,
+        item_name,
+        inner_key,
+        rsq_product_name
+    </sql>
+
+    <insert id="saveOrUpdateOrderSpecItem" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO isv_order_spec_item (
+        date_created,
+        last_updated,
+        suite_key,
+        goods_code,
+        item_code,
+        item_name,
+        inner_key,
+        rsq_product_name
+        )VALUES(
+        now(),
+        now(),
+        #{suiteKey},
+        #{goodsCode},
+        #{itemCode},
+        #{itemName},
+        #{innerKey},
+        #{rsqProductName}
+        )ON DUPLICATE KEY UPDATE last_updated=now()
+    </insert>
+
+    <select id="getOrderSpecItemByGoodsCodeAndItemCode" resultMap="orderSpecItemMap">
+        SELECT <include refid="select-all-fields"/>  FROM isv_order_spec_item
+        <![CDATA[
+			WHERE goods_code=#{goodsCode} AND item_code=#{itemCode}
+		 ]]>
+    </select>
+    <select id="getOrderSpecItemByItemCode" resultMap="orderSpecItemMap">
+        SELECT <include refid="select-all-fields"/>  FROM isv_order_spec_item
+        <![CDATA[
+			WHERE item_code=#{itemCode}
+		 ]]>
+    </select>
+
+</mapper>

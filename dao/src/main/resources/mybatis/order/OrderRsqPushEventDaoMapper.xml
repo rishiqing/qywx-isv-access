@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rishiqing.qywx.dao.mapper.order.OrderRsqPushEventDao">
+
+    <resultMap type="com.rishiqing.qywx.dao.model.order.OrderRsqPushEventDO" id="orderRsqPushEventMap">
+        <id property="id" column="id" />
+        <result property="dateCreated" column="date_created" />
+        <result property="lastUpdated" column="last_updated" />
+        <result property="suiteKey" column="suite_key" />
+        <result property="orderId" column="order_id" />
+        <result property="corpId" column="corp_id" />
+        <result property="quantity" column="quantity" />
+        <result property="serviceStopTime" column="service_stop_time" />
+        <result property="rsqTeamId" column="rsq_team_id" />
+        <result property="status" column="status" />
+    </resultMap>
+
+    <insert id="saveOrUpdateOrderRsqPushEvent" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO isv_order_rsq_push_event (
+        date_created,
+        last_updated,
+        suite_key,
+        order_id,
+        corp_id,
+        quantity,
+        service_stop_time,
+        rsq_team_id,
+        `status`
+        )VALUES(
+        now(),
+        now(),
+        #{suiteKey},
+        #{orderId},
+        #{corpId},
+        #{quantity},
+        #{serviceStopTime},
+        #{rsqTeamId},
+        #{status}
+        )ON DUPLICATE KEY UPDATE last_updated=now(), `status`=#{status}
+    </insert>
+
+</mapper>

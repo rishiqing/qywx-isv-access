@@ -6,7 +6,6 @@ import com.rishiqing.common.util.http.HttpUtilRsqSync;
 import com.rishiqing.qywx.service.biz.rsq.RsqCorpService;
 import com.rishiqing.qywx.service.biz.rsq.RsqDeptService;
 import com.rishiqing.qywx.service.biz.rsq.RsqStaffService;
-import com.rishiqing.qywx.service.common.corp.CorpManageService;
 import com.rishiqing.qywx.service.common.corp.CorpStaffManageService;
 import com.rishiqing.qywx.service.common.corp.CorpSuiteManageService;
 import com.rishiqing.qywx.service.common.isv.GlobalSuite;

@@ -2,6 +2,7 @@ package com.rishiqing.qywx.service.util.http.converter;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.rishiqing.qywx.dao.model.order.QywxOrderDO;
 import com.rishiqing.qywx.service.model.corp.*;
 import com.rishiqing.qywx.service.model.isv.IsvVO;
 import com.rishiqing.qywx.service.model.isv.PhoneCallInfoVO;
@@ -358,5 +359,40 @@ public class Json2BeanConverter {
         phoneCallInfoVO.setCalleeCorpId(json.getString("corpId"));
         
         return phoneCallInfoVO;
+    }
+
+    public static QywxOrderDO generateQywxOrder(JSONObject json) {
+        QywxOrderDO order = new QywxOrderDO();
+        order.setOrderid(json.getString("orderid"));
+        order.setOrderStatus(json.getString("order_status"));
+        order.setOrderType(json.getString("order_type"));
+        order.setPaidCorpid(json.getString("paid_corpid"));
+        order.setOperatorId(json.getString("operator_id"));
+        order.setSuiteid(json.getString("suiteid"));
+        order.setAppid(json.getString("appid"));
+        order.setEditionId(json.getString("edition_id"));
+        order.setEditionName(json.getString("edition_name"));
+        order.setPrice(json.getLong("price"));
+        order.setUserCount(json.getLong("user_count"));
+        order.setOrderPeriod(json.getLong("order_period"));
+        order.setOrderTime(json.getLong("order_time"));
+        order.setPaidTime(json.getLong("paid_time"));
+        return order;
+    }
+
+    public static CorpEditionVO generateCorpEdition(JSONObject json) {
+        CorpEditionVO corpEdition = new CorpEditionVO();
+        if (json.containsKey("edition_info")) {
+            JSONObject info = json.getJSONObject("edition_info");
+            JSONArray agent = info.getJSONArray("agent");
+            JSONObject editionJSON = agent.getJSONObject(0);
+            corpEdition.setAgentId(editionJSON.getLong("agentid"));
+            corpEdition.setEditionId(editionJSON.getString("edition_id"));
+            corpEdition.setEditionName(editionJSON.getString("edition_name"));
+            corpEdition.setAppStatus(editionJSON.getLong("app_status"));
+            corpEdition.setUserLimit(editionJSON.getLong("user_limit"));
+            corpEdition.setExpiredTime(editionJSON.getLong("expired_time"));
+        }
+        return corpEdition;
     }
 }

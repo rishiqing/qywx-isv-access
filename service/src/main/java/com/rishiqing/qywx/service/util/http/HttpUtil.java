@@ -66,6 +66,16 @@ public class HttpUtil {
         );
     }
 
+    public JSONObject getOrder(SuiteTokenVO suiteTokenVO, String orderId) {
+        JSONObject params = Bean2JsonConverter.prepareOrder(orderId);
+        Map<String ,Object> options = new HashMap<String ,Object>();
+        options.put("suiteKey", suiteTokenVO.getSuiteKey());
+        Map<String, Object> queryMap = new HashMap<>();
+        queryMap.put("suite_access_token", suiteTokenVO.getSuiteToken());
+        return restHttpClient.post(
+                RequestUrl.ORDER, queryMap, null, params.toString(), options);
+    }
+
     public RestHttpClient getRestHttpClient() {
         return restHttpClient;
     }

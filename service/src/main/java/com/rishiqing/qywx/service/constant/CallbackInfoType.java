@@ -16,7 +16,15 @@ public enum CallbackInfoType {
     //  通讯录变更
     CHANGE_CONTACT("change_contact"),
     //  定制化注册成功
-    REGISTER_CORP("register_corp");
+    REGISTER_CORP("register_corp"),
+    //  下单
+    OPEN_ORDER("open_order"),
+    //  改单
+    CHANGE_ORDER("change_order"),
+    //  支付成功
+    PAY_FOR_APP_SUCCESS("pay_for_app_success"),
+    //  退款
+    REFUND("refund");
 
     private final String key;
 

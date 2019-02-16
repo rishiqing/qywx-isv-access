@@ -5,6 +5,7 @@ import com.rishiqing.qywx.service.event.message.CorpSuiteMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 public class DemoServiceImpl implements DemoService {
     private static final Logger webLogger = LoggerFactory.getLogger("WEB_LOGGER");
@@ -12,6 +13,7 @@ public class DemoServiceImpl implements DemoService {
     private static final Logger classLogger = LoggerFactory.getLogger(DemoServiceImpl.class);
 
     @Autowired
+    @Qualifier("asyncFetchCorpAllEventBus")
     private AsyncEventBus asyncFetchDeptAndStaffEventBus;
 
     public String printHelloWorld() {

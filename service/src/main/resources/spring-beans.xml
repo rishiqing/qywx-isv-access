@@ -20,6 +20,7 @@
     <bean id="corpAppManageService" class="com.rishiqing.qywx.service.common.corp.impl.CorpAppManageServiceImpl" />
     <bean id="corpTokenManageService" class="com.rishiqing.qywx.service.common.corp.impl.CorpTokenManageServiceImpl" />
     <bean id="corpJsapiTicketManageService" class="com.rishiqing.qywx.service.common.corp.impl.CorpJsapiTicketManageServiceImpl" />
+    <bean id="orderManageService" class="com.rishiqing.qywx.service.common.order.impl.OrderManageServiceImpl" />
     <bean id="rsqInfoManageService" class="com.rishiqing.qywx.service.common.rsq.impl.RsqInfoManageServiceImpl" />
     <bean id="sendMessageService" class="com.rishiqing.qywx.service.common.message.impl.SendMessageServiceImpl" />
     <bean id="cryptoUtil" class="com.rishiqing.qywx.service.common.crypto.CryptoUtil" />
@@ -29,6 +30,7 @@
     <bean id="deptService" class="com.rishiqing.qywx.service.biz.corp.impl.DeptServiceImpl" />
     <bean id="staffService" class="com.rishiqing.qywx.service.biz.corp.impl.StaffServiceImpl" />
     <bean id="tagService" class="com.rishiqing.qywx.service.biz.corp.impl.TagServiceImpl" />
+    <bean id="orderService" class="com.rishiqing.qywx.service.biz.order.impl.OrderServiceImpl" />
     <!--日事清相关-->
     <bean id="idMapService" class="com.rishiqing.qywx.service.biz.rsq.impl.IdMapServiceImpl" />
     <bean id="rsqCorpService" class="com.rishiqing.qywx.service.biz.rsq.impl.RsqCorpServiceImpl" />
@@ -82,18 +84,35 @@
     <!--==========================eventBus相关==============================-->
     <!--AsyncEventBus-->
     <bean id="eventBusService" class="com.rishiqing.qywx.service.event.service.impl.EventBusServiceImpl"/>
+    <!--获取组织架构-->
     <bean id="asyncFetchCorpAllExecutorFactory" class="com.rishiqing.qywx.service.event.executor.AsyncFetchCorpAllExecutorFactory" />
     <bean id="asyncFetchCorpAllExecutor" factory-bean="asyncFetchCorpAllExecutorFactory" factory-method="getFetchCorpAllExecutor" />
     <bean id="asyncFetchCorpAllEventBus" class="com.google.common.eventbus.AsyncEventBus">
         <constructor-arg ref="asyncFetchCorpAllExecutor" />
     </bean>
     <bean id="fetchCorpAllListener" class="com.rishiqing.qywx.service.event.listener.FetchCorpAllListener" />
+    <!--异步充值-->
+    <bean id="asyncDoChargeExecutorFactory" class="com.rishiqing.qywx.service.event.executor.AsyncDoChargeExecutorFactory" />
+    <bean id="asyncDoChargeExecutor" factory-bean="asyncDoChargeExecutorFactory" factory-method="getExecutor" />
+    <bean id="asyncDoChargeEventBus" class="com.google.common.eventbus.AsyncEventBus">
+        <constructor-arg ref="asyncDoChargeExecutor" />
+    </bean>
+    <bean id="doChargeListener" class="com.rishiqing.qywx.service.event.listener.DoChargeListener" />
+    <!--异步退款-->
+    <bean id="asyncDoRefundExecutorFactory" class="com.rishiqing.qywx.service.event.executor.AsyncDoRefundExecutorFactory" />
+    <bean id="asyncDoRefundExecutor" factory-bean="asyncDoRefundExecutorFactory" factory-method="getExecutor" />
+    <bean id="asyncDoRefundEventBus" class="com.google.common.eventbus.AsyncEventBus">
+        <constructor-arg ref="asyncDoRefundExecutor" />
+    </bean>
+    <bean id="doRefundListener" class="com.rishiqing.qywx.service.event.listener.DoRefundListener" />
 
     <bean id="eventBusInitService" class="com.rishiqing.qywx.service.event.service.impl.EventBusInitServiceImpl"
           init-method="register">
         <property name="eventMap">
             <map>
                 <entry key-ref="asyncFetchCorpAllEventBus" value-ref="fetchCorpAllListener" />
+                <entry key-ref="asyncDoChargeEventBus" value-ref="doChargeListener" />
+                <entry key-ref="asyncDoRefundEventBus" value-ref="doRefundListener" />
                 <!--<entry key-ref="demoEventBus" value-ref="demoListener" />-->
             </map>
         </property>

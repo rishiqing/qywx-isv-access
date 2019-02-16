@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rishiqing.qywx.dao.mapper.order.QywxOrderDao">
+
+    <resultMap type="com.rishiqing.qywx.dao.model.order.QywxOrderDO" id="qywxOrderMap">
+        <id property="id" column="id" />
+        <result property="dateCreated" column="date_created" />
+        <result property="lastUpdated" column="last_updated" />
+        <result property="orderid" column="orderid"/>
+        <result property="orderStatus" column="order_status"/>
+        <result property="orderType" column="order_type"/>
+        <result property="paidCorpid" column="paid_corpid"/>
+        <result property="operatorId" column="operator_id"/>
+        <result property="suiteid" column="suiteid"/>
+        <result property="appid" column="appid"/>
+        <result property="editionId" column="edition_id"/>
+        <result property="editionName" column="edition_name"/>
+        <result property="price" column="price"/>
+        <result property="userCount" column="user_count"/>
+        <result property="orderPeriod" column="order_period"/>
+        <result property="orderTime" column="order_time"/>
+        <result property="paidTime" column="paid_time"/>
+        <result property="chargeStatus" column="charge_status"/>
+        <result property="chargeTime" column="charge_time"/>
+        <result property="changedOrderid" column="changed_orderid"/>
+    </resultMap>
+
+    <sql id="select-all-fields">
+        id,
+        date_created,
+        last_updated,
+        orderid,
+        order_status,
+        order_type,
+        paid_corpid,
+        operator_id,
+        suiteid,
+        appid,
+        edition_id,
+        edition_name,
+        price,
+        user_count,
+        order_period,
+        order_time,
+        paid_time,
+        charge_status,
+        charge_time,
+        changed_orderid
+    </sql>
+
+    <insert id="saveOrUpdateQywxOrder" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO isv_qywx_order (
+        date_created,
+        last_updated,
+        orderid,
+        order_status,
+        order_type,
+        paid_corpid,
+        operator_id,
+        suiteid,
+        appid,
+        edition_id,
+        edition_name,
+        price,
+        user_count,
+        order_period,
+        order_time,
+        paid_time,
+        charge_status,
+        charge_time,
+        changed_orderid
+        )VALUES(
+        now(),
+        now(),
+        #{orderid},
+        #{orderStatus},
+        #{orderType},
+        #{paidCorpid},
+        #{operatorId},
+        #{suiteid},
+        #{appid},
+        #{editionId},
+        #{editionName},
+        #{price},
+        #{userCount},
+        #{orderPeriod},
+        #{orderTime},
+        #{paidTime},
+        #{chargeStatus},
+        #{chargeTime},
+        #{changedOrderid}
+        )ON DUPLICATE KEY UPDATE
+                                 last_updated=now(),
+                                 `order_status`=#{orderStatus},
+                                 operator_id=#{operatorId},
+                                 edition_id=#{editionId},
+                                 edition_name=#{editionName},
+                                 price=#{price},
+                                 user_count=#{userCount},
+                                 order_period=#{orderPeriod},
+                                 order_time=#{orderTime},
+                                 paid_time=#{paidTime},
+                                 charge_status=#{chargeStatus},
+                                 charge_time=#{chargeTime},
+                                 changed_orderid=#{changedOrderid}
+    </insert>
+
+    <select id="getQywxOrderByOrderid" resultMap="qywxOrderMap">
+        SELECT <include refid="select-all-fields"/>  FROM isv_qywx_order
+        <![CDATA[
+			WHERE orderid=#{orderid}
+		 ]]>
+    </select>
+    <select id="listQywxOrderByPaidCorpidAndChargeStatusWithLimit" resultMap="qywxOrderMap">
+        SELECT <include refid="select-all-fields"/>  FROM isv_qywx_order
+        <![CDATA[
+			WHERE paid_corpid=#{paidCorpid} AND charge_status=#{chargeStatus}
+		 ]]>
+        ORDER BY charge_time DESC LIMIT #{limit}
+    </select>
+    <select id="listQywxOrderByPaidCorpidAndChargeStatusAndIdNotEqualsWithLimit" resultMap="qywxOrderMap">
+        SELECT <include refid="select-all-fields"/>  FROM isv_qywx_order
+        <![CDATA[
+			WHERE paid_corpid=#{paidCorpid} AND charge_status=#{chargeStatus} AND id != #{excludeId}
+		 ]]>
+        ORDER BY charge_time DESC LIMIT #{limit}
+    </select>
+
+</mapper>

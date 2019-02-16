@@ -1,5 +1,7 @@
 package com.rishiqing.qywx.service.callback.impl;
 
+import com.rishiqing.qywx.dao.model.order.QywxOrderDO;
+import com.rishiqing.qywx.service.biz.order.OrderService;
 import com.rishiqing.qywx.service.biz.rsq.RsqCorpService;
 import com.rishiqing.qywx.service.biz.rsq.RsqDeptService;
 import com.rishiqing.qywx.service.biz.rsq.RsqStaffService;
@@ -8,6 +10,7 @@ import com.rishiqing.qywx.service.common.corp.CorpDeptManageService;
 import com.rishiqing.qywx.service.common.corp.CorpManageService;
 import com.rishiqing.qywx.service.common.corp.CorpStaffManageService;
 import com.rishiqing.qywx.service.common.fail.CallbackFailService;
+import com.rishiqing.qywx.service.common.order.OrderManageService;
 import com.rishiqing.qywx.service.model.corp.CorpDeptVO;
 import com.rishiqing.qywx.service.model.corp.CorpStaffVO;
 import com.rishiqing.qywx.service.model.corp.CorpVO;
@@ -37,6 +40,10 @@ public class PushCallbackHandlerImpl implements PushCallbackHandler {
     private RsqStaffService rsqStaffService;
     @Autowired
     private CallbackFailService callbackFailService;
+    @Autowired
+    private OrderManageService orderManageService;
+    @Autowired
+    private OrderService orderService;
 
     /**
      * 1  根据corpId获取corp
@@ -46,6 +53,8 @@ public class PushCallbackHandlerImpl implements PushCallbackHandler {
     public void handlePushCorp(String corpId) {
         CorpVO corpVO = corpManageService.getCorpByCorpId(corpId);
         rsqCorpService.pushCorpAll(corpVO);
+        //  检查是否有未充值的已付款订单，在这里进行补偿充值
+        checkOrderCharge(corpId);
     }
 
     /**
@@ -168,5 +177,13 @@ public class PushCallbackHandlerImpl implements PushCallbackHandler {
         }
         changedStaffVO.setRsqUserId(rsqUserId);
         rsqStaffService.pushAndDeleteStaffFromTeam(corpVO, changedStaffVO);
+    }
+
+    private void checkOrderCharge(String corpId) {
+        QywxOrderDO order = orderManageService.getLatestPendingQywxOrderByCorpId(corpId);
+
+        if (order != null) {
+            orderService.postChargeEvent(order.getOrderid());
+        }
     }
 }

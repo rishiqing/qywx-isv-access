@@ -4,8 +4,7 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import com.rishiqing.common.exception.ActiveCorpException;
 import com.rishiqing.common.exception.ReauthCorpException;
 import com.rishiqing.qywx.service.biz.corp.CorpService;
-import com.rishiqing.qywx.service.biz.corp.DeptService;
-import com.rishiqing.qywx.service.biz.corp.StaffService;
+import com.rishiqing.qywx.service.biz.order.OrderService;
 import com.rishiqing.qywx.service.callback.FetchCallbackHandler;
 import com.rishiqing.qywx.service.common.corp.CorpManageService;
 import com.rishiqing.qywx.service.common.corp.CorpSuiteManageService;
@@ -16,10 +15,8 @@ import com.rishiqing.common.exception.HttpException;
 import com.rishiqing.qywx.service.constant.CallbackChangeType;
 import com.rishiqing.qywx.service.constant.CallbackInfoType;
 import com.rishiqing.qywx.service.event.service.QueueService;
-import com.rishiqing.qywx.service.model.corp.CorpSuiteVO;
 import com.rishiqing.qywx.service.model.corp.CorpVO;
 import com.rishiqing.qywx.service.model.isv.SuiteTicketVO;
-import com.rishiqing.qywx.service.model.isv.SuiteTokenVO;
 import com.rishiqing.qywx.service.exception.CallbackException;
 import com.rishiqing.qywx.web.service.CallbackService;
 import com.rishiqing.qywx.web.util.codec.AesException;
@@ -50,13 +47,11 @@ public class CallbackServiceImpl implements CallbackService {
     @Autowired
     private CorpSuiteManageService corpSuiteManageService;
     @Autowired
-    private DeptService deptService;
-    @Autowired
-    private StaffService staffService;
-    @Autowired
     private QueueService queueService;
     @Autowired
     private FetchCallbackHandler logFailFetchCallbackHandler;
+    @Autowired
+    private OrderService orderService;
 
     @Override
     public String verifyUrl(String signature, String timestamp, String nonce, String echoString) {
@@ -122,6 +117,18 @@ public class CallbackServiceImpl implements CallbackService {
                     //  通讯录变更,包括部门变更/人员变更
                     handleChangeContact(map);
                     break;
+                case OPEN_ORDER:
+                    handleOpenOrder(map);
+                    break;
+                case CHANGE_ORDER:
+                    handleChangeOrder(map);
+                    break;
+                case PAY_FOR_APP_SUCCESS:
+                    handlePayForOrder(map);
+                    break;
+                case REFUND:
+                    handleRefund(map);
+                    break;
                 default:
                     //  对于不识别的infoType，直接抛出异常
                     throw new CallbackException("info type not handled: " + infoType);
@@ -182,6 +189,51 @@ public class CallbackServiceImpl implements CallbackService {
         String corpId = (String)params.get("AuthCorpId");
         assert corpId != null;
         corpManageService.markRemoveCorp(corpId, true);
+    }
+
+    /**
+     * 处理下单消息，保存订单
+     * @param params
+     */
+    private void handleOpenOrder(Map params) {
+        String orderId = (String)params.get("OrderId");
+        assert orderId != null;
+        orderService.fetchAndSaveQywxOrder(orderId);
+    }
+
+    /**
+     * 处理改单消息，将原订单和新订单均做保存处理
+     * @param params
+     */
+    private void handleChangeOrder(Map params) {
+        String oldOrderId = (String)params.get("OldOrderId");
+        String newOrderId = (String)params.get("NewOrderId");
+        assert oldOrderId != null;
+        assert newOrderId != null;
+        orderService.fetchAndSaveQywxOrder(newOrderId);
+        orderService.changeOrder(oldOrderId, newOrderId);
+    }
+
+    /**
+     * 支付成功的消息处理，先将订单保存，然后异步充值
+     * @param params
+     */
+    private void handlePayForOrder(Map params) {
+        String orderId = (String)params.get("OrderId");
+        assert orderId != null;
+        orderService.fetchAndSaveQywxOrder(orderId);
+        orderService.postChargeEvent(orderId);
+    }
+
+    /**
+     * 退款流程：更新要退款的订单状态，然后异步处理退款
+     * @param params
+     */
+    private void handleRefund(Map params) {
+        String orderId = (String)params.get("OrderId");
+        assert orderId != null;
+        orderService.fetchAndSaveQywxOrder(orderId);
+        orderService.postRefundEvent(orderId);
     }
 
     /**

@@ -6,4 +6,8 @@ package com.rishiqing.qywx.service.event.service;
  */
 public interface EventBusService {
     void sendToFetchCorpAll(String corpId);
+
+    void sendToChargeCorp(String orderId);
+
+    void sendToRefundCorp(String orderId);
 }

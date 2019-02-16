@@ -5,8 +5,7 @@ import com.rishiqing.common.exception.RsqSyncException;
 import com.rishiqing.common.model.RsqCommonUserVO;
 import com.rishiqing.common.model.RsqDepartmentVO;
 import com.rishiqing.common.model.RsqTeamVO;
-
-import java.util.Map;
+import com.rishiqing.qywx.dao.model.order.OrderRsqPushEventDO;
 
 /**
  * @author Wallace Mao
@@ -100,4 +99,6 @@ public interface HttpUtilRsqSync {
      * @throws RsqSyncException
      */
     public RsqCommonUserVO setUserAdmin(String appName, String appToken, RsqTeamVO rsqTeamVO, RsqCommonUserVO rsqCommonUserVO);
+
+    void doCharge(String appToken, String rsqProductName, OrderRsqPushEventDO pushEventVO);
 }

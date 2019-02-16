@@ -11,8 +11,13 @@ import com.rishiqing.common.util.http.HttpUtilRsqSync;
 import com.rishiqing.common.util.http.client.RestHttpClient;
 import com.rishiqing.common.util.http.converter.RsqRequestConverter;
 import com.rishiqing.common.util.http.converter.RsqResponseConverter;
+import com.rishiqing.qywx.dao.model.order.OrderRsqPushEventDO;
 import com.rishiqing.qywx.service.util.rsq.UserGenerator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,6 +34,7 @@ public class HttpUtilRsqSyncImpl implements HttpUtilRsqSync {
     private static final String URL_UPDATE_USER = "/task/v2/tokenAuth/autoCreate/updateUser";
     private static final String URL_USER_LEAVE_TEAM = "/task/v2/tokenAuth/autoCreate/userLeaveTeam";
     private static final String URL_SET_USER_ADMIN = "/task/v2/tokenAuth/autoCreate/userSetAdmin";
+    private static final String URL_CHARGE = "/task/v2/tokenAuth/pay/recharge";
 
     public HttpUtilRsqSyncImpl(String rootDomain, RestHttpClient restHttpClient) {
         this.rootDomain = rootDomain;
@@ -204,6 +210,31 @@ public class HttpUtilRsqSyncImpl implements HttpUtilRsqSync {
         checkResponse(jsonObject);
 
         return RsqResponseConverter.Json2RsqCommonUserVO(jsonObject);
+    }
+
+    @Override
+    public void doCharge(String appToken, String rsqProductName, OrderRsqPushEventDO pushEventVO){
+        String url = this.rootDomain + URL_CHARGE ;
+        // 转成yyyy-MM-dd HH:mm:ss的格式
+        String encodedDateString = parseFormat(pushEventVO.getServiceStopTime());
+        Map<String, Object> queryMap = new HashMap<>();
+        queryMap.put("token", appToken);
+        queryMap.put("productName", rsqProductName);
+        queryMap.put("userLimit", checkMax(pushEventVO.getQuantity()));
+        queryMap.put("deadLine", encodedDateString);
+        queryMap.put("teamId", pushEventVO.getRsqTeamId());
+
+        restHttpClient.post(url, queryMap, null, null, null);
+    }
+
+    private String parseFormat(Long mills) {
+        Date date = new Date(mills);
+        SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return dt.format(date);
+    }
+
+    private Long checkMax(Long value) {
+        return value > Integer.MAX_VALUE ? Integer.MAX_VALUE : value;
     }
 
     private void checkResponse(JSONObject jsonObject){
