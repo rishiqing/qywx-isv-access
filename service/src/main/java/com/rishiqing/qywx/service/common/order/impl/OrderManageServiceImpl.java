@@ -76,6 +76,11 @@ public class OrderManageServiceImpl implements OrderManageService {
     }
 
     @Override
+    public CorpChargeStatusDO getCorpChargeStatusByCorpId(String corpId) {
+        return corpChargeStatusDao.getCorpChargeStatusByCorpId(corpId);
+    }
+
+    @Override
     public void saveOrUpdateOrderRsqPushEvent(OrderRsqPushEventDO rsqPushEvent) {
         orderRsqPushEventDao.saveOrUpdateOrderRsqPushEvent(rsqPushEvent);
     }

@@ -13,9 +13,13 @@ public interface OrderService {
 
     void postChargeEvent(String orderId);
 
+    void postTrialEvent(String corpId);
+
     void postRefundEvent(String orderId);
 
     void doChargeByOrder(String orderId);
+
+    void doTrialByCorp(String corpId);
 
     void doRefundByOrder(String orderId);
 }

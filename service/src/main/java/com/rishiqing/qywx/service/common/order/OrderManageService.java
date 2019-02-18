@@ -24,5 +24,7 @@ public interface OrderManageService {
 
     void saveOrUpdateCorpChargeStatus(CorpChargeStatusDO corpChargeStatusDO);
 
+    CorpChargeStatusDO getCorpChargeStatusByCorpId(String corpId);
+
     void saveOrUpdateOrderRsqPushEvent(OrderRsqPushEventDO rsqPushEvent);
 }

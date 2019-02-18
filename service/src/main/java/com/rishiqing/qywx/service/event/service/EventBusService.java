@@ -9,5 +9,7 @@ public interface EventBusService {
 
     void sendToChargeCorp(String orderId);
 
+    void sendToTrialCorp(String corpId);
+
     void sendToRefundCorp(String orderId);
 }

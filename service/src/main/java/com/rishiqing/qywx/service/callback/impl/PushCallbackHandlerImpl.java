@@ -1,5 +1,6 @@
 package com.rishiqing.qywx.service.callback.impl;
 
+import com.rishiqing.qywx.dao.model.corp.CorpChargeStatusDO;
 import com.rishiqing.qywx.dao.model.order.QywxOrderDO;
 import com.rishiqing.qywx.service.biz.order.OrderService;
 import com.rishiqing.qywx.service.biz.rsq.RsqCorpService;
@@ -184,6 +185,12 @@ public class PushCallbackHandlerImpl implements PushCallbackHandler {
 
         if (order != null) {
             orderService.postChargeEvent(order.getOrderid());
+            return;
+        }
+        //  检查是否是新注册用户，新注册用户要充值试用，根据chargeStatus判断
+        CorpChargeStatusDO corpChargeStatus = orderManageService.getCorpChargeStatusByCorpId(corpId);
+        if (corpChargeStatus == null) {
+            orderService.postTrialEvent(corpId);
         }
     }
 }

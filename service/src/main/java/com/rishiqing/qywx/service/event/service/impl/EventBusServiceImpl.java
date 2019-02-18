@@ -4,6 +4,7 @@ import com.google.common.eventbus.AsyncEventBus;
 import com.rishiqing.qywx.service.event.message.CorpChargeMessage;
 import com.rishiqing.qywx.service.event.message.CorpRefundMessage;
 import com.rishiqing.qywx.service.event.message.CorpSuiteMessage;
+import com.rishiqing.qywx.service.event.message.CorpTrialMessage;
 import com.rishiqing.qywx.service.event.service.EventBusService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -20,6 +21,9 @@ public class EventBusServiceImpl implements EventBusService {
     @Qualifier("asyncDoChargeEventBus")
     private AsyncEventBus asyncDoChargeEventBus;
     @Autowired
+    @Qualifier("asyncDoTrialEventBus")
+    private AsyncEventBus asyncDoTrialEventBus;
+    @Autowired
     @Qualifier("asyncDoRefundEventBus")
     private AsyncEventBus asyncDoRefundEventBus;
 
@@ -35,6 +39,13 @@ public class EventBusServiceImpl implements EventBusService {
         CorpChargeMessage msg = new CorpChargeMessage();
         msg.setOrderId(orderId);
         asyncDoChargeEventBus.post(msg);
+    }
+
+    @Override
+    public void sendToTrialCorp(String corpId) {
+        CorpTrialMessage msg = new CorpTrialMessage();
+        msg.setCorpId(corpId);
+        asyncDoTrialEventBus.post(msg);
     }
 
     @Override

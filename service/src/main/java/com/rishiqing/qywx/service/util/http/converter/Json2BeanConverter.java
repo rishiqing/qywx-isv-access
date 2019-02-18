@@ -391,7 +391,9 @@ public class Json2BeanConverter {
             corpEdition.setEditionName(editionJSON.getString("edition_name"));
             corpEdition.setAppStatus(editionJSON.getLong("app_status"));
             corpEdition.setUserLimit(editionJSON.getLong("user_limit"));
-            corpEdition.setExpiredTime(editionJSON.getLong("expired_time"));
+            if (editionJSON.containsKey("expired_time")) {
+                corpEdition.setExpiredTime(editionJSON.getLong("expired_time"));
+            }
         }
         return corpEdition;
     }

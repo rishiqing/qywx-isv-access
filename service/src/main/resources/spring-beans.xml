@@ -98,6 +98,13 @@
         <constructor-arg ref="asyncDoChargeExecutor" />
     </bean>
     <bean id="doChargeListener" class="com.rishiqing.qywx.service.event.listener.DoChargeListener" />
+    <!--异步充试用-->
+    <bean id="asyncDoTrialExecutorFactory" class="com.rishiqing.qywx.service.event.executor.AsyncDoTrialExecutorFactory" />
+    <bean id="asyncDoTrialExecutor" factory-bean="asyncDoTrialExecutorFactory" factory-method="getExecutor" />
+    <bean id="asyncDoTrialEventBus" class="com.google.common.eventbus.AsyncEventBus">
+        <constructor-arg ref="asyncDoTrialExecutor" />
+    </bean>
+    <bean id="doTrialListener" class="com.rishiqing.qywx.service.event.listener.DoTrialListener" />
     <!--异步退款-->
     <bean id="asyncDoRefundExecutorFactory" class="com.rishiqing.qywx.service.event.executor.AsyncDoRefundExecutorFactory" />
     <bean id="asyncDoRefundExecutor" factory-bean="asyncDoRefundExecutorFactory" factory-method="getExecutor" />
@@ -112,6 +119,7 @@
             <map>
                 <entry key-ref="asyncFetchCorpAllEventBus" value-ref="fetchCorpAllListener" />
                 <entry key-ref="asyncDoChargeEventBus" value-ref="doChargeListener" />
+                <entry key-ref="asyncDoTrialEventBus" value-ref="doTrialListener" />
                 <entry key-ref="asyncDoRefundEventBus" value-ref="doRefundListener" />
                 <!--<entry key-ref="demoEventBus" value-ref="demoListener" />-->
             </map>

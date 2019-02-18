@@ -28,4 +28,6 @@ public class OrderConstant {
     public static final String ORDER_CORP_CHARGE_STATUS_OK = "ok";
 
     public static final String DEFAULT_CHARGE_RSQ_PRODUCT_NAME = "BASE_ENTERPRISE";
+    public static final Long DEFAULT_TRIAL_EXPIRES_MILLS = 1000L * 60 * 60 * 24 * 30;
+    public static final Long DEFAULT_TRIAL_USER_COUNT = 9999L;
 }

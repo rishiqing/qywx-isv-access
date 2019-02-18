@@ -88,6 +88,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public void postTrialEvent(String corpId) {
+        eventBusService.sendToTrialCorp(corpId);
+    }
+
+    @Override
     public void postRefundEvent(String orderId) {
         eventBusService.sendToRefundCorp(orderId);
     }
@@ -117,13 +122,28 @@ public class OrderServiceImpl implements OrderService {
         orderManageService.saveOrUpdateQywxOrder(qywxOrder);
 
         // 开始走充值流程
-        Boolean isSuccess = chargeByQywxOrder(qywxOrder);
+        Boolean isSuccess = chargeByCorpIdAndOrderId(qywxOrder.getPaidCorpid(), qywxOrder.getOrderid());
 
         if (isSuccess) {
             qywxOrder.setChargeStatus(OrderConstant.ORDER_PUSH_STATUS_SUCCESS);
             qywxOrder.setChargeTime(new Date());
             orderManageService.saveOrUpdateQywxOrder(qywxOrder);
         }
+    }
+
+    /**
+     * 充值为试用
+     * @param corpId
+     */
+    @Override
+    public void doTrialByCorp(String corpId) {
+        CorpVO corp = corpManageService.getCorpByCorpId(corpId);
+        if(corp == null || corp.getRsqId() == null){
+            return;
+        }
+
+        // 开始走充值流程
+        chargeByCorpIdAndOrderId(corpId, null);
     }
 
     /**
@@ -153,7 +173,7 @@ public class OrderServiceImpl implements OrderService {
         QywxOrderDO lastOrder = orderManageService.getLastChargedQywxOrderByCorpIdAndExcludeId(corpId, refundOrder.getId());
         Boolean isSuccess;
         if (lastOrder != null) {
-            isSuccess = chargeByQywxOrder(lastOrder);
+            isSuccess = chargeByCorpIdAndOrderId(corpId, lastOrder.getOrderid());
         } else {
             isSuccess = rollbackToFreeVersion(refundOrder);
         }
@@ -165,9 +185,10 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
-    private Boolean chargeByQywxOrder(QywxOrderDO order) {
+    private Boolean chargeByCorpIdAndOrderId(String corpId, String orderId) {
+        String suiteKey = suite.getSuiteKey();
         // 读取corp
-        CorpVO corp = corpManageService.getCorpByCorpId(order.getPaidCorpid());
+        CorpVO corp = corpManageService.getCorpByCorpId(corpId);
         //  如果corp不存在，或者corp的rsqId不存在，那么说明没有同步完成，这种情况下暂时先不充值，等corp同步成功之后再做补偿
         if(corp == null || corp.getRsqId() == null){
             return false;
@@ -176,13 +197,14 @@ public class OrderServiceImpl implements OrderService {
         CorpEditionVO corpEdition = fetchCurrentCorpEdition(corp);
 
         // 保存OrderRsqPushEventVO
-        OrderRsqPushEventDO rsqPushEvent = qywxOrder2OrderRsqPushEvent(order, corpEdition);
+        OrderRsqPushEventDO rsqPushEvent = qywxOrder2OrderRsqPushEvent(
+                suiteKey, corpId, corpEdition, orderId);
         rsqPushEvent.setStatus(OrderConstant.ORDER_PUSH_STATUS_PENDING);
         rsqPushEvent.setRsqTeamId(Long.valueOf(corp.getRsqId()));
         orderManageService.saveOrUpdateOrderRsqPushEvent(rsqPushEvent);
 
         OrderSpecItemDO specItemVO = orderManageService.getOrderSpecItemByItemCode(
-                order.getEditionId());
+                corpEdition.getEditionId());
         String rsqProductName = OrderConstant.DEFAULT_CHARGE_RSQ_PRODUCT_NAME;
         if (specItemVO != null) {
             rsqProductName = specItemVO.getRsqProductName();
@@ -252,13 +274,24 @@ public class OrderServiceImpl implements OrderService {
         return true;
     }
 
-    private OrderRsqPushEventDO qywxOrder2OrderRsqPushEvent(QywxOrderDO qywxOrderDO, CorpEditionVO corpEdition) {
+    private OrderRsqPushEventDO qywxOrder2OrderRsqPushEvent(
+            String suiteKey, String corpId, CorpEditionVO corpEdition, String orderId) {
         OrderRsqPushEventDO rsqPushEventDO = new OrderRsqPushEventDO();
-        rsqPushEventDO.setCorpId(qywxOrderDO.getPaidCorpid());
-        rsqPushEventDO.setOrderId(qywxOrderDO.getOrderid());
-        rsqPushEventDO.setSuiteKey(qywxOrderDO.getSuiteid());
-        rsqPushEventDO.setQuantity(corpEdition.getUserLimit());
-        rsqPushEventDO.setServiceStopTime(getServiceStopTime(corpEdition.getExpiredTime()));
+        rsqPushEventDO.setSuiteKey(suiteKey);
+        rsqPushEventDO.setOrderId(orderId);
+        rsqPushEventDO.setCorpId(corpId);
+        Long userLimit = corpEdition.getUserLimit();
+        if (userLimit == null || userLimit == 0L) {
+            // 如果为0，那么表示无限人数
+            userLimit = OrderConstant.DEFAULT_TRIAL_USER_COUNT;
+        }
+        rsqPushEventDO.setQuantity(userLimit);
+        //  如果为null，那么就设置为默认的超时时间
+        Long serviceStopTime = corpEdition.getExpiredTime() == null
+                ? new Date().getTime() + OrderConstant.DEFAULT_TRIAL_EXPIRES_MILLS
+                : getServiceStopTime(corpEdition.getExpiredTime());
+
+        rsqPushEventDO.setServiceStopTime(serviceStopTime);
         return rsqPushEventDO;
     }
     private CorpChargeStatusDO qywxOrder2CorpChargeStatus(OrderRsqPushEventDO rsqPushEventDO) {
