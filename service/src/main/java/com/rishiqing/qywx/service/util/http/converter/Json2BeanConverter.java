@@ -381,8 +381,9 @@ public class Json2BeanConverter {
     }
 
     public static CorpEditionVO generateCorpEdition(JSONObject json) {
-        CorpEditionVO corpEdition = new CorpEditionVO();
+        CorpEditionVO corpEdition = null;
         if (json.containsKey("edition_info")) {
+            corpEdition = new CorpEditionVO();
             JSONObject info = json.getJSONObject("edition_info");
             JSONArray agent = info.getJSONArray("agent");
             JSONObject editionJSON = agent.getJSONObject(0);

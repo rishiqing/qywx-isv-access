@@ -195,6 +195,10 @@ public class OrderServiceImpl implements OrderService {
         }
         // 从企业微信获取最新的订单消息，免去自己计算公司购买的人数和到期时间的麻烦
         CorpEditionVO corpEdition = fetchCurrentCorpEdition(corp);
+        //  处理无版本信息的公司
+        if (corpEdition == null) {
+            return false;
+        }
 
         // 保存OrderRsqPushEventVO
         OrderRsqPushEventDO rsqPushEvent = qywxOrder2OrderRsqPushEvent(
